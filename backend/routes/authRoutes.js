@@ -18,11 +18,26 @@ const {
 // ** Routes **
 
 /**
- * @description POST /register -> Register A User
- * @param {} [checkRegistrationFields]
- * @param {} request
- * @param {} response
- * @access public
+ * @swagger
+ * /api/v1/auth/register:
+ *  post:
+ *      summary: Register a user
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      type: object
+ *                      properties:
+ *                          username:
+ *                              type: string
+ *                          email:
+ *                              type: string
+ *                          password:
+ *                              type: string
+ *      responses:
+ *          '200':
+ *              description: A successful register request
  */
 router.post("/register", [checkRegistrationFields], (req, res) => {
     let errors = [];

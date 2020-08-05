@@ -7,7 +7,9 @@ const UserSchema = new Schema({
     username: {
         type: String,
         required: true,
-        trim: true
+        trim: true,
+        minlength: ['5', 'Username has to be at least 5 characters long'],
+        maxlength: ['50', 'Username has to be less than 50 characters long']
     },
     social: {
         id: {

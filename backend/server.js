@@ -25,7 +25,7 @@ const server = require('http').Server(app);
 const io = require('socket.io')(server);
 
 // ** Routes **
-
+const authRoutes = require('./routes/authRoutes');
 
 // ** Middleware **
 
@@ -37,9 +37,12 @@ app.use(expressValidator());
 app.use(cors());
 
 // ** Route Definitions **
-
+app.use('/api/v1/auth', authRoutes);
 
 // ** Run server **
-server.listen(process.env.PORT, () => {
-    console.log(`[INFO] Server is running on port ${process.env.PORT}`)
-});
+if (process.env.NODE_ENV !== 'test'){
+    server.listen(process.env.PORT, () => {
+        console.log(`[INFO] Server is running on port ${process.env.PORT}`)
+    });
+};
+module.exports = { app };

@@ -27,7 +27,7 @@ const checkRegistrationFields = async (req, res, next) => {
     let errors = req.validationErrors() || [];
 
     if (errors.length > 0) {
-        res.send({
+        res.status(400).send({
             errors: createErrorObject(errors)
         });
     } else {
@@ -47,7 +47,7 @@ const checkLoginFields = async (req, res, next) => {
     }
 
     if (errors.length !== 0) {
-        res.send({
+        res.status(400).send({
             errors: createErrorObject(errors)
         });
     } else {
@@ -65,7 +65,7 @@ const checkEditProfileFields = async (req, res, next) => {
     }
 
     if (errors.length !== 0) {
-        res.send({
+        res.status(400).send({
             errors: createErrorObject(errors)
         });
     } else {

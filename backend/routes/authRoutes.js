@@ -38,6 +38,8 @@ const {
  *      responses:
  *          '200':
  *              description: A successful register request
+ *          '400':
+ *              description: Failed Request. Something went wrong
  */
 router.post("/register", [checkRegistrationFields], (req, res) => {
     let errors = [];
@@ -99,5 +101,43 @@ router.post("/register", [checkRegistrationFields], (req, res) => {
     });
 });
 
+
+/**
+ * @swagger
+ * /api/v1/auth/login:
+ *  post:
+ *      summary: Login a user
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      type: object
+ *                      properties:
+ *                          email:
+ *                              type: string
+ *                          password:
+ *                              type: string
+ *      responses:
+ *          '200':
+ *              description: A successful register request
+ *          '400':
+ *              description: Failed Request. No user found or wrong password
+ */
+ router.post('/login', checkLoginFields, async(req, res) => {
+    const user = await User.findOne({ email: req.body.email }).select('-password');
+
+    
+    if (!user) {
+        return res.status(404).send({
+            error: 'No User Found'
+        });
+    }
+
+    const token = jwt.sign(user.toObject(), process.env.JWT_SECRET, { expiresIn: 18000 });
+
+    res.status(200).send({ auth: true, token: `Bearer ${token}`, user });
+
+ });
 
 module.exports = router;

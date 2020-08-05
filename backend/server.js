@@ -9,6 +9,7 @@ require('./db/database');
 
 // ** Passport Config **
 const passport = require('passport');
+require('./config/passport')(passport);
 
 
 // ** Express **

@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const randomString = require('random-base64-string');
 
 const TeamSchema = new Schema({
 
@@ -11,7 +12,18 @@ const TeamSchema = new Schema({
         maxlength: ['50', 'Channel name have to be less than 50 characters long']
     },
 
+    invitationCode: {
+        type: String,
+        trim: true,
+        default: randomString(8)
+    },
+
     description: {
+        type: String,
+        trim: true
+    },
+
+    image: {
         type: String,
         trim: true
     },
@@ -22,11 +34,11 @@ const TeamSchema = new Schema({
         ref: 'User'
     },
 
-    channels: [{
-        type: Schema.Types.ObjectId,
-        required: true,
-        ref: 'Channel'
-    }]
+    // channels: [{
+    //     type: Schema.Types.ObjectId,
+    //     required: true,
+    //     ref: 'Channel'
+    // }]
 
 }, {
     timestamps: {

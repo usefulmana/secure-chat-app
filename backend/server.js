@@ -60,6 +60,7 @@ if (process.env.NODE_ENV === "development") {
 
 // ** Routes **
 const authRoutes = require("./routes/authRoutes");
+const teamRoutes = require('./routes/teamRoutes');
 
 // ** Middleware **
 
@@ -72,6 +73,7 @@ app.use(cors());
 
 // ** Route Definitions **
 app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/team", teamRoutes);
 
 // ** Run server **
 if (process.env.NODE_ENV !== "test") {

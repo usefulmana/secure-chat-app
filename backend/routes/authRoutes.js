@@ -1,7 +1,6 @@
 const _ = require("lodash");
 const express = require("express");
 const router = express.Router();
-const passport = require("passport");
 const jwt = require("jsonwebtoken");
 const randomString = require("random-base64-string");
 const { User } = require("../models/User");

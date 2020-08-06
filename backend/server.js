@@ -21,8 +21,8 @@ const helmet = require("helmet");
 
 // ** Socket IO **
 const app = express();
-// const server = require("http").Server(app);
-// const io = require("socket.io")(server);
+const server = require("http").Server(app);
+const io = require("socket.io")(server);
 
 
 // ** Swagger API Doc **
@@ -75,7 +75,7 @@ app.use("/api/v1/auth", authRoutes);
 
 // ** Run server **
 if (process.env.NODE_ENV !== "test") {
-    app.listen(process.env.PORT, () => {
+    server.listen(process.env.PORT, () => {
         console.log(`[INFO] Server is running on port ${process.env.PORT}`);
     });
 }

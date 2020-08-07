@@ -134,8 +134,6 @@ router.post("/register", [checkRegistrationFields], (req, res) => {
         });
     }
 
-    console.log(user);
-
     const token = jwt.sign(user.toObject(), process.env.JWT_SECRET, { expiresIn: 18000 });
 
     res.status(200).send({ auth: true, token: `Bearer ${token}`, user });

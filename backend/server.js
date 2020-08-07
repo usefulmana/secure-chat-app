@@ -21,8 +21,8 @@ const helmet = require("helmet");
 
 // ** Socket IO **
 const app = express();
-// const server = require("http").Server(app);
-// const io = require("socket.io")(server);
+const server = require("http").Server(app);
+const io = require("socket.io")(server);
 
 
 // ** Swagger API Doc **
@@ -60,6 +60,8 @@ if (process.env.NODE_ENV === "development") {
 
 // ** Routes **
 const authRoutes = require("./routes/authRoutes");
+const teamRoutes = require('./routes/teamRoutes');
+const userRoutes = require('./routes/userRoutes')
 
 // ** Middleware **
 
@@ -72,10 +74,11 @@ app.use(cors());
 
 // ** Route Definitions **
 app.use("/api/v1/auth", authRoutes);
-
+app.use("/api/v1/team", teamRoutes);
+app.use('/api/v1/user', userRoutes);
 // ** Run server **
 if (process.env.NODE_ENV !== "test") {
-    app.listen(process.env.PORT, () => {
+    server.listen(process.env.PORT, () => {
         console.log(`[INFO] Server is running on port ${process.env.PORT}`);
     });
 }

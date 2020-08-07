@@ -39,6 +39,10 @@ const UserSchema = new Schema({
         type: String,
         default: null
     },
+    teams: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Team'
+    }],
     location: {
         type: String,
         default: null

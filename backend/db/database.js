@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
 
+
 const connect = () => {
     mongoose.connect(
         process.env.DATABASE_URL,

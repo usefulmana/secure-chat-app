@@ -1,7 +1,6 @@
 const _ = require("lodash");
 const express = require("express");
 const router = express.Router();
-const passport = require("passport");
 const jwt = require("jsonwebtoken");
 const randomString = require("random-base64-string");
 const { User } = require("../models/User");
@@ -14,6 +13,7 @@ const {
     checkEditProfileFields,
     createErrorObject,
 } = require("../middleware/authenticate");
+const passport = require("passport");
 
 // ** Routes **
 
@@ -125,7 +125,7 @@ router.post("/register", [checkRegistrationFields], (req, res) => {
  *              description: Failed Request. No user found or wrong password
  */
  router.post('/login', checkLoginFields, async(req, res) => {
-    const user = await User.findOne({ email: req.body.email }).select('-password');
+    const user = await User.findOne({ email: req.body.email }).select('-password').populate('teams');
 
     
     if (!user) {
@@ -134,10 +134,14 @@ router.post("/register", [checkRegistrationFields], (req, res) => {
         });
     }
 
+    console.log(user);
+
     const token = jwt.sign(user.toObject(), process.env.JWT_SECRET, { expiresIn: 18000 });
 
     res.status(200).send({ auth: true, token: `Bearer ${token}`, user });
 
  });
+
+
 
 module.exports = router;

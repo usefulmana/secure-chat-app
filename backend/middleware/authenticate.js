@@ -73,9 +73,33 @@ const checkEditProfileFields = async (req, res, next) => {
     }
 };
 
+const checkCreateTeamFields = async (req, res, next) => {
+    if (!req.body.teamName) {
+        req.check('teamName')
+            .not()
+            .isEmpty()
+            .withMessage('Room name is required');
+    } else {
+        req.check('teamName')
+            .isString()
+            .isLength({ min: 4, max: 50 })
+            .withMessage('Team name must be between 4 and 50 characters');
+    }
+    const errors = req.validationErrors();
+
+    if (errors) {
+        res.send({
+            errors: createErrorObject(errors)
+        });
+    } else {
+        next();
+    }
+};
+
 module.exports = {
     checkLoginFields,
     checkRegistrationFields,
     checkEditProfileFields,
-    createErrorObject
+    createErrorObject,
+    checkCreateTeamFields
 };

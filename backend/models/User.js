@@ -39,15 +39,9 @@ const UserSchema = new Schema({
         type: String,
         default: null
     },
-    ownedTeams: [{
+    teams: [{
         type: Schema.Types.ObjectId,
-        required: true,
-        ref: 'User'
-    }],
-    subscribedTeams: [{
-        type: Schema.Types.ObjectId,
-        required: true,
-        ref: 'User'
+        ref: 'Team'
     }],
     location: {
         type: String,

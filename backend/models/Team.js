@@ -8,8 +8,8 @@ const TeamSchema = new Schema({
         type: String,
         required: true,
         trim: true,
-        minlength: ['4', 'Channel name must be at least 4 characters long'],
-        maxlength: ['50', 'Channel name have to be less than 50 characters long']
+        minlength: ['4', 'Team name must be at least 4 characters long'],
+        maxlength: ['50', 'Team name have to be less than 50 characters long']
     },
 
     invitationCode: {
@@ -34,11 +34,10 @@ const TeamSchema = new Schema({
         ref: 'User'
     },
 
-    // channels: [{
-    //     type: Schema.Types.ObjectId,
-    //     required: true,
-    //     ref: 'Channel'
-    // }]
+    channels: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Channel'
+    }]
 
 }, {
     timestamps: {

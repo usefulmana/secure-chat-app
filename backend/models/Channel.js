@@ -22,11 +22,20 @@ const ChannelSchema = new Schema({
         ref: 'User'
     },
 
-    members: [{
-        type: Schema.Types.ObjectId,
-        required: true,
-        ref: 'User'
-    }]
+    members: [
+        {
+            _id: false,
+            lookup: {
+                type: Schema.Types.ObjectId,
+                required: true,
+                ref: 'User'
+            },
+            socketId: {
+                type: String,
+                required: true
+            }
+        }
+    ]
 
 }, {
     timestamps: {

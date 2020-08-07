@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const mongoosePaginate = require('mongoose-paginate-v2');
 const Schema = mongoose.Schema;
 
 const MessageSchema = new Schema({
@@ -20,6 +21,10 @@ const MessageSchema = new Schema({
         required: true,
         ref: 'User'
     },
+    admin: {
+        type: Boolean,
+        default: false
+    }
 
 }, {
     timestamps: {
@@ -28,6 +33,7 @@ const MessageSchema = new Schema({
     }
 });
 
+MessageSchema.plugin(mongoosePaginate);
 
 const Message = mongoose.model('Message', MessageSchema);
 

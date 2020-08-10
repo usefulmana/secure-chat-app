@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 const randomString = require("random-base64-string");
 const { User } = require("../models/User");
 const gravatar = require("gravatar");
+const socialAuthActions = require('../actions/socialAuthActions');
 
 // ** Middleware **
 const {
@@ -12,6 +13,7 @@ const {
     checkRegistrationFields,
     checkEditProfileFields,
     createErrorObject,
+    customSocialAuthenticate
 } = require("../middleware/authenticate");
 const passport = require("passport");
 
@@ -140,6 +142,12 @@ router.post("/register", [checkRegistrationFields], (req, res) => {
 
  });
 
+// ** Social Auth Routes **
+router.get('/google', passport.authenticate('google'));
+router.get('/facebook', passport.authenticate('facebook', {scope: 'email'}));
 
+// ** Social Auth Callbacks **
+router.get('/google/redirect', passport.authenticate('google', {failureRedirect: '/login'}), socialAuthActions.google);
+router.get('/facebook/redirect', passport.authenticate('facebook'), socialAuthActions.facebook);
 
 module.exports = router;

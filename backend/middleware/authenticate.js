@@ -96,10 +96,19 @@ const checkCreateTeamFields = async (req, res, next) => {
     }
 };
 
+const customSocialAuthenticate = socialAuth => {
+    return (req, res, next) => {
+        passport.authenticate(socialAuth, {
+            state: JSON.stringify({ _socket: req.query.socketId })
+        })(req, res, next);
+    };
+};
+
 module.exports = {
     checkLoginFields,
     checkRegistrationFields,
     checkEditProfileFields,
     createErrorObject,
-    checkCreateTeamFields
+    checkCreateTeamFields, 
+    customSocialAuthenticate
 };

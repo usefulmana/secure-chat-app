@@ -18,8 +18,8 @@ let transporter = nodemailer.createTransport({
 const sendEMail =  async (user, type) =>{
 
     const token = randomString(16);
-    const package = JSON.stringify({type: type, token: token});
-    setKeyValue(String(user._id), package, 12*60*60);
+    const payload = JSON.stringify({type: type, userId: user._id});
+    setKeyValue(token, payload, 12*60*60);
     try {
       let info = await transporter.sendMail({
         from: process.env.EMAIL_USER,

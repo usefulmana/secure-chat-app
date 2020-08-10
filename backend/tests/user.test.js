@@ -1,8 +1,5 @@
 const { app } = require('../server');
-const { userSeedData } = require('./seed/seedData');
 const supertest = require('supertest');
-const slugify = require('slugify');
-const { expectCt } = require('helmet');
 
 let token;
 let request = supertest(app);
@@ -29,5 +26,13 @@ describe('POST /change-pw', () => {
         expect(response.status).toBe(200);
         expect(response.body).not.toBeNull();
         
+    }),
+    it('should send a password recovery email', async() => {
+        const response = await request
+        .post('/api/v1/user/forgot-pw')
+        .send({email: 'haha@gmail.com'})
+
+        expect(response.status).toBe(200);
+        expect(response.body).not.toBeNull();
     })
 })

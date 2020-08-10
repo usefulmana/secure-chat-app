@@ -1,5 +1,5 @@
 const redis = require('redis');
-
+const { User } = require("../models/User");
 const client = redis.createClient({
     port: process.env.REDIS_PORT,
     host: process.env.REDIS_HOST
@@ -18,18 +18,24 @@ process.on("exit", function(){
 });
 
 const setKeyValue = (key, value, duration) => {
-    console.log(value)
-    client.set(key, value, 'EX', duration, redis.print)
+    client.set(key, value, 'EX', duration, redis.print);
 }
 
-const getKeyValue = (key) => {
-    client.get(key, (error, result) => {
+const getKeyValue =  (key, req, res) => {
+    let r = client.get(key, (error, result) => {
         if (error){
             console.log(error);
             throw error;
         }
-
-        return JSON.parse(result)
+        const {type , userId } = JSON.parse(result);
+        User.findById(userId).then((u) => {
+            u.password = req.body.password;
+      
+            u.save().then((result) => {
+                deleteKeyValue(key);
+                res.status(200).send({ success: true })
+            });
+          });
     })
 };
 

@@ -72,7 +72,7 @@ router.post("/register", [checkRegistrationFields], (req, res) => {
 
 
             const newUser = new User({
-                username: req.body.username + '!' + randomString(6),
+                username: req.body.username,
                 email: req.body.email,
                 password: req.body.password,
                 image: avatar,

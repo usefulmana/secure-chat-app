@@ -4,7 +4,7 @@ const passport = require("passport");
 const { User } = require("../models/User");
 const { sendEMail } = require("../utils/email");
 const { retrievePW, verifyEmail } = require("../utils/redis");
-const { assignWith } = require("lodash");
+
 
 // Get Current User
 router.get(
@@ -18,6 +18,15 @@ router.get(
     return res.status(200).json(user);
   }
 );
+
+// Edit Username
+router.put("/current",  passport.authenticate("jwt", { session: false }),
+async (req, res) => {
+  const user = await User.findById(req.user.id);
+
+  user.username = req.body.username;
+  user.save().then( u => res.status(200).send(u)).catch(err => console.log(err));
+})
 
 // Change password
 router.post(

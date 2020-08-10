@@ -3,7 +3,7 @@ const router = express.Router();
 const passport = require("passport");
 const { User } = require("../models/User");
 const { sendEMail } = require("../utils/email");
-const { getKeyValue, deleteKeyValue } = require("../utils/redis");
+const { retrievePW, verifyEmail } = require("../utils/redis");
 const { assignWith } = require("lodash");
 
 // Get Current User
@@ -32,6 +32,12 @@ router.post(
   }
 );
 
+// Verify Email
+router.post("/verify/:token", (req, res) => {
+    verifyEmail(req.params.token, req, res);
+});
+
+
 // Send Retrieve Password Email
 router.post("/forgot-pw", async (req, res) => {
   const user = await User.findOne({ email: req.body.email });
@@ -45,7 +51,7 @@ router.post("/forgot-pw", async (req, res) => {
 
 // Retrieve Password
 router.post("/retrieve-pw/:token", (req, res) => {
-  getKeyValue(req.params.token, req, res);
+    retrievePW(req.params.token, req, res);
 });
 
 module.exports = router;

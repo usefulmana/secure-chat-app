@@ -21,21 +21,51 @@ const setKeyValue = (key, value, duration) => {
     client.set(key, value, 'EX', duration, redis.print);
 }
 
-const getKeyValue =  (key, req, res) => {
+const retrievePW =  (key, req, res) => {
     let r = client.get(key, (error, result) => {
         if (error){
             console.log(error);
             throw error;
         }
         const {type , userId } = JSON.parse(result);
-        User.findById(userId).then((u) => {
-            u.password = req.body.password;
-      
-            u.save().then((result) => {
-                deleteKeyValue(key);
-                res.status(200).send({ success: true })
-            });
-          });
+        if (type === 'forgotpw'){
+            User.findById(userId).then((u) => {
+                u.password = req.body.password;
+          
+                u.save().then((result) => {
+                    deleteKeyValue(key);
+                    res.status(200).send({ success: true })
+                });
+              });
+        }
+        else {
+            res.status(400).send({error: 'Wrong Token Type'})
+        }
+        
+    })
+};
+
+const verifyEmail =  (key, req, res) => {
+    let r = client.get(key, (error, result) => {
+        if (error){
+            console.log(error);
+            throw error;
+        }
+        const {type , userId } = JSON.parse(result);
+        if (type === 'verify'){
+            User.findById(userId).then((u) => {
+                u.isVerified = true;
+          
+                u.save().then((result) => {
+                    deleteKeyValue(key);
+                    res.status(200).send({ success: true })
+                });
+              });
+        }
+        else {
+            res.status(400).send({error: 'Wrong Token Type'})
+        }
+        
     })
 };
 
@@ -50,4 +80,4 @@ const deleteKeyValue = (key) => {
 }
 
 
-module.exports = { setKeyValue, getKeyValue, deleteKeyValue };
+module.exports = { setKeyValue, retrievePW, deleteKeyValue, verifyEmail };

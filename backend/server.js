@@ -1,4 +1,4 @@
-if (process.env.DEPLOYMENT !== "true") {
+if (process.env.NODE_ENV !== 'production') {
     // Skip loading the .env file
     require("dotenv").config();
 }
@@ -47,7 +47,7 @@ if (process.env.NODE_ENV === "development") {
                     name: "Anh Nguyen",
                     email: "alex.nguyen.3141@gmail.com"
                 },
-                servers: [`http://localhost:3001`]
+                servers: [process.env.SWAGGER_URL]
             }
         },
 
@@ -76,6 +76,12 @@ app.use(cors());
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/team", teamRoutes);
 app.use('/api/v1/user', userRoutes);
+
+// ** SocketIO
+
+
+
+
 // ** Run server **
 if (process.env.NODE_ENV !== "test") {
     server.listen(process.env.PORT, () => {

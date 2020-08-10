@@ -68,6 +68,7 @@ module.exports = function(passport){
                                     id: profile.id,
                                     image: profile.photos[0].value.replace('?sz=50', '')
                                 },
+                                isVerified: true,
                                 email: profile.emails[0].value,
                                 username: profile.displayName
                                     ? slugify(profile.displayName.toLowerCase())
@@ -114,6 +115,7 @@ module.exports = function(passport){
                                     id: profile.id,
                                     image: profile.photos[0].value
                                 },
+                                isVerified: true,
                                 email: profile.emails[0].value,
                                 username: profile.displayName
                                     ? slugify(profile.displayName.toLowerCase())

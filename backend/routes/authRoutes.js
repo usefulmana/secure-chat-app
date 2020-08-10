@@ -2,7 +2,6 @@ const _ = require("lodash");
 const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
-const randomString = require("random-base64-string");
 const { User } = require("../models/User");
 const gravatar = require("gravatar");
 const socialAuthActions = require('../actions/socialAuthActions');
@@ -75,7 +74,7 @@ router.post("/register", [checkRegistrationFields], (req, res) => {
                 username: req.body.username,
                 email: req.body.email,
                 password: req.body.password,
-                image: avatar,
+                image: avatar.substr(2),
             });
 
             newUser

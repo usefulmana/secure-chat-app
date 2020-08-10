@@ -6,6 +6,7 @@ const randomString = require("random-base64-string");
 const { User } = require("../models/User");
 const gravatar = require("gravatar");
 const socialAuthActions = require('../actions/socialAuthActions');
+const { sendEMail } = require('../utils/email');
 
 // ** Middleware **
 const {
@@ -85,6 +86,10 @@ router.post("/register", [checkRegistrationFields], (req, res) => {
                     const token = jwt.sign(user, process.env.JWT_SECRET, {
                         expiresIn: 18000,
                     });
+
+                    if (process.env.NODE_ENV === 'production'){
+                        sendEMail(user, 'verify');
+                    };
 
                     res.status(200).send({
                         auth: true,

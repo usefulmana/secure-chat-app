@@ -3,7 +3,10 @@ const router = express.Router();
 const passport = require("passport");
 const { User } = require("../models/User");
 const { sendEMail } = require("../utils/email");
+const { upload } = require('../utils/upload');
 const { retrievePW, verifyEmail } = require("../utils/redis");
+
+
 
 
 // Get Current User
@@ -27,6 +30,17 @@ async (req, res) => {
   user.username = req.body.username;
   user.save().then( u => res.status(200).send(u)).catch(err => console.log(err));
 })
+
+
+// Update avatar
+router.put("/photo",  passport.authenticate("jwt", { session: false }), upload.single('avatar'),
+async (req, res) => {
+  const user = await User.findById(req.user.id);
+
+  user.image = req.file.location;
+  user.save().then( u => res.status(200).send(u)).catch(err => console.log(err));
+})
+
 
 // Change password
 router.post(
@@ -57,6 +71,7 @@ router.post("/forgot-pw", async (req, res) => {
 
   res.status(200).json({ success: true });
 });
+
 
 // Retrieve Password
 router.post("/retrieve-pw/:token", (req, res) => {

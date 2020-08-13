@@ -57,8 +57,8 @@ const Main = ({ history }) => {
 
     return (
         <div className={`main-cont ${visible === 1 && 'main-cont-enlarged'} row align-items-center justify-content-end`}>
-            <SignIn visible={visible} flipVisibility={flipVisibility} />
-            <SignUp visible={visible} flipVisibility={flipVisibility} />
+            <SignIn visible={visible} flipVisibility={flipVisibility} history={history} />
+            <SignUp visible={visible} flipVisibility={flipVisibility} history={history}/>
 
             {/* <ul id="scene">
                 <li class="layer polygons" data-depth="0.15"><img src="img/main/polygons.png" alt="image" /></li>

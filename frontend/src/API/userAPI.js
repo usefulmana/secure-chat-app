@@ -1,13 +1,13 @@
 import { BASE_URL } from "../config";
 const API = BASE_URL + '/api'
 
-export const getUsers = ({ token }) => {
-    return fetch(`${API}/users`, {
+export const currentUser = ({ token }) => {
+    return fetch(`${API}/user/current`, {
         method: "GET",
         headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`
+            Authorization: `${token}`
         }
     })
         .then(response => {
@@ -18,10 +18,10 @@ export const getUsers = ({ token }) => {
         });
 };
 
-export const signup = user => {
+export const register = user => {
     console.log("what is user : ", user)
 
-    return fetch(`${API}/signup`, {
+    return fetch(`${API}/auth/register`, {
         method: "POST",
         headers: {
             Accept: "application/json",
@@ -37,8 +37,8 @@ export const signup = user => {
         });
 };
 
-export const signin = user => {
-    return fetch(`${API}/signin`, {
+export const login = user => {
+    return fetch(`${API}/auth/login`, {
         method: "POST",
         headers: {
             Accept: "application/json",

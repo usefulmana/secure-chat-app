@@ -73,13 +73,26 @@ app.use(expressValidator());
 app.use(cors());
 
 // ** Route Definitions **
-app.use("/api/auth", authRoutes);
-app.use("/api/team", teamRoutes);
-app.use('/api/user', userRoutes);
+app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/team", teamRoutes);
+app.use('/api/v1/user', userRoutes);
 
 // ** SocketIO
 
+//TODO get users name
+io.on('connection', socket => {
+    console.log('${name} has connected');
 
+
+    socket.on('chatMessage', function(data){
+        io.emit('chat',data);
+        console.log("sent mesage");
+    })
+      
+    socket.on('disconnect', () =>{
+        console.log('${name} disconnected from server');
+    })
+})
 
 
 // ** Run server **

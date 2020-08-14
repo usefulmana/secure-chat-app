@@ -10,7 +10,7 @@ import anime from 'animejs';
 const SignUp = ({ history, visible, flipVisibility }) => {
     var jwt = JSON.parse(localStorage.getItem("jwt"));
     if (jwt && jwt.token) {
-        history.push('/dashboard/locations')
+        history.push('/dashboard')
     }
 
     const [values, setValues] = useState({

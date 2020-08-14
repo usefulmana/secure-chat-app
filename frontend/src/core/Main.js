@@ -12,7 +12,7 @@ import SignUp from "./SignUp";
 const Main = ({ history }) => {
     var jwt = JSON.parse(localStorage.getItem("jwt"));
     if (jwt && jwt.token) {
-        history.push('/dashboard/locations')
+        history.push('/dashboard')
     }
 
     const [values, setValues] = useState({

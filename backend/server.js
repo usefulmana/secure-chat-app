@@ -73,9 +73,9 @@ app.use(expressValidator());
 app.use(cors());
 
 // ** Route Definitions **
-app.use("/api/v1/auth", authRoutes);
-app.use("/api/v1/team", teamRoutes);
-app.use('/api/v1/user', userRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/team", teamRoutes);
+app.use('/api/user', userRoutes);
 
 // ** SocketIO
 

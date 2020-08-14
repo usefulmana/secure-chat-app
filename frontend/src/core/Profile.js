@@ -20,7 +20,7 @@ const Profile = ({ history }) => {
     currentUser({ token }).then((data) => {
       setUser(data)
     }).catch((err) => {
-
+      console.log("err : ", err)
     })
   }, [])
 

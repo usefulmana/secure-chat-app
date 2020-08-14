@@ -54,6 +54,40 @@ export const login = user => {
         });
 };
 
+export const changeUsername = ({ username, token }) => {
+    return fetch(`${API}/user/current`, {
+        method: "PUT",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `${token}`
+        },
+        body: JSON.stringify({ username })
+    })
+        .then(response => {
+            return response.json();
+        })
+        .catch(err => {
+            console.log(err);
+        });
+};
+
+// export const readTours = ({ limit = 20, token }) => {
+//     return fetch(`${API}/tours?limit=${limit}`, {
+//         method: "GET",
+//         headers: {
+//             Accept: "application/json",
+//             "Content-Type": "application/json",
+//             Authorization: `Bearer ${token}`
+//         },
+//     })
+//         .then(response => {
+//             return response.json();
+//         })
+//         .catch(err => console.log(err));
+// };
+
+
 
 export const authenticate = (data, next) => {
     if (typeof window !== "undefined") {

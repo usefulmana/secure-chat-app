@@ -36,7 +36,7 @@ async (req, res) => {
 router.put("/photo",  passport.authenticate("jwt", { session: false }), upload.single('avatar'),
 async (req, res) => {
   const user = await User.findById(req.user.id);
-
+  console.log(req.file)
   user.image = req.file.location;
   user.save().then( u => res.status(200).send(u)).catch(err => console.log(err));
 })

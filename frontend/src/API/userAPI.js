@@ -72,20 +72,41 @@ export const changeUsername = ({ username, token }) => {
         });
 };
 
-// export const readTours = ({ limit = 20, token }) => {
-//     return fetch(`${API}/tours?limit=${limit}`, {
-//         method: "GET",
-//         headers: {
-//             Accept: "application/json",
-//             "Content-Type": "application/json",
-//             Authorization: `Bearer ${token}`
-//         },
-//     })
-//         .then(response => {
-//             return response.json();
-//         })
-//         .catch(err => console.log(err));
-// };
+export const changePassword = ({ password, token }) => {
+    return fetch(`${API}/user/change-pw`, {
+        method: "POST",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `${token}`
+        },
+        body: JSON.stringify({ password })
+    })
+        .then(response => {
+            return response.json();
+        })
+        .catch(err => {
+            console.log(err);
+        });
+};
+
+export const changeAvatar = ({ formData, token }) => {
+    return fetch(`${API}/user/photo`, {
+        method: "PUT",
+        headers: {
+            Accept: "application/json",
+            // "Content-Type": "form-data",
+            Authorization: `${token}`
+        },
+        body: formData 
+    })
+        .then(response => {
+            return response.json();
+        })
+        .catch(err => {
+            console.log(err);
+        });
+};
 
 
 

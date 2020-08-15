@@ -12,14 +12,15 @@ const handleClick=()=>{
     setOpened(!opened)
 }
 
-const options={
+const modalStyle={
     width:'50vw',
     height: '20vh'
 }
 
 Step 1: Feed them in Modal component.
-<Modal opened={opened} setOpened={setOpened} options={options}>
+<Modal opened={opened} setOpened={setOpened} options={modalStyle}>
 <div>
+    <button onClick={handleClick}>button</button>
     hi i am inside modal
 </div>
 </Modal>

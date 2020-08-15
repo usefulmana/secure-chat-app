@@ -5,7 +5,7 @@ const { User } = require("../models/User");
 const { sendEMail } = require("../utils/email");
 const { upload } = require('../utils/upload');
 const { retrievePW, verifyEmail } = require("../utils/redis");
-
+const { checkPassword } = require("../utils/passwordChecker");
 
 
 
@@ -47,6 +47,10 @@ router.post(
   "/change-pw",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
+    if (!checkPassword(req.body.password)){
+      return res.status(400).send({error: "Weak Password"}).end()
+    };
+
     User.findById(req.user.id).then((u) => {
       u.password = req.body.password;
 

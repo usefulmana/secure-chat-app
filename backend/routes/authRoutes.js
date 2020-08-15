@@ -6,6 +6,7 @@ const { User } = require("../models/User");
 const gravatar = require("gravatar");
 const socialAuthActions = require('../actions/socialAuthActions');
 const { sendEMail } = require('../utils/email');
+const { checkPassword } = require('../utils/passwordChecker');
 
 // ** Middleware **
 const {
@@ -48,11 +49,8 @@ router.post("/register", [checkRegistrationFields], (req, res) => {
 
     User.findOne({ email: req.body.email }).then((user) => {
         if (user) {
-            errors.push({ param: "email", msg: "Email is already taken" });
+            return res.status(400).send({error: "Email is taken"}).end()
 
-            res.send({
-                errors: createErrorObject(errors),
-            }).end();
         } else {
             // ** Assign A Random Avatar **
             const avatar = gravatar.url(req.body.email, {
@@ -61,12 +59,8 @@ router.post("/register", [checkRegistrationFields], (req, res) => {
                 d: "identicon",
             });
 
-            if (req.body.username.includes('!')){
-                errors.push({ param: "username", msg: "Username cannot have '!' character" });
-
-                res.send({
-                    errors: createErrorObject(errors),
-                }).end();
+            if (!checkPassword(req.body.password)){
+                return res.status(400).send({error: "Weak Password"}).end()
             };
 
 

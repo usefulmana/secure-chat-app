@@ -14,6 +14,8 @@ router.get(
   "/current",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
+    console.log("api/user/current GET method ")
+
     const user = await User.findById(req.user.id)
       .populate("teams")
       .select("-password");
@@ -23,23 +25,26 @@ router.get(
 );
 
 // Edit Username
-router.put("/current",  passport.authenticate("jwt", { session: false }),
-async (req, res) => {
-  const user = await User.findById(req.user.id);
+router.put("/current", passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
 
-  user.username = req.body.username;
-  user.save().then( u => res.status(200).send(u)).catch(err => console.log(err));
-})
+    const user = await User.findById(req.user.id);
+
+    user.username = req.body.username;
+    user.save().then(u => res.status(200).send(u)).catch(err => console.log(err));
+  })
 
 
 // Update avatar
-router.put("/photo",  passport.authenticate("jwt", { session: false }), upload.single('avatar'),
-async (req, res) => {
-  const user = await User.findById(req.user.id);
-
-  user.image = req.file.location;
-  user.save().then( u => res.status(200).send(u)).catch(err => console.log(err));
-})
+router.put("/photo", passport.authenticate("jwt", { session: false }), upload.single('avatar'),
+  async (req, res) => {
+    console.log("api/user/photo put method ")
+    const user = await User.findById(req.user.id);
+    console.log("req.file : ", req.file)
+    console.log("req.body : ", req.body)
+    user.image = req.file.location;
+    user.save().then(u => res.status(200).send(u)).catch(err => console.log(err));
+  })
 
 
 // Change password
@@ -57,7 +62,7 @@ router.post(
 
 // Verify Email
 router.post("/verify/:token", (req, res) => {
-    verifyEmail(req.params.token, req, res);
+  verifyEmail(req.params.token, req, res);
 });
 
 
@@ -75,7 +80,7 @@ router.post("/forgot-pw", async (req, res) => {
 
 // Retrieve Password
 router.post("/retrieve-pw/:token", (req, res) => {
-    retrievePW(req.params.token, req, res);
+  retrievePW(req.params.token, req, res);
 });
 
 module.exports = router;

@@ -38,7 +38,7 @@ const SignIn = ({ history, visible, flipVisibility }) => {
                 }
                 else {
                     authenticate(data, () => {
-                        history.push('/dashboard/locations')
+                        history.push('/dashboard')
                     });
                 }
             })

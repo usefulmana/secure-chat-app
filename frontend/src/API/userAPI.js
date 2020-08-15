@@ -54,6 +54,61 @@ export const login = user => {
         });
 };
 
+export const changeUsername = ({ username, token }) => {
+    return fetch(`${API}/user/current`, {
+        method: "PUT",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `${token}`
+        },
+        body: JSON.stringify({ username })
+    })
+        .then(response => {
+            return response.json();
+        })
+        .catch(err => {
+            console.log(err);
+        });
+};
+
+export const changePassword = ({ password, token }) => {
+    return fetch(`${API}/user/change-pw`, {
+        method: "POST",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `${token}`
+        },
+        body: JSON.stringify({ password })
+    })
+        .then(response => {
+            return response.json();
+        })
+        .catch(err => {
+            console.log(err);
+        });
+};
+
+export const changeAvatar = ({ formData, token }) => {
+    return fetch(`${API}/user/photo`, {
+        method: "PUT",
+        headers: {
+            Accept: "application/json",
+            // "Content-Type": "form-data",
+            Authorization: `${token}`
+        },
+        body: formData 
+    })
+        .then(response => {
+            return response.json();
+        })
+        .catch(err => {
+            console.log(err);
+        });
+};
+
+
 
 export const authenticate = (data, next) => {
     if (typeof window !== "undefined") {

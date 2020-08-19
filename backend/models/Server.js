@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const randomString = require('random-base64-string');
 
-const TeamSchema = new Schema({
+const ServerSchema = new Schema({
 
     name: {
         type: String,
@@ -12,7 +12,7 @@ const TeamSchema = new Schema({
         maxlength: ['50', 'Team name have to be less than 50 characters long']
     },
 
-    invitationCode: {
+    code: {
         type: String,
         trim: true,
         default: randomString(8)
@@ -37,6 +37,11 @@ const TeamSchema = new Schema({
     channels: [{
         type: Schema.Types.ObjectId,
         ref: 'Channel'
+    }],
+
+    members: [{
+        type: Schema.Types.ObjectId,
+        ref: 'User'
     }]
 
 }, {
@@ -47,6 +52,6 @@ const TeamSchema = new Schema({
 });
 
 
-const Team = mongoose.model('Team', TeamSchema);
+const Server = mongoose.model('Server', ServerSchema);
 
-module.exports = { Team };
+module.exports = { Server };

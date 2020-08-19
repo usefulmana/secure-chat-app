@@ -42,11 +42,7 @@ router.post(
 
     Server.create(newServer)
       .then((server) => {
-        User.findByIdAndUpdate(
-          req.user.id,
-          { $push: { server: server._id } },
-          { new: true, useFindAndModify: false }
-        )
+        User.findById(req.user.id)
           .then((u) => {
             const newChannel = new Channel({
               name: "general",
@@ -54,7 +50,11 @@ router.post(
               server: server._id,
             })
               .save()
-              .then((c) => res.status(201).json(server));
+              .then((c) => {
+
+                u.servers.push(server.id);
+                u.save();
+                res.status(201).json(server)});
           })
           .catch((err) => console.log(err));
       })

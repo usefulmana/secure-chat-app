@@ -7,7 +7,8 @@ const MessageSchema = new Schema({
     message: {
         type: String,
         required: true,
-        trim: true
+        trim: true,
+        minlength: ['1', 'Chat message must be at least 1 characters long'],
     },
 
     channel: {
@@ -20,10 +21,6 @@ const MessageSchema = new Schema({
         type: Schema.Types.ObjectId,
         required: true,
         ref: 'User'
-    },
-    admin: {
-        type: Boolean,
-        default: false
     }
 
 }, {

@@ -74,16 +74,16 @@ const checkEditProfileFields = async (req, res, next) => {
 };
 
 const checkCreateTeamFields = async (req, res, next) => {
-    if (!req.body.teamName) {
-        req.check('teamName')
+    if (!req.body.name) {
+        req.check('name')
             .not()
             .isEmpty()
-            .withMessage('Room name is required');
+            .withMessage('Server name is required');
     } else {
-        req.check('teamName')
+        req.check('name')
             .isString()
             .isLength({ min: 4, max: 50 })
-            .withMessage('Team name must be between 4 and 50 characters');
+            .withMessage('Server name must be between 4 and 50 characters');
     }
     const errors = req.validationErrors();
 

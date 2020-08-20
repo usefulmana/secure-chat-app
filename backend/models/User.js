@@ -39,13 +39,17 @@ const UserSchema = new Schema({
         type: String,
         default: null
     },
-    teams: [{
+    servers: [{
         type: Schema.Types.ObjectId,
-        ref: 'Team'
+        ref: 'Server'
     }],
     location: {
         type: String,
         default: null
+    },
+    lastActive:{
+        type: Date,
+        default: Date.now
     }
 },
 {

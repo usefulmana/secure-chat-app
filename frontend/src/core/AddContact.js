@@ -5,12 +5,13 @@ import { login, authenticate, findUser } from '../API/userAPI'
 
 const AddContact = ({ visible }) => {
   var jwt = JSON.parse(localStorage.getItem("jwt"));
+  var token= jwt.token
 
 
   const [option, setOption] = useState('username')
   const [values, setValues] = useState({})
   const { username, email } = values
-  const [lists, setLists] = useState([])
+  const [result, setResult] = useState([])
 
   useEffect(() => {
 
@@ -31,8 +32,9 @@ const AddContact = ({ visible }) => {
   }
 
   const handleClick = () => {
-    findUser({ method: option, keyword: values[option] }).then(data => {
-
+    findUser({ token,method: option, keyword: values[option] }).then(data => {
+      console.log("Data : ", data)
+      setResult(data)
     }).catch(err => {
 
     })
@@ -55,10 +57,19 @@ const AddContact = ({ visible }) => {
       )
   }
 
+  const showResult = () => {
+    return (
+      <div>
+        {result.map(r => <div>{r.username}</div>)}
+      </div>
+    )
+  }
+
   return (
     <div>
       {showOption()}
       {showForm()}
+      {showResult()}
     </div>
   )
 }

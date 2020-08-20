@@ -25,11 +25,11 @@ router.get(
 );
 
 // Edit Username
-router.put("/current",  passport.authenticate("jwt", { session: false }),
-async (req, res) => {
-  const user = await User.findById(req.user.id).select('-password');
+router.put("/current", passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    const user = await User.findById(req.user.id).select('-password');
 
-    const user = await User.findById(req.user.id);
+    // const user = await User.findById(req.user.id);
 
     user.username = req.body.username;
     user.save().then(u => res.status(200).send(u)).catch(err => console.log(err));
@@ -53,8 +53,8 @@ router.post(
   "/change-pw",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
-    if (!checkPassword(req.body.password)){
-      return res.status(400).send({error: "Weak Password"}).end()
+    if (!checkPassword(req.body.password)) {
+      return res.status(400).send({ error: "Weak Password" }).end()
     };
 
     User.findById(req.user.id).then((u) => {
@@ -89,20 +89,20 @@ router.post("/retrieve-pw/:token", (req, res) => {
 });
 
 // Find users by username or email
-router.get("/find", passport.authenticate("jwt", { session: false }), async(req, res) => {
-  const { username, email } =  req.query;
+router.get("/find", passport.authenticate("jwt", { session: false }), async (req, res) => {
+  const { username, email } = req.query;
 
-  if (username){
-    const users = await User.find({username: new RegExp('^'+username+'$', "i")}).select('-password');
+  if (username) {
+    const users = await User.find({ username: new RegExp('^' + username + '$', "i") }).select('-password');
     if (!users) {
-      return res.status(404).send({"message": `No users were found with username: ${username}`})
+      return res.status(404).send({ "message": `No users were found with username: ${username}` })
     }
     return res.status(200).json(users)
   }
-  else if (email){
-    const users = await User.find({email: new RegExp('^'+email+'$', "i")}).select('-password');
+  else if (email) {
+    const users = await User.find({ email: new RegExp('^' + email + '$', "i") }).select('-password');
     if (!users) {
-      return res.status(404).send({"message": `No users were found with email: ${email}`})
+      return res.status(404).send({ "message": `No users were found with email: ${email}` })
     }
     return res.status(200).json(users)
   }

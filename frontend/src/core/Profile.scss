@@ -1,11 +1,55 @@
-.profile-cont{
-    input{
-        color:black;
-        // border:1px;
-    }
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,700;1,400&display=swap");
+
+$color_1: #4d4d4d;
+$color_2: #262626;
+$color_3: #cf3939;
+
+body {
+  background-color: $color_1;
+  margin-top: 3%;
 }
 
-.avatar-image{
-    width:20vw;
-    height:20vh;
+.profile-cont {
+  font-family: "Open Sans";
+  font-size: large;
+  position: relative;
+  z-index: 1;
+  max-width: 75%;
+  min-height: 50%;
+  margin: 10%;
+  padding: 15%;
+  border: 1px solid $color_3;
+  background-color: $color_2;
+
+  input {
+    background-color: $color_2;
+    box-sizing: border-box;
+    margin: 2%;
+    padding: 1%;
+    border: 1px solid $color_3;
+    border-radius: 5px;
+  }
+
+  button {
+    margin-left: 15px auto;
+    border-radius: 2px;
+    background-color: $color_1;
+  }
 }
+
+.avatar-image {
+  width: 20vw;
+  height: 20vh;
+}
+
+// .profile-cont {
+//   input {
+//     color: black;
+//     // border:1px;
+//   }
+// }
+
+// .avatar-image {
+//   width: 20vw;
+//   height: 20vh;
+// }

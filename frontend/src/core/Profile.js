@@ -140,6 +140,7 @@ const Profile = ({ history }) => {
         required
       ></input>
       <button onClick={handleSubmit("image")}>Submit</button>
+      <div>
       <div className="">
         <input
           value={user.username}
@@ -159,6 +160,7 @@ const Profile = ({ history }) => {
         {showOptions("password")}
       </div>
       <Modal opened={popUp} setOpened={setPopUp} options={modalStyle}>
+        <div>
         <div>
           <button
             onClick={() => {

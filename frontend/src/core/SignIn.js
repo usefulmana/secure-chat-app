@@ -6,6 +6,7 @@ import Loader from './Loader'
 import Parallax from 'parallax-js' // Now published on NPM
 import anime from 'animejs';
 import './SignIn.scss'
+import queryString from 'query-string';
 
 const SignIn = ({ history, visible, flipVisibility }) => {
     var jwt = JSON.parse(localStorage.getItem("jwt"));
@@ -37,8 +38,9 @@ const SignIn = ({ history, visible, flipVisibility }) => {
                     setValues({ ...values, errors: data.errors })
                 }
                 else {
+                    console.log("what is data after login is succesfull : " , data.user.servers)
                     authenticate(data, () => {
-                        history.push('/dashboard/locations')
+                        history.push(`/dashboard`)
                     });
                 }
             })

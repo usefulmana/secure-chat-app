@@ -17,10 +17,12 @@ const SignUp = ({ history, visible, flipVisibility }) => {
         username: "",
         email: "",
         password: "",
+        password2: "",
         errors: [],
         loading: false,
     })
-    const { username, email, password, loading, errors } = values;
+
+    const { username, email, password, password2, loading, errors } = values;
 
     useEffect(() => {
 
@@ -32,6 +34,7 @@ const SignUp = ({ history, visible, flipVisibility }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault()
+        if (!passwordCheck()) return false 
         console.log({ username, email, password })
         register({ username, email, password }).then(
             data => {
@@ -86,11 +89,19 @@ const SignUp = ({ history, visible, flipVisibility }) => {
         }
     }
 
-    const isFilled = () => {
-        if (email !== '') {
+    const isFilled = (field) => {
+        if (values[field] !== '') {
             return 'label label-active'
         } else {
             return 'label'
+        }
+    }
+
+    const passwordCheck = () => {
+        if (password === password2) {
+            return true
+        } else {
+            setValues({...values,errors:[{password:"Password do not match"}]})
         }
     }
 
@@ -104,27 +115,32 @@ const SignUp = ({ history, visible, flipVisibility }) => {
                     <h3 class="" id="" ><strong>Sign Up</strong></h3>
                 </div>
                 <div class="body">
+                    <div class="md-form ">
+                        <input type="email" class="form-control " onChange={handleChange('username')} />
+                        <label className={isFilled('username')} data-error="wrong" for="Form-pass1">Username</label>
+                    </div>
+
 
                     <div class="md-form ">
-                        <input type="email" id="Form-email1" class="form-control " onChange={handleChange('username')} />
-                        <label data-error="wrong" className={isFilled()} for="Form-email1">User name</label>
+                        <input type="email" class="form-control " onChange={handleChange('email')} />
+                        <label className={isFilled('email')} data-error="wrong" for="Form-pass1">Email</label>
                     </div>
 
                     <div class="md-form ">
-                        <input type="username" id="Form-pass1" class="form-control " onChange={handleChange('email')} />
-                        <label className={isFilled()} data-error="wrong" for="Form-pass1">email</label>
+                        <input type="password" class="form-control " onChange={handleChange('password')} />
+                        <label className={isFilled('password')} data-error="wrong" for="Form-pass1">Your password</label>
                     </div>
 
                     <div class="md-form ">
-                        <input type="password" id="Form-pass1" class="form-control " onChange={handleChange('password')} />
-                        <label className={isFilled()} data-error="wrong" for="Form-pass1">Your password</label>
+                        <input type="password" class="form-control " onChange={handleChange('password2')} />
+                        <label className={isFilled('password2')} data-error="wrong" for="Form-pass1">Type password again</label>
                     </div>
 
-                    {errors.length>0 && (<div className="position-absolute showError ">{showErrors()}</div>)}
-                    <div class="row justify-content-center mr-3 mt-5">
+                    {errors.length > 0 && (<div className="position-absolute showError ">{showErrors()}</div>)}
+                    <div class="row justify-content-center mr-3 mt-1">
                         <button type="button" class="signup-button" onClick={handleSubmit}>Sign Up</button>
                     </div>
-                    <div className="text-center my-3">
+                    <div className="text-center my-1">
                         Already have account?
                     </div>
                     <div className="text-center my-4 sign-up-link pointer" onClick={flipVisibility}>

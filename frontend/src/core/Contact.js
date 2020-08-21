@@ -1,44 +1,40 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import './Contact.scss'
-import { login, authenticate } from '../API/userAPI'
+import { login, authenticate, findUser } from '../API/userAPI'
+import AddContact from "./AddContact";
+import Modal from "../Template/Modal";
 
 const Contact = ({ visible }) => {
-    var jwt = JSON.parse(localStorage.getItem("jwt"));
+  var jwt = JSON.parse(localStorage.getItem("jwt"));
 
-    const [values, setValues] = useState({
- 
-    })
-
-    useEffect(() => {
-
-    }, [])
-
-    // const handleChange = name => event => {
-    //     setValues({ ...values, errors: [], [name]: event.target.value });
-    // };
-
-    // const handleSubmit = (e) => {
-    //     e.preventDefault()
-    //     login({ email, password }).then(
-    //         data => {
-    //             if (data.errors) {
-    //                 setValues({ ...values, errors: data.errors })
-    //             }
-    //             else {
-    //                 authenticate(data, () => {
-    //                     history.push('/dashboard/locations')
-    //                 });
-    //             }
-    //         })
-    // }
+  const [formOpened, setFormOpened] = useState(false)
 
 
-    return visible==='contact'&&(
-      <div>
-          Contact
-      </div>
-    )
+  useEffect(() => {
+
+  }, [])
+
+  const addContactButton = () => {
+    return <button onClick={()=>setFormOpened(true)}>Add contact</button>
+  }
+
+
+  const modalStyle = {
+    width: '50vw',
+    height: '20vh'
+  }
+
+
+  return visible === 'contact' && (
+    <div>
+      Contact
+      {addContactButton()}
+      <Modal opened={formOpened} setOpened={setFormOpened} options={modalStyle}>
+        <AddContact />
+      </Modal>
+    </div>
+  )
 }
 
 export default Contact

@@ -14,6 +14,8 @@ router.get(
   "/current",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
+    console.log("api/user/current GET method ")
+
     const user = await User.findById(req.user.id)
       .populate("servers")
       .select("-password");
@@ -23,23 +25,27 @@ router.get(
 );
 
 // Edit Username
-router.put("/current",  passport.authenticate("jwt", { session: false }),
-async (req, res) => {
-  const user = await User.findById(req.user.id).select('-password');
+router.put("/current", passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    const user = await User.findById(req.user.id).select('-password');
 
-  user.username = req.body.username;
-  user.save().then( u => res.status(200).send(u)).catch(err => console.log(err));
-})
+    // const user = await User.findById(req.user.id);
+
+    user.username = req.body.username;
+    user.save().then(u => res.status(200).send(u)).catch(err => console.log(err));
+  })
 
 
 // Update avatar
-router.put("/photo",  passport.authenticate("jwt", { session: false }), upload.single('avatar'),
-async (req, res) => {
-  const user = await User.findById(req.user.id);
-  console.log(req.file)
-  user.image = req.file.location;
-  user.save().then( u => res.status(200).send(u)).catch(err => console.log(err));
-})
+router.put("/photo", passport.authenticate("jwt", { session: false }), upload.single('avatar'),
+  async (req, res) => {
+    console.log("api/user/photo put method ")
+    const user = await User.findById(req.user.id);
+    console.log("req.file : ", req.file)
+    console.log("req.body : ", req.body)
+    user.image = req.file.location;
+    user.save().then(u => res.status(200).send(u)).catch(err => console.log(err));
+  })
 
 
 // Change password
@@ -47,8 +53,8 @@ router.post(
   "/change-pw",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
-    if (!checkPassword(req.body.password)){
-      return res.status(400).send({error: "Weak Password"}).end()
+    if (!checkPassword(req.body.password)) {
+      return res.status(400).send({ error: "Weak Password" }).end()
     };
 
     User.findById(req.user.id).then((u) => {
@@ -61,7 +67,7 @@ router.post(
 
 // Verify Email
 router.post("/verify/:token", (req, res) => {
-    verifyEmail(req.params.token, req, res);
+  verifyEmail(req.params.token, req, res);
 });
 
 
@@ -79,24 +85,24 @@ router.post("/forgot-pw", async (req, res) => {
 
 // Retrieve Password
 router.post("/retrieve-pw/:token", (req, res) => {
-    retrievePW(req.params.token, req, res);
+  retrievePW(req.params.token, req, res);
 });
 
 // Find users by username or email
-router.get("/find", passport.authenticate("jwt", { session: false }), async(req, res) => {
-  const { username, email } =  req.query;
+router.get("/find", passport.authenticate("jwt", { session: false }), async (req, res) => {
+  const { username, email } = req.query;
 
   if (username){
     const users = await User.find({username: {"$regex": username, "$options": "i"}}).select('-password');
     if (!users) {
-      return res.status(404).send({"message": `No users were found with username: ${username}`})
+      return res.status(404).send({ "message": `No users were found with username: ${username}` })
     }
     return res.status(200).json(users)
   }
   else if (email){
     const users = await User.find({email: {"$regex": email, "$options": "i"}}).select('-password');
     if (!users) {
-      return res.status(404).send({"message": `No users were found with email: ${email}`})
+      return res.status(404).send({ "message": `No users were found with email: ${email}` })
     }
     return res.status(200).json(users)
   }

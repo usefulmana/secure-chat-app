@@ -142,52 +142,19 @@ export const isAuthenticated = () => {
     }
 };
 
-export const deactivateAccount = ({ token, userId }) => {
-    return fetch(`${API}/deactivate/${userId}`, {
-        method: "POST",
+export const findUser = ({ token, method, keyword }) => {
+    return fetch(`${API}/user/find?${method}=${keyword}`, {
+        method: "GET",
         headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`
-        },
+            Authorization: `${token}`
+        }
     })
-        .then(data => {
-            return data
+        .then(response => {
+            return response.json();
         })
-        .catch(err => console.log(err));
+        .catch(err => {
+            console.log(err);
+        });
 };
-
-export const reactivateAccount = ({ token, userId }) => {
-    return fetch(`${API}/reactivate/${userId}`, {
-        method: "POST",
-        headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`
-        },
-    })
-        .then(data => {
-            return data
-        })
-        .catch(err => console.log(err));
-};
-
-export const createAccount = ({ token, userId, userInfo }) => {
-    return fetch(`${API}/signup`, {
-        method: "POST",
-        headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify(userInfo)
-    })
-        .then(data => {
-            return data.json();
-        })
-        .catch(err => console.log(err));
-};
-
-// export const adminRoute=()=>{
-//     console.log("adminroute function")
-// }

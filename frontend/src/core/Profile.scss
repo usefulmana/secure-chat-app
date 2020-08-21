@@ -2,6 +2,7 @@
 
 $color_1: #4d4d4d;
 $color_2: #262626;
+
 $color_3: #cf3939;
 
 body {
@@ -53,3 +54,30 @@ body {
 //   width: 20vw;
 //   height: 20vh;
 // }
+
+$color_3: #ffffff;
+
+.profile-cont {
+  position: relative;
+  z-index: 10;
+  width: 480px;
+  margin: 0 auto;
+  background-color: $color_2;
+
+  input {
+    font-family: "Open Sans";
+    background-color: $color_1;
+    box-sizing: border-box;
+    margin: 0 auto;
+    padding: 10px;
+    border: 1px solid $color_3;
+    border-radius: 5px;
+  }
+}
+
+.avatar-image {
+  border-radius: 100%;
+  width: 20vw;
+  height: 20vh;
+}
+

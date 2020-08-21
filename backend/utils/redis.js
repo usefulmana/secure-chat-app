@@ -1,6 +1,7 @@
 const redis = require('redis');
 const { User } = require("../models/User");
-const client = redis.createClient({host: process.env.REDIS_HOST})
+const client = redis.createClient({host: process.env.REDIS_HOST});
+const { checkPassword } = require("../utils/passwordChecker");
 
 client.on('connect', () => {
     console.log('Connected to Redis');  
@@ -27,6 +28,10 @@ const retrievePW =  (key, req, res) => {
         const {type , userId } = JSON.parse(result);
         if (type === 'forgotpw'){
             User.findById(userId).then((u) => {
+                if (!checkPassword(req.body.password)){
+                    return res.status(400).send({error: "Weak Password"}).end()
+                };
+
                 u.password = req.body.password;
           
                 u.save().then((result) => {

@@ -87,14 +87,14 @@ router.get("/find", passport.authenticate("jwt", { session: false }), async(req,
   const { username, email } =  req.query;
 
   if (username){
-    const users = await User.find({username: new RegExp('^'+username+'$', "i")}).select('-password');
+    const users = await User.find({username: {"$regex": username, "$options": "i"}}).select('-password');
     if (!users) {
       return res.status(404).send({"message": `No users were found with username: ${username}`})
     }
     return res.status(200).json(users)
   }
   else if (email){
-    const users = await User.find({email: new RegExp('^'+email+'$', "i")}).select('-password');
+    const users = await User.find({email: {"$regex": email, "$options": "i"}}).select('-password');
     if (!users) {
       return res.status(404).send({"message": `No users were found with email: ${email}`})
     }

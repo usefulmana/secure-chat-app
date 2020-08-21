@@ -51,7 +51,8 @@ router.post(
             })
               .save()
               .then((c) => {
-
+                server.channels.push(c);
+                server.save();
                 u.servers.push(server.id);
                 u.save();
                 res.status(201).json(server)});

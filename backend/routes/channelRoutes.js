@@ -21,7 +21,7 @@ router.post('/create', passport.authenticate("jwt", { session: false }), async (
 });
 
 // Edit Channel Name
-router.post("/name", passport.authenticate("jwt", { session: false }),
+router.put("/name", passport.authenticate("jwt", { session: false }),
     async (req, res) => {
         const { oldName, newName } = req.body;
 

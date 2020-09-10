@@ -8,7 +8,7 @@
 #root .signup-container{
     transition: 0.5s all ease-in-out;
 
-    height:80vh;
+    height:85vh;
     width:30vw;
     margin-right:10vw;
     z-index:1;
@@ -69,7 +69,12 @@
 }
 
 #root .main-cont-enlarged .label, input{
-    color:rgb(255, 255, 255);
+    color:rgb(255, 255, 255) !important;
+    border-top:0px !important;
+    border-left:0px !important;
+    border-right:0px !important;
+    background:none;
+
 }
 
 #root .sign-up-slide-left{

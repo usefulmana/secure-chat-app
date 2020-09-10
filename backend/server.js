@@ -87,7 +87,7 @@ app.use("/api/channel", channelRoutes);
 
 // {userId, userName, id}
 
-let clients = [];
+let clients = [];   
 io.on('connection', socket => {
     
     let sessionUserId = '';

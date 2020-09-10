@@ -6,7 +6,7 @@ import Loader from './Loader'
 import Parallax from 'parallax-js' // Now published on NPM
 import anime from 'animejs';
 import SignIn from './SignIn'
-import SignUp from "./SignUp";
+import SignUp from "./SignUp2";
 
 
 const Main = ({ history }) => {
@@ -56,7 +56,7 @@ const Main = ({ history }) => {
     }
 
     return (
-        <div className={`main-cont ${visible === 1 && 'main-cont-enlarged'} row align-items-center justify-content-end`}>
+        <div className={`main-cont ${visible === 1 && 'main-cont-enlarged'} row `}>
             <SignIn visible={visible} flipVisibility={flipVisibility} history={history} />
             <SignUp visible={visible} flipVisibility={flipVisibility} history={history}/>
 

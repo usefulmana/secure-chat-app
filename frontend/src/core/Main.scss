@@ -18,33 +18,16 @@
 }
 
 
-
-#scene{
-    position: absolute;
-    bottom:14vh;
-    left:5vw;
-    width:80vw;
-    height:90vh;
-    padding:0;
-    margin:0;
-    border:0;
-    overflow: hidden;
-
-    img{
-        width:100%;
-        height:100%;
-    }
-}
-
 // Main component
 
 #root .main-cont{
     width:100vw;
-    height:100vh;
+    // height:100vh;
     background:linear-gradient(-45deg,  #bd0db4, #0d4363, rgb(214, 40, 58), rgba(226, 135, 119, 0.7));
     background-size: 300% 100%;
     background-position:0% 0%;
-    overflow: hidden;
+    overflow-x: hidden;
+    // overflow-y: auto;
     // background-size: 100% 100%;
     position: relative;
     transition: 0.7s all ease-in-out;

@@ -7,15 +7,7 @@ const gravatar = require("gravatar");
 const socialAuthActions = require('../actions/socialAuthActions');
 const { sendEMail } = require('../utils/email');
 const { checkPassword } = require('../utils/passwordChecker');
-
-// ** Middleware **
-const {
-    checkLoginFields,
-    checkRegistrationFields,
-    checkEditProfileFields,
-    createErrorObject,
-    customSocialAuthenticate
-} = require("../middleware/authenticate");
+const { checkEmail } = require('../utils/emailChecker');
 const passport = require("passport");
 
 // ** Routes **
@@ -44,23 +36,45 @@ const passport = require("passport");
  *          '400':
  *              description: Failed Request. Something went wrong
  */
-router.post("/register", [checkRegistrationFields], (req, res) => {
+router.post("/register", (req, res) => {
     let errors = [];
 
-    User.findOne({ email: req.body.email }).then((user) => {
+    const {email , username, password} = req.body;
+
+    if (!email || !username || !password){
+        return res.status(400).send({error: "Some fields are missing"}).end()
+    }
+
+    if (!checkEmail(email)){
+        return res.status(400).send({error: "Invalid Email"}).end()
+    }
+
+    if (username.length < 5 || username.length > 50){
+        return res.status(400).send({error: "Username must be between 5 and 50 characters"}).end()
+    }
+
+    if (password.length < 5 || password.length > 15){
+        return res.status(400).send({error: "Password must be between 5 and 15 characters"}).end()
+    }
+
+    if (!checkPassword(password)){
+        return res.status(400).send({error: "Weak Password"}).end()
+    };
+
+    User.findOne({ email: email }).then((user) => {
         if (user) {
-            return res.status(400).send({error: "Email is taken"}).end()
+            return res.status(400).send({error: "Email is taken!"}).end()
 
         } else {
             // ** Assign A Random Avatar **
-            const avatar = gravatar.url(req.body.email, {
+            const avatar = gravatar.url(email, {
                 s: 220,
                 r: "pg",
                 d: "identicon",
             });
 
-            if (!checkPassword(req.body.password)){
-                return res.status(400).send({error: "Weak Password"}).end()
+            if (!checkPassword(password)){
+                return res.status(400).send({error: "Weak Password!"}).end()
             };
 
 
@@ -124,8 +138,19 @@ router.post("/register", [checkRegistrationFields], (req, res) => {
  *          '400':
  *              description: Failed Request. No user found or wrong password
  */
- router.post('/login', checkLoginFields, async(req, res) => {
-    const user = await User.findOne({ email: req.body.email }).select('-password').populate('teams');
+ router.post('/login', async(req, res) => {
+
+    const {email, password} = req.body;
+
+    if (!email || !password) {
+        return res.status(400).send({error: "Some fields are messing"}).end();
+    }
+
+    if (!checkEmail(req.body.email)){
+        return res.status(400).send({error: "Invalid Email"}).end()
+    }
+
+    const user = await User.findOne({ email: req.body.email }).select('-password').populate('servers');
 
     
     if (!user) {

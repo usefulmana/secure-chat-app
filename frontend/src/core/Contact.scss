@@ -14,7 +14,7 @@ $app_primary: #5558af;
 }
 
 button {
-  background-color: #5558af;
+  background-color: $app_primary;
   border-radius: 3px;
   margin: 25px;
   padding: 5px;

@@ -6,37 +6,31 @@ $color_3: #ffffff;
 $color_4: #ccc9c9;
 
 .profile-cont {
-  font-family: 'Open Sans';
-  font-size: large;
   position: relative;
   z-index: 1;
-  max-width: 75%;
-  min-height: 50%;
   margin: 10%;
   padding: 15%;
-  // width: 480px;
-  // margin: 0 auto;
-  border: 1px solid $color_3;
+  border: 1px solid $color_1;
   background-color: $color_4;
 
   input {
-    background-color: $color_2;
     box-sizing: border-box;
     margin: 2%;
     padding: 1%;
-    border: 1px solid $color_3;
-    border-radius: 5px;
+    border: 1px solid $color_1;
+    border-radius: 3px;
   }
 
   button {
-    margin-left: 15px auto;
-    border-radius: 2px;
-    background-color: $color_2;
+    background-color: #5558af;
+    border-radius: 3px;
+    margin: 25px;
+    padding: 5px;
   }
 }
 
 .avatar-image {
-  border-radius: 100%;
+  border-radius: 3px;
   width: 20vw;
   height: 20vh;
 }

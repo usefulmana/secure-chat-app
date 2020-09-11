@@ -1,3 +1,55 @@
-.option-btn{
-    
+$color_1: #4d4d4d;
+$color_2: #696969;
+$color_3: #ffffff;
+$color_4: #ccc9c9;
+$app_primary: #5558af;
+
+body {
+  background: $color_4;
+}
+
+.navbar-options {
+  display: grid;
+  grid-template-columns: 2fr 2fr;
+  grid-template-rows: 2fr;
+  align-content: center;
+  box-shadow: 0 1px 2px 0 rgba(190, 134, 255, 0.4),
+    0 2px 5px 0 rgba(190, 120, 255, 0.4);
+
+  :hover {
+    color: $app_primary;
+    text-shadow: 0 0 5px rgba(94, 59, 189, 0.85);
+    box-shadow: 0 2px 4px 0 rgba(121, 121, 121, 0.4),
+      0 3px 10px 0 rgba(121, 121, 121, 0.4);
+  }
+}
+
+.option-btn {
+  margin: 5%;
+  padding-bottom: 5%;
+  font-weight: 700;
+  text-align: center;
+}
+
+.pointer {
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-left: 10px;
+  // border-radius: 30px;
+  // border-right: thick double #32a1ce;
+  border-bottom: #5558af;
+  // background-color: #82ccdd;
+  padding: 10px;
+  position: relative;
+}
+
+.col-8 {
+  text-align: center;
+  margin-top: 50px;
+  padding: 50px;
+  font-weight: 700;
+  background-color: $color_3;
+  padding: 20px;
+  box-sizing: border-box;
+  position: relative;
 }

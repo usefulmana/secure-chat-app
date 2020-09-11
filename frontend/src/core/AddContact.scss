@@ -1,0 +1,18 @@
+$app_primary: #5558af;
+
+.cursor-pointer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 5px;
+  background-color: #e0dbdb;
+
+  :hover {
+    color: $app_primary;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.85);
+  }
+}
+
+button {
+  background-color: $app_primary;
+}

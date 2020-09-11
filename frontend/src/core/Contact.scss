@@ -1,0 +1,41 @@
+$app_primary: #5558af;
+
+.cursor-pointer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 5px;
+  background-color: #e0dbdb;
+
+  :hover {
+    color: $app_primary;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.85);
+  }
+}
+
+button {
+  background-color: #5558af;
+  border-radius: 3px;
+  margin: 25px;
+  padding: 5px;
+}
+
+.choice {
+  display: grid;
+  grid-template-rows: 1fr;
+  grid-template-columns: 1fr;
+  //   justify-content: space-around;
+  justify-content: stretch;
+  justify-items: center;
+  border-radius: 3px;
+  margin-left: 50px;
+  margin-bottom: 15px;
+  padding-left: 15px;
+  background-color: #f8dbf7;
+}
+
+input {
+  padding: 5px;
+  margin-left: 50px;
+  border-radius: 3px;
+}

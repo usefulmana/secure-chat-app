@@ -1,27 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Switch, Route, withRouter } from "react-router-dom";
-import { getTeamInfo,editTeam } from '../../API/teamsAPI'
+import { createChannel, } from '../../API/channelAPI'
 
 import editTeamForm from './EditTeamForm.scss'
 
-const EditTeamForm = ({history, TeamsRef, teamId }) => {
+const CreateTeamForm = ({ history, TeamsRef, teamId }) => {
   var jwt = JSON.parse(localStorage.getItem("jwt"));
   var token = jwt.token;
 
-  console.log("TeamsRef.current : ", TeamsRef.current)
   const { setOpened } = TeamsRef.current
 
   const [values, setValues] = useState({})
-  const { name, description } = values
+  const { name } = values
 
   useEffect(() => {
-    // alert(teamId)
-    getTeamInfo({ token, teamId }).then((data) => {
-      console.log("Data : ", data)
-      setValues({ name: data.name, description: data.description })
-    }).catch((err) => {
-      console.log("Error in Teams : ", err)
-    })
+
   }, [])
 
 
@@ -30,7 +23,7 @@ const EditTeamForm = ({history, TeamsRef, teamId }) => {
   }
 
   const handleSubmit = () => {
-    editTeam({ teamId, name, description }).then(data => {
+    createChannel({ teamId, channelName: name }).then(data => {
       console.log("Data: ", data)
       if (data.error) {
 
@@ -49,8 +42,6 @@ const EditTeamForm = ({history, TeamsRef, teamId }) => {
       <div className="form-cont">
         <div>Name </div>
         <input className="name-input input" value={name} onChange={handleChange('name')} />
-        <div>Description </div>
-        <textarea className="desc-input input" value={description} onChange={handleChange('description')} />
       </div>
     )
   }
@@ -58,7 +49,7 @@ const EditTeamForm = ({history, TeamsRef, teamId }) => {
   const renderOption = () => {
     return (
       <div className="content-cont">
-        <div className="header">Edit your team</div>
+        <div className="header">Create new channel</div>
         {showForm()}
         <div className="row JCE">
           <div className="cancel-btn btn" onClick={() => setOpened(false)}>Cancel</div>
@@ -77,4 +68,4 @@ const EditTeamForm = ({history, TeamsRef, teamId }) => {
   )
 }
 
-export default withRouter(EditTeamForm)
+export default withRouter(CreateTeamForm)

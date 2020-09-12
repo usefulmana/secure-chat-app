@@ -1,7 +1,10 @@
 import { BASE_URL } from "../config";
 const API = BASE_URL + '/api'
 
-var token = JSON.parse(localStorage.getItem('jwt')).token
+var token=undefined
+if (JSON.parse(localStorage.getItem('jwt'))) {
+    token = JSON.parse(localStorage.getItem('jwt')).token
+}
 
 export const getTeamInfo = async ({ token, teamId }) => {
     return await fetch(`${API}/server/${teamId}`, {
@@ -69,6 +72,26 @@ export const deleteTeam = async ({  teamId }) => {
             Authorization: `${token}`
         },
         // body: JSON.stringify({name, description})
+
+    })
+        .then(response => {
+            return response.json();
+        })
+        .catch(err => {
+            console.log(err);
+        });
+};
+
+
+export const leaveTeam = async ({ serverId }) => {
+    return await fetch(`${API}/server/leave`, {
+        method: "POST",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `${token}`
+        },
+        body: JSON.stringify({serverId})
 
     })
         .then(response => {

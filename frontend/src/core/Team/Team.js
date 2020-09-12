@@ -5,9 +5,9 @@ import Modal from '../../Template/Modal'
 import Layout from '../Layout'
 import { TweenLite } from 'gsap'
 import TeamOptions from '../Common/TeamOptions'
-import EditTeamForm from '../Common/EditTeamForm'
 // CSS
 import './Team.scss'
+import Channel from "./Channel";
 
 const Team = ({ history, match }) => {
     var jwt = JSON.parse(localStorage.getItem("jwt"));
@@ -21,8 +21,10 @@ const Team = ({ history, match }) => {
 
     useEffect(() => {
         getTeamInfo({ token, teamId }).then((data) => {
+            console.log("data : ", data)
+
             setTeamInfo(data)
-            initEvent()
+            // initEvent()
         }).catch((err) => {
             console.log("Error in Teams : ", err)
         })
@@ -31,23 +33,27 @@ const Team = ({ history, match }) => {
     const initEvent = () => {
         console.log("target : ", document.querySelector(".edit-btn"))
         document.querySelector(".edit-btn").addEventListener("click", (e) => {
-          e.stopPropagation();
-          var teamId=  e.target.closest('.edit-btn').id
-          setTeamToEdit(teamId)
-          setEditFormOpened(true);
+            e.stopPropagation();
+            var teamId = e.target.closest('.edit-btn').id
+            setTeamToEdit(teamId)
+            setEditFormOpened(true);
         });
 
-       
-      }
+
+    }
 
     const renderTeamInfo = () => {
         return (
             <>
                 <TeamOptions team={teamInfo} />
                 <div className="channel-header">Channel</div>
-                <div>{teamInfo.channels.map((c) =>
-                    <div>{c}</div>
-                )}</div>
+                <div className="channel-cont">
+                    {teamInfo.channels.map((c) => {
+                        { console.log("c : ", c) }
+                        return <Channel teamId={teamId} channelName={c.name} channelId={c._id} />
+                    }
+                    )}
+                </div>
             </>
         )
     }
@@ -57,14 +63,12 @@ const Team = ({ history, match }) => {
         if (teamInfo) {
             return (
                 <Layout>
-                    {JSON.stringify(teamInfo)}
                     <div className="team-cont row" >
                         <div className="first">
                             {renderTeamInfo()}
                         </div>
                         <div className="second">
                             {/* show chat history */}
-                            awef
                         </div>
                     </div>
                 </Layout>
@@ -74,18 +78,13 @@ const Team = ({ history, match }) => {
         }
     }
 
-    const modalStyle = {
-        width: '50vw',
-        height: '40vw'
-      }
-    
+
+
 
     return (
         <>
             {conditionalRender()}
-            <Modal opened={editFormOpened} setOpened={setEditFormOpened} options={modalStyle}>
-                <EditTeamForm TeamsRef={useRef({setEditFormOpened})} teamId={teamToEdit} />
-            </Modal>
+
         </>
     )
 }

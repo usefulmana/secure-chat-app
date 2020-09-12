@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { BrowserRouter, Switch, Route, withRouter } from "react-router-dom";
 import './TeamsList.scss'
-import { getTeamInfo , deleteTeam} from '../../API/teamsAPI'
+import { getTeamInfo, deleteTeam, leaveTeam } from '../../API/teamsAPI'
 import { currentUser } from '../../API/userAPI'
 
 import Modal from '../../Template/Modal'
@@ -30,7 +30,7 @@ const TeamsList = ({ history }) => {
     currentUser().then((data) => {
       var teams = data.servers
       setTeams(teams)
-      if(teams.length>0) initEvent()
+      if (teams.length > 0) initEvent()
     }).catch()
 
   }, [])
@@ -51,12 +51,23 @@ const TeamsList = ({ history }) => {
   }
 
   const handleDelete = (teamId) => {
-    deleteTeam({teamId}).then((data)=>{
+    deleteTeam({ teamId }).then((data) => {
       console.log("data in deleteTeam : ", data)
-      if(data.error){
+      if (data.error) {
         console.log("err in handleDelete : ", data.error)
-      }else{
+      } else {
         window.location.reload(false);
+      }
+    }).catch()
+  }
+
+  const handleLeaveTeam = (teamId) => {
+    leaveTeam({ serverId: teamId }).then((data) => {
+      console.log("data in leaveTeam : ", data)
+      if (data.error) {
+        console.log("err in handleLeaveTeam : ", data.error)
+      } else {
+        // window.location.reload(false);
       }
     }).catch()
   }
@@ -69,24 +80,47 @@ const TeamsList = ({ history }) => {
   }
 
   const initEvent = () => {
-    document.querySelector(".edit-btn").addEventListener("click", (e) => {
-      e.stopPropagation();
-      var target = e.target.closest('.edit-btn')
-      var teamId= target.id
-      // console.log(e.target.closest('.edit-btn').id)
-      setTeamToEdit(teamId)
-      setEditFormOpened(true);
+
+    var editBtns = document.querySelectorAll('.edit-btn');
+
+    Array.from(editBtns).forEach(editBtn => {
+      editBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        var target = e.target.closest('.edit-btn')
+        var teamId = target.id
+        // console.log(e.target.closest('.edit-btn').id)
+        setTeamToEdit(teamId)
+        setEditFormOpened(true);
+      });
     });
 
-    document.querySelector(".delete-btn").addEventListener("click", (e) => {
-      e.stopPropagation()
-      var target = e.target.closest('.delete-btn')
-      var teamId= target.id
-      var r = window.confirm("Delete the team?")
-      if(r===true){
-        handleDelete(teamId)
-      } 
+    var deleteBtns = document.querySelectorAll('.delete-btn');
+
+    Array.from(deleteBtns).forEach(deleteBtn => {
+      deleteBtn.addEventListener("click", (e) => {
+        e.stopPropagation()
+        var target = e.target.closest('.delete-btn')
+        var teamId = target.id
+        var r = window.confirm("Delete the team?")
+        if (r === true) {
+          handleDelete(teamId)
+        }
+      });
     });
+
+    var leaveBtns = document.querySelectorAll('.leave-team-btn');
+    Array.from(leaveBtns).forEach(leaveBtn => {
+      leaveBtn.addEventListener("click", (e) => {
+        e.stopPropagation()
+        var target = e.target.closest('.leave-team-btn')
+        var teamId = target.id
+        var r = window.confirm("Leave the team?")
+        if (r === true) {
+          handleLeaveTeam(teamId)
+        }
+      });
+    });
+    
   }
 
   const renderTeams = () => {
@@ -101,6 +135,7 @@ const TeamsList = ({ history }) => {
                 <div className="each-option" onClick={handleAddMembers}><i class="fas fa-user-plus"></i>Add members to the team</div>
                 <div className="each-option edit-btn" id={c._id}><i class="far fa-edit"></i>Edit team</div>
                 <div className="each-option delete-btn" id={c._id}><i class="far fa-trash-alt"></i>Delete team</div>
+                <div className="each-option leave-team-btn" id={c._id}><i class="fas fa-sign-out-alt"></i>Leave team</div>
               </div>
             </div>
             <div class="team-image row JCC AIC">

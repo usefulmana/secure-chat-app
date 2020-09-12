@@ -54,6 +54,8 @@ router.post(
 
                 u.servers.push(server.id);
                 u.save();
+                server.channels.push(c.id);
+                server.save();
                 res.status(201).json(server)});
           })
           .catch((err) => console.log(err));
@@ -119,5 +121,49 @@ router.get("/active/:id",  passport.authenticate("jwt", { session: false }), asy
   });
 
 });
+
+// Delete a server
+router.delete("/:id",  passport.authenticate("jwt", { session: false }), async(req, res) => {
+  const serverId = req.params.id;
+  
+  if (!serverId){
+    return res.status(400).send({message: "No server Id"})
+  }
+
+  Server.findById(serverId).then(s => {
+    for (let i = 0; i < s.channels.length; i++) {
+      Channel.findByIdAndDelete(s.channels[i], function (err, result) {
+        if (err) {
+            res.status(404);
+            res.send('Channel could not be deleted');
+        } else {
+            res.status(200);
+            res.send('Channel deleted successfully');
+        }
+    })
+    }
+  })
+  Server.findByIdAndDelete(serverId).then(s => res.status(200).json(s))
+})
+
+// Edit a server
+router.put("/:id",  passport.authenticate("jwt", { session: false }), async(req, res) => {
+  const serverId = req.params.id;
+  
+  if (!serverId){
+    return res.status(400).send({message: "No server Id"})
+  }
+
+  const { name, description } = req.body;
+  Server.findById(serverId).then((s) => {
+    s.name = name;
+    s.description = description;
+    s.save().then(u => res.status(200).send(u)).catch(err => console.log(err));
+});
+
+})
+  
+  
+  
 
 module.exports = router;

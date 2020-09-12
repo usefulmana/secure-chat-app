@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import './Contact.scss'
-import { login, authenticate, findUser } from '../API/userAPI'
+import { login, authenticate, findUser } from '../../API/userAPI'
 import AddContact from "./AddContact";
-import Modal from "../Template/Modal";
+import Modal from "../../Template/Modal";
 
 const Contact = ({ visible }) => {
   var jwt = JSON.parse(localStorage.getItem("jwt"));

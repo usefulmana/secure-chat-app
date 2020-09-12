@@ -39,7 +39,7 @@ const Modal = ({ opened, setOpened, children, options }) => {
     return opened ? (
         <div className="modal-background row align-items-center justify-content-center" onClick={clickAway} >
             <div className="modal-cont my-modal" style={{ height: options.height, width: options.width }}>
-                <button onClick={() => setOpened(false)}>X</button>
+                <div className="modal-close-btn btn"  onClick={() => setOpened(false)}>X</div>
                 {children}
             </div>
         </div>

@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
-import './Chats.scss'
-import { login, authenticate } from '../API/userAPI'
 
 const ChatRoom = ({ history }) => {
     var jwt = JSON.parse(localStorage.getItem("jwt"));

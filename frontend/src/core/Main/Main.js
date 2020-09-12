@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import './Main.scss'
-import { signin, authenticate } from '../API/userAPI'
-import Loader from './Loader'
-import Parallax from 'parallax-js' // Now published on NPM
-import anime from 'animejs';
-import SignIn from './SignIn'
-import SignUp from "./SignUp2";
+import { signin, authenticate } from '../../API/userAPI'
+import Loader from '../Loader'
+import SignIn from '../Auth/SignIn'
+import SignUp from "../Auth/SignUp";
 
 
 const Main = ({ history }) => {
     var jwt = JSON.parse(localStorage.getItem("jwt"));
     if (jwt && jwt.token) {
-        history.push('/dashboard')
+        history.push('/teams')
     }
 
     const [values, setValues] = useState({

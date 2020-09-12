@@ -1,8 +1,8 @@
 import { BASE_URL } from "../config";
 const API = BASE_URL + '/api'
 
-export const getChatInfo = async ({ token, chatId }) => {
-    return await fetch(`${API}/server/${chatId}`, {
+export const getTeamInfo = async ({ token, teamId }) => {
+    return await fetch(`${API}/server/${teamId}`, {
         method: "GET",
         headers: {
             Accept: "application/json",
@@ -19,7 +19,7 @@ export const getChatInfo = async ({ token, chatId }) => {
 };
 
 
-export const createChat = async ({ token, name, description }) => {
+export const createTeam = async ({ token, name, description }) => {
     return await fetch(`${API}/server/create`, {
         method: "POST",
         headers: {

@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import "./Profile.scss";
+import Layout from "../Layout"
 import {
   changeUsername,
   changePassword,
   currentUser,
   changeAvatar,
-} from "../API/userAPI";
-import Modal from "../Template/Modal";
+} from "../../API/userAPI";
+import Modal from "../../Template/Modal";
 import { set } from "animejs";
 
 const Profile = ({ history }) => {
@@ -82,7 +83,7 @@ const Profile = ({ history }) => {
             setDisabled({ username: true, password: true });
           }
         })
-        .catch((err) => {});
+        .catch((err) => { });
     } else if (option === "password") {
       changePassword({ password: user.password, token })
         .then((data) => {
@@ -94,7 +95,7 @@ const Profile = ({ history }) => {
           } else if (data.error) {
           }
         })
-        .catch((err) => {});
+        .catch((err) => { });
     } else if (option === "image") {
       changeAvatar({ formData, token })
         .then((data) => {
@@ -105,72 +106,84 @@ const Profile = ({ history }) => {
           } else if (data.error) {
           }
         })
-        .catch((err) => {});
+        .catch((err) => { });
     }
   };
 
   const showOptions = (option) => {
     if (option === "username" && disabled.username) {
-      return <button onClick={handleClick("username")}>Edit</button>;
+      return <div className="btn edit-btn" onClick={handleClick("username")}>Edit</div>;
     } else if (option === "username" && !disabled.username) {
-      return <button onClick={handleSubmit("username")}>Submit</button>;
+      return <div className="btn edit-btn" onClick={handleSubmit("username")}>Submit</div>;
     }
 
     if (option === "password" && disabled.password) {
-      return <button onClick={handleClick("password")}>Edit</button>;
+      return <div className="btn edit-btn" onClick={handleClick("password")}>Edit</div>;
     } else if (option === "password" && !disabled.password) {
-      return <button onClick={handleSubmit("password")}>Submit</button>;
+      return <div className="btn edit-btn" onClick={handleSubmit("password")}>Submit</div>;
     }
   };
 
   const modalStyle = {
-    width: "50vw",
-    height: "20vh",
+    width: "30vw",
+    height: "30vh",
   };
 
   return (
-    <div className="profile-cont">
-      <div>
-        <img className="avatar-image" src={`${user.image}`} />
-      </div>
-      <input
-        type="file"
-        name="filefield"
-        onChange={handleChange("image")}
-        required
-      ></input>
-      <button onClick={handleSubmit("image")}>Submit</button>
-      <div className="">
-        <input
-          value={user.username}
-          onChange={handleChange("username")}
-          disabled={disabled.username}
-        />
-        {showOptions("username")}
-      </div>
-      <div>{user.email}</div>
-      <div>
-        <input
-          type="password"
-          onChange={handleChange("password")}
-          value={user.password}
-          disabled={disabled.password}
-        />
-        {showOptions("password")}
-      </div>
-      <Modal opened={popUp} setOpened={setPopUp} options={modalStyle}>
+    <Layout>
+      <div className="profile-cont">
+        <div className="profile">Profile</div>
+        <div className="heading">Edit avatar</div>
         <div>
-          <button
-            onClick={() => {
-              setPopUp(!popUp);
-            }}
-          >
-            Close
-          </button>
-          {message}
+          <img className="avatar-image" src={`${user.image}`} />
         </div>
-      </Modal>
-    </div>
+        <div className="row AIC">
+          <input
+            type="file"
+            name="filefield"
+            onChange={handleChange("image")}
+            required
+          ></input>
+          <div className="btn edit-btn" onClick={handleSubmit("image")}>Submit</div>
+        </div>
+
+        <div className="heading">Edit username</div>
+        <div className="row AIC">
+          <input
+            value={user.username}
+            onChange={handleChange("username")}
+            disabled={disabled.username}
+          />
+          {showOptions("username")}
+        </div>
+
+        {/* <div>{user.email}</div> */}
+        <div className="heading">Edit password</div>
+        <div className="row AIC">
+          <input
+            type="password"
+            onChange={handleChange("password")}
+            value={user.password}
+            disabled={disabled.password}
+          />
+          {showOptions("password")}
+        </div>
+        <Modal opened={popUp} setOpened={setPopUp} options={modalStyle}>
+          <div className="popup-message-cont">
+            <div className="message">
+              {message}
+            </div>
+            <div className="btn edit-btn"
+              onClick={() => {
+                setPopUp(!popUp);
+              }}
+            >
+              Close
+           </div>
+          </div>
+        </Modal>
+      </div>
+    </Layout>
   );
 };
 

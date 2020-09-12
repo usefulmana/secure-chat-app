@@ -1,0 +1,22 @@
+.team-cont {
+    height: 100%;
+    overflow: hidden;
+    .first {
+        width: 25%;
+        height: 100%;
+        padding:1vw;
+
+        background-color:white;
+
+        .channel-header{
+            font-weight: 600;
+        }
+
+    }
+
+    .second {
+        width: 75%;
+        height: 100%;
+        background-color: rgba(235, 235, 235, 0.95);
+    }
+}

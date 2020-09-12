@@ -1,7 +1,8 @@
 import { BASE_URL } from "../config";
 const API = BASE_URL + '/api'
 
-export const currentUser = ({ token }) => {
+export const currentUser = () => {
+    var token = JSON.parse(localStorage.getItem('jwt')).token
     return fetch(`${API}/user/current`, {
         method: "GET",
         headers: {
@@ -98,7 +99,7 @@ export const changeAvatar = ({ formData, token }) => {
             // "Content-Type": "form-data",
             Authorization: `${token}`
         },
-        body: formData 
+        body: formData
     })
         .then(response => {
             return response.json();

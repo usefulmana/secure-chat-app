@@ -16,5 +16,9 @@
         position: relative;
         box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.07), 0 6px 5px 0 rgba(0, 0, 0, 0.07);
         /* padding:2rem; */
+
+        .modal-close-btn{
+            display: none;
+        }
     }
   }

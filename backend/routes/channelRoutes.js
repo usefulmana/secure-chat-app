@@ -15,22 +15,25 @@ router.post('/create', passport.authenticate("jwt", { session: false }), async (
                 name: channelName,
                 server: serverId
             }).save().then(channel => {
+                s.channels.push(channel.id);
+                s.save();
                 res.status(200).json(channel);
             });
         }).catch(err => res.status(404).send({ message: "Server Not Found" }));
 });
 
 // Edit Channel Name
-router.put("/name", passport.authenticate("jwt", { session: false }),
+router.put("/:id", passport.authenticate("jwt", { session: false }),
     async (req, res) => {
-        const { oldName, newName } = req.body;
+        const cId = req.params.id;
+        const { name } = req.body;
 
-        if (req.newName.length < 4 || req.newName.length > 15) {
-            res.status(404);
+        if (name.length < 4 || name.length > 15) {
+            res.status(400);
             res.send('Channel name not the right length');
         } else {
-            Channel.findById(req.oldName.id).then((channel) => {
-                channel.name = req.newName;
+            Channel.findById(cId).then((channel) => {
+                channel.name = name;
                 channel.save().then(u => res.status(200).send(u)).catch(err => console.log(err));
             });
         }

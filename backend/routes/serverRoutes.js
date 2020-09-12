@@ -12,7 +12,6 @@ const {
 
 
 // Get A Server
-
 router.get(
   "/:id",
   passport.authenticate("jwt", { session: false }),
@@ -24,6 +23,50 @@ router.get(
     });
   }
 );
+
+// Add User to server
+router.post("/add", passport.authenticate("jwt", { session: false }), async (req, res) => {
+  const {userId, serverId} = req.body;
+
+  const user = await User.findById(userId).then((u) => {
+    Server.findById(serverId)
+      .then(server => {
+          for (let i = 0; i < server.members.length; i++){
+              if (server.members[i] == userId){
+                  return res.status(400).send({ message: "Already in the server" });
+              }
+          }
+          server.members.push(userId);
+          server.save()
+          .then( s => res.status(200).send(s));
+      })
+      .catch((err) => {
+        res.status(400).send({ message: "Invalid server code" });
+      });
+  }).catch((err) => res.status(400).send({message: "No user with such Id"}));
+})
+
+// User leave server
+router.post("/leave", passport.authenticate("jwt", { session: false }), async (req, res) => {
+  const {serverId} = req.body;
+
+  const user = await User.findById(req.user.id).then((u) => {
+    Server.findById(serverId)
+      .then(server => {
+          for (let i = 0; i < server.members.length; i++){
+              if (server.members[i] == req.user.id){
+                  server.members.splice(i, 1);
+              }
+          }
+          
+          server.save()
+          .then( s => res.status(200).send(s));
+      })
+      .catch((err) => {
+        res.status(400).send({ message: "Invalid server code" });
+      });
+  }).catch((err) => res.status(400).send({message: "No user with such Id"}));
+})
 
 // Create A Server
 router.post(

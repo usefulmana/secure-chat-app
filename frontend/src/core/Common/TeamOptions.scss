@@ -24,38 +24,43 @@
     }
 
     .options {
-        z-index: 1;
+        z-index:1;
         // display: none;
-        position: absolute;
-        right: 5%;
-        top: -8%;
-        font-size: 3vw;
-        color: grey;
         cursor: pointer;
+        position: absolute;
+        right:5%;
+        top:-8%;
+        font-size:3vw;
+        color:grey;
 
-        &:hover {
-            color: rgb(100, 100, 100);
+        &:hover{
+            color:rgb(100, 100, 100);
+            .drop-down{
+                display: block;
+            }
         }
 
         .drop-down {
             display: none;
-            width: 20vw;
+            width:20vw;
             position: absolute;
             // right:-100%;
             // box-shadow: 0 0.6vw 0.9vw -0.075vw rgba(0, 0, 0, 0.1);
-            box-shadow: 0 0.2vw 1.6vw 0 rgba(37, 36, 35, 0.3);
-            background-color: white;
-            .each-option {
-                font-size: 1.3vw;
-                color: black;
-                padding: 0.6vw;
-                &:hover {
-                    background-color: rgb(243, 236, 236);
+            box-shadow:0 0.2vw 1.6vw 0 rgba(37,36,35,.3);
+            background-color:white;
+            .each-option{
+                font-size:1.3vw;
+                color:black;
+                padding:0.6vw;
+                &:hover{
+                    background-color:rgb(243, 236, 236);
+                    display: block;
                 }
 
-                i {
-                    margin-right: 0.5vw;
-                    color: rgb(0, 0, 0);
+
+                i{
+                    margin-right:0.5vw;
+                    color:rgb(0, 0, 0);
                 }
             }
         }

@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { BrowserRouter, Switch, Route, withRouter } from "react-router-dom";
 import './TeamOptions.scss'
-import { getTeamInfo } from '../../API/chatAPI'
 import { currentUser } from '../../API/userAPI'
+import { getTeamInfo , deleteTeam} from '../../API/teamsAPI'
+
 
 import { TweenLite } from 'gsap'
 
@@ -11,7 +12,7 @@ const TeamOptions = ({ history, team }) => {
     var token = jwt.token;
 
     useEffect(() => {
-
+        initEvent()
     }, [])
 
     const parseTeamName = (name) => {
@@ -28,26 +29,39 @@ const TeamOptions = ({ history, team }) => {
     const handleAddMembers = () => {
 
     }
-
-    const handleDelete = () => {
-
+ 
+    const handleDelete = (teamId) => {
+        deleteTeam({ teamId }).then((data) => {
+            console.log("data in deleteTeam : ", data)
+            if (data.error) {
+                console.log("err in handleDelete : ", data.error)
+            } else {
+                history.push('/teams');
+            }
+        }).catch()
     }
 
-    const showDropDown = (e) => {
-
-        console.log(e.target.parentNode.querySelector('.drop-down'))
-
+    const initEvent = () => {
+        document.querySelector(".delete-btn").addEventListener("click", (e) => {
+            e.stopPropagation()
+            var target = e.target.closest('.delete-btn')
+            var teamId = target.id
+            var r = window.confirm("Delete the team?")
+            if (r === true) {
+                handleDelete(teamId)
+            }
+        });
     }
 
     const renderTeam = () => {
         return (
             <>
                 <div className="options">
-                    <div className="show-drop-down-btn" onClick={showDropDown}>...</div>
+                    <div className="show-drop-down-btn" >...</div>
                     <div className="drop-down">
                         <div className="each-option" onClick={handleAddMembers}><i class="fas fa-user-plus"></i>Add members to the team</div>
-                        <div className="each-option" onClick={handleAddMembers}><i class="far fa-edit"></i>Edit team</div>
-                        <div className="each-option" onClick={handleDelete}><i class="far fa-trash-alt"></i>Delete team</div>
+                        <div className="each-option edit-btn" id={team._id} ><i class="far fa-edit"></i>Edit team</div>
+                        <div className="each-option delete-btn" id={team._id} ><i class="far fa-trash-alt"></i>Delete team</div>
                     </div>
                 </div>
                 <div class="team-image row JCC AIC">
@@ -60,24 +74,6 @@ const TeamOptions = ({ history, team }) => {
         )
     }
 
-    const CreateChatButton = () => {
-        return
-    }
-
-    // Moved this to parent component which is Team.
-    // const closeAllDropDown = (e) => {
-    //     var isBtn = e.target.classList.contains("show-drop-down-btn")
-    //     var isOption = e.target.classList.contains("each-option")
-
-    //     if (isBtn) {
-    //         e.target.parentNode.querySelector('.drop-down').style.display = 'block'
-    //     } else if (isOption) {
-
-    //     } else {
-    //         TweenLite.to('.drop-down', 0, { display: 'none' })
-    //     }
-    // }
-
     return (
         <div className="team-options-cont" >
             {renderTeam()}
@@ -85,4 +81,4 @@ const TeamOptions = ({ history, team }) => {
     )
 }
 
-export default TeamOptions
+export default withRouter(TeamOptions)

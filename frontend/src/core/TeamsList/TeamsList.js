@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import { BrowserRouter, Switch, Route, withRouter } from "react-router-dom";
 import './TeamsList.scss'
-import { getTeamInfo } from '../../API/chatAPI'
+import { getTeamInfo , deleteTeam} from '../../API/teamsAPI'
 import { currentUser } from '../../API/userAPI'
 
 import Modal from '../../Template/Modal'
 import CreateTeamForm from './CreateTeamForm'
+import EditTeamForm from '../Common/EditTeamForm'
 import Layout from '../Layout'
 import { TweenLite } from 'gsap'
 
@@ -15,52 +16,23 @@ const TeamsList = ({ history }) => {
 
   const [teams, setTeams] = useState([])
   const [createFormOpened, setCreateFormOpened] = useState(false)
+  const [editFormOpened, setEditFormOpened] = useState(false)
+  const [teamToEdit, setTeamToEdit] = useState()
 
   const TeamsRef = useRef({
     setTeams,
-    setCreateFormOpened
+    setCreateFormOpened,
+    setEditFormOpened
   })
-
-  const getEachTeamInfo = (teams) => {
-
-    var populatedChatInfo = []
-    var number = 0
-    teams.forEach((teamId) => {
-      getTeamInfo({ token, teamId }).then((data) => {
-        populatedChatInfo.push(data)
-        number = number + 1
-        if (teams.length === number) {
-          setTeams(populatedChatInfo)
-        }
-      }).catch((err) => {
-        console.log("Error in Teams : ", err)
-      })
-    });
-  }
 
   useEffect(() => {
 
-
     currentUser().then((data) => {
       var teams = data.servers
-      getEachTeamInfo(teams)
+      setTeams(teams)
+      if(teams.length>0) initEvent()
     }).catch()
 
-    var teamsIdList = jwt.user.servers
-    var populatedChatInfo = []
-    var number = 0
-    console.log("whatsi teams : ", teams)
-    teamsIdList.forEach((teamId) => {
-      getTeamInfo({ token, teamId }).then((data) => {
-        populatedChatInfo.push(data)
-        number = number + 1
-        if (teamsIdList.length === number) {
-          setTeams(populatedChatInfo)
-        }
-      }).catch((err) => {
-        console.log("Error in Teams : ", err)
-      })
-    });
   }, [])
 
   const parseTeamName = (name) => {
@@ -78,8 +50,15 @@ const TeamsList = ({ history }) => {
 
   }
 
-  const handleDelete = () => {
-
+  const handleDelete = (teamId) => {
+    deleteTeam({teamId}).then((data)=>{
+      console.log("data in deleteTeam : ", data)
+      if(data.error){
+        console.log("err in handleDelete : ", data.error)
+      }else{
+        window.location.reload(false);
+      }
+    }).catch()
   }
 
   const showDropDown = (e) => {
@@ -87,6 +66,27 @@ const TeamsList = ({ history }) => {
     console.log(e.target.parentNode.querySelector('.drop-down'))
 
 
+  }
+
+  const initEvent = () => {
+    document.querySelector(".edit-btn").addEventListener("click", (e) => {
+      e.stopPropagation();
+      var target = e.target.closest('.edit-btn')
+      var teamId= target.id
+      // console.log(e.target.closest('.edit-btn').id)
+      setTeamToEdit(teamId)
+      setEditFormOpened(true);
+    });
+
+    document.querySelector(".delete-btn").addEventListener("click", (e) => {
+      e.stopPropagation()
+      var target = e.target.closest('.delete-btn')
+      var teamId= target.id
+      var r = window.confirm("Delete the team?")
+      if(r===true){
+        handleDelete(teamId)
+      } 
+    });
   }
 
   const renderTeams = () => {
@@ -99,8 +99,8 @@ const TeamsList = ({ history }) => {
               <div className="show-drop-down-btn" onClick={showDropDown}>...</div>
               <div className="drop-down">
                 <div className="each-option" onClick={handleAddMembers}><i class="fas fa-user-plus"></i>Add members to the team</div>
-                <div className="each-option" onClick={handleAddMembers}><i class="far fa-edit"></i>Edit team</div>
-                <div className="each-option" onClick={handleDelete}><i class="far fa-trash-alt"></i>Delete team</div>
+                <div className="each-option edit-btn" id={c._id}><i class="far fa-edit"></i>Edit team</div>
+                <div className="each-option delete-btn" id={c._id}><i class="far fa-trash-alt"></i>Delete team</div>
               </div>
             </div>
             <div class="team-image row JCC AIC">
@@ -135,18 +135,6 @@ const TeamsList = ({ history }) => {
     )
   }
 
-  const closeAllDropDown = (e) => {
-    var isBtn = e.target.classList.contains("show-drop-down-btn")
-    var isOption = e.target.classList.contains("each-option")
-
-    if (isBtn) {
-      e.target.parentNode.querySelector('.drop-down').style.display = 'block'
-    } else if (isOption) {
-
-    } else {
-      TweenLite.to('.drop-down', 0, { display: 'none' })
-    }
-  }
 
 
   const modalStyle = {
@@ -156,14 +144,19 @@ const TeamsList = ({ history }) => {
 
   return (
     <Layout>
-      <Modal opened={createFormOpened} setOpened={setCreateFormOpened} options={modalStyle}>
-        <CreateTeamForm TeamsRef={TeamsRef} />
-      </Modal>
-      <div className="teams-list-cont" onClick={closeAllDropDown}>
+
+      <div className="teams-list-cont" >
         {renderHeader()}
         {renderTeams()}
 
       </div>
+
+      <Modal opened={createFormOpened} setOpened={setCreateFormOpened} options={modalStyle}>
+        <CreateTeamForm TeamsRef={TeamsRef} />
+      </Modal>
+      <Modal opened={editFormOpened} setOpened={setEditFormOpened} options={modalStyle}>
+        <EditTeamForm TeamsRef={TeamsRef} teamId={teamToEdit} />
+      </Modal>
     </Layout>
   )
 }

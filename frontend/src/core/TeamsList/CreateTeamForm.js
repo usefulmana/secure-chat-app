@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
-import { createTeam } from '../../API/chatAPI'
+import { createTeam } from '../../API/teamsAPI'
 import { currentUser, findUser } from '../../API/userAPI'
 import createTeamForm from './CreateTeamForm.scss'
 

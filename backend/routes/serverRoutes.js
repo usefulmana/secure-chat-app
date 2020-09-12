@@ -16,7 +16,10 @@ router.get(
   "/:id",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
-    Server.findById(req.params.id).then((team) => {
+    Server.findById(req.params.id).populate({
+      path: 'channels',
+      populate: {path: 'channels'}
+    }).then((team) => {
       if (!team) res.status(400).send({ error: "Server does not exist!" });
 
       res.status(200).json(team);

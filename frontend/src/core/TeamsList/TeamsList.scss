@@ -1,0 +1,131 @@
+// Top navbar height height: 3vw;
+.teams-list-cont {
+    // overflow-y:auto;
+    width: 100%;
+    height: 96vh;
+    // height:100%;
+    background-color: rgba(235, 235, 235, 0.95);
+    .teams-header {
+        padding-left: 3vw;
+        padding-right: 1vw;
+        padding-top: 1vw;
+        padding-bottom: 0.5vw;
+
+        > .first {
+            font-weight: 700;
+        }
+
+        > .second {
+            padding: 0.8vw 1.3vw 0.8vw 2vw;
+            background-color: white;
+            font-size: 1.3vw;
+            cursor: pointer;
+            box-shadow: 0 0.2vw 0.4vw -0.075vw rgba(0, 0, 0, 0.1);
+
+            &:hover {
+                background-color: rgb(230, 230, 230);
+            }
+
+            .i {
+            }
+
+            .create-btn {
+                background-color: inherit;
+                font-weight: 600;
+                font-size: inherit;
+            }
+        }
+    }
+
+    .teams-list-cont {
+        overflow-y: auto;
+        height: 35vw;
+        padding-bottom: 10vw;
+        padding-left:4vw;
+        // width:100vw;
+
+        .each-team {
+            position: relative;
+            width: 25vw !important;
+            margin: 0.6vw;
+            // margin-left:0.4vw;
+            // margin-right:0.4vw;
+            height: 13vw;
+            padding: 4vw 1.2vw 0.2vw 1.2vw;
+            background-color: white;
+            cursor: pointer;
+            box-shadow: 0 0.2vw 0.4vw -0.075vw rgba(0, 0, 0, 0.1);
+
+            &:hover {
+                background-color: rgba(207, 207, 207, 0.397);
+            }
+
+            .show-drop-down-btn{
+                padding:1vw;
+                z-index:1;
+            }
+
+            .options {
+                z-index:1;
+                // display: none;
+                position: absolute;
+                right:5%;
+                top:-8%;
+                font-size:3vw;
+                color:grey;
+
+                &:hover{
+                    color:rgb(100, 100, 100);
+                    .drop-down{
+                        display: block;
+                    }
+                }
+
+                .drop-down {
+                    display: none;
+                    width:20vw;
+                    position: absolute;
+                    // right:-100%;
+                    // box-shadow: 0 0.6vw 0.9vw -0.075vw rgba(0, 0, 0, 0.1);
+                    box-shadow:0 0.2vw 1.6vw 0 rgba(37,36,35,.3);
+                    background-color:white;
+                    .each-option{
+                        font-size:1.3vw;
+                        color:black;
+                        padding:0.6vw;
+                        &:hover{
+                            background-color:rgb(243, 236, 236);
+                            display: block;
+                        }
+
+
+                        i{
+                            margin-right:0.5vw;
+                            color:rgb(0, 0, 0);
+                        }
+                    }
+                }
+            }
+
+            .team-image {
+                height: 50%;
+                width: 30%;
+                margin: auto;
+                background-color: rgba(75, 86, 243, 0.801);
+                border-radius: 0.2vw;
+                color: white;
+
+                span {
+                    text-align: center;
+                    // width: 100%;
+                    // height:100%;
+                }
+            }
+            .team-name {
+                margin-top: 2vw;
+                text-align: center;
+                // font-weight: 500;
+            }
+        }
+    }
+}

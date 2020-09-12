@@ -19,12 +19,12 @@ const ChannelSchema = new Schema(
       required: true,
       ref: "Server",
     },
-    // members: [
-    //   {
-    //     type: Schema.Types.ObjectId,
-    //     ref: "User",
-    //   },
-    // ],
+    members: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
   },
   {
     timestamps: {

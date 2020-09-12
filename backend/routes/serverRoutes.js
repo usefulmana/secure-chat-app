@@ -59,11 +59,20 @@ router.post("/leave", passport.authenticate("jwt", { session: false }), async (r
           for (let i = 0; i < server.members.length; i++){
               if (server.members[i] == req.user.id){
                   server.members.splice(i, 1);
+                  break;
               }
           }
-          
+          for (let i = 0; i < u.servers.length; i++){
+            if (u.servers[i] == serverId){
+                u.servers.splice(i, 1);
+                break;
+            }
+          }
+          u.save();
           server.save()
-          .then( s => res.status(200).send(s));
+          .then( s => {
+            res.status(200).send(s)
+          });
       })
       .catch((err) => {
         res.status(400).send({ message: "Invalid server code" });

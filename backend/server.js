@@ -105,6 +105,9 @@ io.on("connection", (socket) => {
 
   // Normal Chat Message in a channel
   socket.on("chat-message", async (msg) => {
+
+    socket.emit("test","go test")
+
     const newMessage = Message({
       user: msg.userId,
       channel: msg.channelId,

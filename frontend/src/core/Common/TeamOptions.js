@@ -7,6 +7,7 @@ import { getTeamInfo, deleteTeam, leaveTeam } from '../../API/teamsAPI'
 import Modal from '../../Template/Modal'
 import EditTeamForm from '../Common/EditTeamForm'
 import CreateChannelForm from '../Common/CreateChannelForm'
+import AddMember from '../Common/AddMember'
 
 import { TweenLite } from 'gsap'
 
@@ -16,6 +17,7 @@ const TeamOptions = ({ history, team }) => {
 
     const [editFormOpened, setEditFormOpened] = useState(false)
     const [createFormOpened, setCreateFormOpened] = useState(false)
+    const [addMemberFormOpened, setAddMemberFormOpened] = useState(false)
 
     console.log("Tea in teamOPTIONS : ", team)
 
@@ -31,10 +33,6 @@ const TeamOptions = ({ history, team }) => {
         } else {
             return <span>{arr[0].charAt(0)} {arr[0].charAt(1)}</span>
         }
-    }
-
-    const handleAddMembers = () => {
-
     }
 
     const handleDelete = (teamId) => () => {
@@ -96,7 +94,7 @@ const TeamOptions = ({ history, team }) => {
                 <div className="options">
                     <div className="show-drop-down-btn" >...</div>
                     <div className="drop-down">
-                        <div className="each-option" onClick={handleAddMembers}><i class="fas fa-user-plus"></i>Add members to the team</div>
+                        <div className="each-option" onClick={() => { setAddMemberFormOpened(true) }}><i class="fas fa-user-plus"></i>Add members to the team</div>
                         <div className="each-option edit-btn" onClick={() => { setEditFormOpened(true) }} ><i class="far fa-edit"></i>Edit team</div>
                         <div className="each-option delete-btn" onClick={handleDelete(team._id)}><i class="far fa-trash-alt"></i>Delete team</div>
                         <div className="each-option create-btn" onClick={() => { setCreateFormOpened(true) }}><i class="far fa-plus-square"></i>Create channel</div>
@@ -130,6 +128,10 @@ const TeamOptions = ({ history, team }) => {
 
             <Modal opened={createFormOpened} setOpened={setCreateFormOpened} options={modalStyle}>
                 <CreateChannelForm TeamsRef={useRef({ setOpened: setCreateFormOpened })} teamId={team._id} />
+            </Modal>
+
+            <Modal opened={addMemberFormOpened} setOpened={addMemberFormOpened} options={modalStyle}>
+                <AddMember TeamsRef={useRef({ setOpened: setAddMemberFormOpened })} teamId={team._id} />
             </Modal>
         </div>
     )

@@ -1,0 +1,38 @@
+.add-member-cont {
+    .form-cont {
+        .header{
+            margin-bottom:3vw;
+        }
+
+        .input-cont{
+            margin-top:0.9vw;
+        
+        }
+
+        input {
+            width: 80% !important;
+            margin: 0 !important;
+        }
+
+        .search-btn {
+            padding: 0.9vw;
+            background: rgb(118, 118, 231);
+            border-radius: 0.6vw;
+            color: white;
+            font-size: 1.7vw;
+            cursor: pointer;
+
+            &:hover {
+                background: rgb(109, 109, 223);
+            }
+        }
+
+        .search-result-cont {
+            height: 50%;
+        }
+
+        .added-member-cont {
+            height: 50%;
+        }
+    }
+}

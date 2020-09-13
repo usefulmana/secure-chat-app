@@ -163,8 +163,8 @@ router.delete(
             }
           }
           s.save();
-          Channel.findByIdAndDelete(channelId).then(
-            res.status(200).send({ message: "Channel deleted" })
+          Channel.findByIdAndDelete(channelId).then( c =>
+            res.status(200).json(c)
           );
         }
         else {

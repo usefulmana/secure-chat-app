@@ -63,12 +63,11 @@ router.post("/register", [checkRegistrationFields], (req, res) => {
                 return res.status(400).send({error: "Weak Password"}).end()
             };
 
-
             const newUser = new User({
                 username: req.body.username,
                 email: req.body.email,
                 password: req.body.password,
-                image: avatar.substr(2),
+                image: "https://" + avatar.substr(2),
             });
 
             newUser

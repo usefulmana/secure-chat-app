@@ -1,0 +1,78 @@
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,700;1,400&display=swap");
+
+$color_1: #4d4d4d;
+$color_2: #262626;
+$color_3: #ffffff;
+
+.profile-cont {
+  padding:3vw;
+  padding-left:6vw;
+  position: relative;
+  font-size: inherit;
+  // width: 50vw;
+  margin: 0 auto;
+  // background-color: rgba(235, 235, 235, 0.95);
+
+  .avatar-image {
+    border-radius: 7vw;
+    width: 10.5vw;
+    height: 20vh;
+    margin-top:1vw;
+    margin-bottom:1vw;
+  }
+
+  .profile{
+    font-size:2.5vw;
+    font-weight: 600;
+  }
+
+  .heading{
+    margin-bottom:0.5vw;
+    margin-top:1.3vw;
+    font-weight: 600;
+  }
+
+  .edit-btn{
+    cursor: pointer;
+    margin-left:1vw;
+    padding:0.6vw 1.2vw 0.6vw 1.2vw;
+    background:rgb(186, 155, 228);
+    border-radius: 0.3vw;
+    color:white;
+
+    &:hover{
+      background:rgb(162, 124, 216);
+    }
+  }
+
+  input {
+    font-family: "Open Sans";
+    // background-color: $color_1;
+    box-sizing: border-box;
+    // margin: 0 auto;
+    // padding: 0.2vw;
+    border: 0.3vw solid $color_3;
+    border-radius: 5px;
+    font-size:1.2vw;
+
+    padding:1vw;
+    outline: none;
+    background-color: rgb(245, 238, 238);
+    border-radius: 0.3vw;
+    border:0px;
+    // width:94%;
+  }
+}
+
+
+
+.popup-message-cont{
+  padding:3vw;
+  font-size: inherit;
+  text-align: center;
+
+  .message{
+    margin-bottom:3vw;
+  }
+
+}

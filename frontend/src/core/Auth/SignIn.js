@@ -1,30 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
-import './Main.scss'
-import { register , authenticate } from '../API/userAPI'
-
-import Loader from './Loader'
-import Parallax from 'parallax-js' // Now published on NPM
-import anime from 'animejs';
-import './SignIn.scss'
+import { login, authenticate } from '../../API/userAPI'
+import './base.scss'
 import queryString from 'query-string';
 
-const SignUp = ({ history, visible, flipVisibility }) => {
+const SignIn = ({ history, visible, flipVisibility }) => {
     var jwt = JSON.parse(localStorage.getItem("jwt"));
     if (jwt && jwt.token) {
-        history.push('/dashboard/')
+        history.push('/teams')
     }
 
     const [values, setValues] = useState({
-        username: "",
         email: "",
         password: "",
-        password2: "",
         errors: [],
         loading: false,
     })
-
-    const { username, email, password, password2, loading, errors } = values;
+    const { email, password, loading, errors } = values;
 
     useEffect(() => {
 
@@ -36,17 +28,15 @@ const SignUp = ({ history, visible, flipVisibility }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        if (!passwordCheck()) return false 
-        console.log({ username, email, password })
-        register({ username, email, password }).then(
+        login({ email, password }).then(
             data => {
-                console.log("data : ", data)
                 if (data.errors) {
                     setValues({ ...values, errors: data.errors })
                 }
                 else {
+                    console.log("what is data after login is succesfull : ", data.user.servers)
                     authenticate(data, () => {
-                        history.push('/dashboard/')
+                        history.push(`/teams`)
                     });
                 }
             })
@@ -98,14 +88,6 @@ const SignUp = ({ history, visible, flipVisibility }) => {
         return errorMessage
     }
 
-    const passwordCheck = () => {
-        if (password === password2) {
-            return true
-        } else {
-            setValues({...values,errors:[{password:"Password do not match"}]})
-        }
-    }
-
     const showForm = () => {
         return (
             <form onKeyDown={handleEnter} className={`signin-form `}>
@@ -113,13 +95,9 @@ const SignUp = ({ history, visible, flipVisibility }) => {
                     <div class="row justify-content-center ">
                         <img src="img/user.png" className="user-icon" />
                     </div>
-                    <div className="">Sign Up</div>
+                    <div className="">Sign in</div>
                 </div>
                 <div class="signin-body">
-                    <div class="my-form ">
-                        <input type="email" class="my-form-input" onChange={handleChange('username')} />
-                        <label data-error="wrong" className={isFilled("username")} for="Form-email1">Your username</label>
-                    </div>
                     <div class="my-form ">
                         <input type="email" class="my-form-input" onChange={handleChange('email')} />
                         <label data-error="wrong" className={isFilled("email")} for="Form-email1">Your email</label>
@@ -129,32 +107,27 @@ const SignUp = ({ history, visible, flipVisibility }) => {
                         <input type="password" class="my-form-input " onChange={handleChange('password')} />
                         <label className={isFilled("password")} data-error="wrong" for="Form-pass1">Your password</label>
                     </div>
-                    <div class="my-form ">
-                        <input type="password" class="my-form-input " onChange={handleChange('password2')} />
-                        <label className={isFilled("password2")} data-error="wrong" for="Form-pass1">Your password</label>
-                    </div>
                     {errors.length > 0 && (<div className="position-absolute showError ">{showErrors()}</div>)}
-                    <div type="button" class="btn signin-button" onClick={handleSubmit}>Sign Up</div>
+                    <div type="button" class="btn signin-button" onClick={handleSubmit}>Sign in</div>
 
                 </div>
                 <div className="signin-footer">
                     <div className="text-center no-have-account">
-                        Already have account?
+                        Have not had account yet?
                     </div>
                     <div className="text-center sign-up-link btn" onClick={flipVisibility}>
-                        Sign In
+                        Sign up
                     </div>
                 </div>
             </form>
         )
     }
-   
 
-    return visible===1&&(
-        <div className={`signin-container signup-cont`}>
+    return visible === 0 && (
+        <div className={`signin-container `}>
             {showForm()}
         </div>
     )
 }
 
-export default SignUp
+export default SignIn

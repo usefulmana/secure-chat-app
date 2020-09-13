@@ -113,6 +113,21 @@ io.on("connection", (socket) => {
       });
   });
 
+  // Normal Chat Message in a channel
+  socket.on("private-channel-message", async (msg) => {
+    const newMessage = Message({
+      user: msg.userId,
+      channel: msg.channelId,
+      message: msg.message,
+    })
+      .save()
+      .then((msg) => {
+        payload = { type: "message", payload: msg };
+
+        io.to(msg.channelId).emit("update", payload);
+      });
+  });
+
   // One to one direct message
   socket.on("private-chat-message", async (msg) => {
     const newPrivateMessage = PrivateMessage({

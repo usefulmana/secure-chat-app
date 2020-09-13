@@ -43,6 +43,9 @@ const UserSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Server'
     }],
+    notifications: [{
+        type: String
+    }],
     location: {
         type: String,
         default: null

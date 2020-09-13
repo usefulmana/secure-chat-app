@@ -17,7 +17,7 @@ const TeamOptions = ({ history, team }) => {
     const [editFormOpened, setEditFormOpened] = useState(false)
     const [createFormOpened, setCreateFormOpened] = useState(false)
 
-
+    console.log("Tea in teamOPTIONS : ", team)
 
     useEffect(() => {
     }, [])
@@ -75,6 +75,21 @@ const TeamOptions = ({ history, team }) => {
         }
     }
 
+    const handleCopyText = () => {
+
+        /* Get the text field */
+        var copyText = document.querySelector(".join-code");
+        console.log("copyText: ", copyText)
+
+        /* Select the text field */
+        copyText.select();
+        // copyText.setSelectionRange(0, 99999); /*For mobile devices*/
+
+        /* Copy the text inside the text field */
+        document.execCommand("copy");
+
+    }
+
     const renderTeam = () => {
         return (
             <>
@@ -86,6 +101,7 @@ const TeamOptions = ({ history, team }) => {
                         <div className="each-option delete-btn" onClick={handleDelete(team._id)}><i class="far fa-trash-alt"></i>Delete team</div>
                         <div className="each-option create-btn" onClick={() => { setCreateFormOpened(true) }}><i class="far fa-plus-square"></i>Create channel</div>
                         <div className="each-option leave-team-btn" onClick={() => { handleLeaveTeam(team._id) }}><i class="fas fa-sign-out-alt"></i>Leave team</div>
+                        <div className="each-option " onClick={handleCopyText}><i class="fa fa-clone" aria-hidden="true"></i><input className="join-code" value={team.code} /> Copy join code</div>
 
                     </div>
                 </div>

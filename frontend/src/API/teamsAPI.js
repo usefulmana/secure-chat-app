@@ -43,6 +43,27 @@ export const createTeam = async ({ token, name, description }) => {
         });
 };
 
+
+export const joinTeam = async ({ serverCode }) => {
+    console.log("token ! : ", token)
+    return await fetch(`${API}/server/join`, {
+        method: "POST",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `${token}`
+        },
+        body: JSON.stringify({serverCode})
+
+    })
+        .then(response => {
+            return response.json();
+        })
+        .catch(err => {
+            console.log(err);
+        });
+};
+
 export const editTeam = async ({  teamId, name, description }) => {
     return await fetch(`${API}/server/${teamId}`, {
         method: "PUT",

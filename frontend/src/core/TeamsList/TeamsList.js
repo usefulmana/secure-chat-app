@@ -9,6 +9,7 @@ import CreateTeamForm from './CreateTeamForm'
 import EditTeamForm from '../Common/EditTeamForm'
 import Layout from '../Layout'
 import { TweenLite } from 'gsap'
+import socketClient from '../../Socket/clinet'
 
 const TeamsList = ({ history }) => {
   var jwt = JSON.parse(localStorage.getItem("jwt"));
@@ -28,10 +29,15 @@ const TeamsList = ({ history }) => {
   useEffect(() => {
 
     currentUser().then((data) => {
-      var teams = data.servers
+      console.log("data in currentUser : " , data)
+      var teams = data?.servers
       setTeams(teams)
       if (teams.length > 0) initEvent()
     }).catch()
+
+
+    socketClient.init(jwt.user._id)
+    socketClient.sendTestMessage()
 
   }, [])
 
@@ -120,7 +126,7 @@ const TeamsList = ({ history }) => {
         }
       });
     });
-    
+
   }
 
   const renderTeams = () => {
@@ -128,7 +134,7 @@ const TeamsList = ({ history }) => {
     return (
       <div className="teams-list-cont row-w ">
         {teams.map((c) =>
-          <div className="each-team" onClick={() => { history.push(`/team/${c._id}`) }}>
+          <div className="each-team" onClick={() => { history.push(`/team/${c._id}?channel=${c.channels[0]}`) }}>
             <div className="options">
               <div className="show-drop-down-btn" onClick={showDropDown}>...</div>
               <div className="drop-down">

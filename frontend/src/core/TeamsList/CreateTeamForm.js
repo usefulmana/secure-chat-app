@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
-import { createTeam } from '../../API/teamsAPI'
+import { createTeam, joinTeam } from '../../API/teamsAPI'
 import { currentUser, findUser } from '../../API/userAPI'
 import createTeamForm from './CreateTeamForm.scss'
 
@@ -12,7 +12,7 @@ const CreateTeamForm = ({ TeamsRef }) => {
   const { setTeams, setCreateFormOpened } = TeamsRef.current
 
   const [values, setValues] = useState({})
-  const { name, description } = values
+  const { name, description, serverCode } = values
 
   const [joinOrCreate, setJoinOrCreate] = useState('create')
 
@@ -28,6 +28,22 @@ const CreateTeamForm = ({ TeamsRef }) => {
 
   const handleSubmit = () => {
     createTeam({ token, name, description }).then(data => {
+      if (data.error) {
+
+      } else {
+        currentUser().then((data) => {
+          setTeams(data.servers)
+          setCreateFormOpened(false)
+        }).catch()
+      }
+    }).catch(err => {
+      console.log("err in chatForm : ", err)
+
+    })
+  }
+
+  const handleJoin = () => {
+    joinTeam({ serverCode }).then(data => {
       if (data.error) {
 
       } else {
@@ -70,11 +86,11 @@ const CreateTeamForm = ({ TeamsRef }) => {
         <div className="header">Join the team</div>
         <div className="form-cont">
             <div>Code </div>
-            <input className="name-input input" value={name} onChange={handleChange('name')} />
+            <input className="name-input input" value={serverCode} onChange={handleChange('serverCode')} />
 
           <div className="row JCE">
             <div className="cancel-btn btn" onClick={() => setCreateFormOpened(false)}>Cancel</div>
-            <div className="submit-btn btn" onClick={handleSubmit}>Submit</div>
+            <div className="submit-btn btn" onClick={handleJoin}>Submit</div>
           </div>
         </div>
       </div>

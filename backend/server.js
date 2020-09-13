@@ -96,7 +96,12 @@ app.use((req, res, next) => {
 
 let clients = [];
 io.on("connection", (socket) => {
+  // console.log(socket, " has been connected")
   let sessionUserId = "";
+  // testing
+  socket.on("test", async (msg) => {
+    console.log("listening on test and got message : ", msg)
+  });
 
   // Normal Chat Message in a channel
   socket.on("chat-message", async (msg) => {
@@ -139,14 +144,14 @@ io.on("connection", (socket) => {
 
     // Find which socket to
     action = {
-        type: 'private-message',
-        payload: { from: message.from, to: message.to, msg: message.msg, user: message.to.toLowerCase() }
-      };
-      clients.find(client => {
-        if (client.userId === from[0].user_id) {
-          io.to(client.id).emit('update', action);
-        }
-      });
+      type: 'private-message',
+      payload: { from: message.from, to: message.to, msg: message.msg, user: message.to.toLowerCase() }
+    };
+    clients.find(client => {
+      if (client.userId === from[0].user_id) {
+        io.to(client.id).emit('update', action);
+      }
+    });
 
   });
 

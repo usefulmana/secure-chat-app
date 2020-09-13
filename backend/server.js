@@ -109,7 +109,7 @@ io.on("connection", (socket) => {
       .then((msg) => {
         payload = { type: "message", payload: msg };
 
-        io.to(serverId).emit("update", payload);
+        io.to(msg.serverId).emit("update", payload);
       });
   });
 

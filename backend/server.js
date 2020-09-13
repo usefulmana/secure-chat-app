@@ -65,6 +65,7 @@ const authRoutes = require("./routes/authRoutes");
 const serverRoutes = require("./routes/serverRoutes");
 const userRoutes = require("./routes/userRoutes");
 const channelRoutes = require("./routes/channelRoutes");
+const messageRoutes = require("./routes/messageRoutes");
 
 // ** Model **
 const { Message } = require("./models/Message");
@@ -85,6 +86,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/server", serverRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/channel", channelRoutes);
+app.use("/api/chat", messageRoutes);
 
 // ** Log the routes **
 app.use((req, res, next) => {
@@ -118,6 +120,21 @@ io.on("connection", (socket) => {
         payload = { type: "message", payload: msg };
 
         io.to(msg.serverId).emit("update", payload);
+      });
+  });
+
+  // Normal Chat Message in a channel
+  socket.on("private-channel-message", async (msg) => {
+    const newMessage = Message({
+      user: msg.userId,
+      channel: msg.channelId,
+      message: msg.message,
+    })
+      .save()
+      .then((msg) => {
+        payload = { type: "message", payload: msg };
+
+        io.to(msg.channelId).emit("update", payload);
       });
   });
 

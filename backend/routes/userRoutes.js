@@ -14,10 +14,23 @@ router.get(
   "/current",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
-    console.log("api/user/current GET method ")
+
 
     const user = await User.findById(req.user.id)
       .populate("servers")
+      .select("-password");
+
+    return res.status(200).json(user);
+  }
+);
+
+// Get Current User
+router.get(
+  "/:id",
+  async (req, res) => {
+   
+
+    const user = await User.findById(req.params.id)
       .select("-password");
 
     return res.status(200).json(user);

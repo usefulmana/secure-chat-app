@@ -151,7 +151,7 @@ export const isAuthenticated = () => {
 
 export const findUser = ({ method, keyword }) => {
     return fetch(`${API}/user/find?${method}=${keyword}`, {
-        method: "GET",
+        method: "POST",
         headers: {
             Accept: "application/json",
             "Content-Type": "application/json",

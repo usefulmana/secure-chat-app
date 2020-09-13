@@ -28,7 +28,7 @@ router.get(
 router.get(
   "/:id",
   async (req, res) => {
-   
+
 
     const user = await User.findById(req.params.id)
       .select("-password");
@@ -101,9 +101,34 @@ router.post("/retrieve-pw/:token", (req, res) => {
   retrievePW(req.params.token, req, res);
 });
 
+// // Find users by username or email
+// router.post("/find", passport.authenticate("jwt", { session: false }), async (req, res) => {
+
+//   const { username, email } = req.query;
+
+//   if (username) {
+//     const users = await User.find({ username: new RegExp('^' + username + '$', "i") }).select('-password');
+//     if (!users) {
+//       return res.status(404).send({ "message": `No users were found with username: ${username}` })
+//     }
+//     return res.status(200).json(users)
+//   }
+//   else if (email) {
+//     console.log("what is email  ", email)
+//     const users = await User.find({ email: new RegExp('^' + email + '$', "i") }).select('-password');
+//     if (!users) {
+//       return res.status(404).send({ "message": `No users were found with email: ${email}` })
+//     }
+//     return res.status(200).json(users)
+//   }
+
+// });
+
 // Find users by username or email
-router.get("/find", passport.authenticate("jwt", { session: false }), async (req, res) => {
+router.post("/find", passport.authenticate("jwt", { session: false }), async (req, res) => {
+  console.log("come hre")
   const { username, email } = req.query;
+  console.log("username: email :", username, email)
 
   if (username) {
     const users = await User.find({ username: new RegExp('^' + username + '$', "i") }).select('-password');
@@ -113,7 +138,16 @@ router.get("/find", passport.authenticate("jwt", { session: false }), async (req
     return res.status(200).json(users)
   }
   else if (email) {
-    const users = await User.find({ email: new RegExp('^' + email + '$', "i") }).select('-password');
+    // console.log("what is email  ", email)
+    // const users = await User.find({ email: new RegExp('^' + email + '$', "i") }).select('-password');
+
+    // Books.find(
+    //   { "authors": { "$regex": "Alex", "$options": "i" } },
+    //   function (err, docs) {
+    //   }
+    // );
+
+    const users = await User.find({ email: { $regex: email } }).select('-password');
     if (!users) {
       return res.status(404).send({ "message": `No users were found with email: ${email}` })
     }

@@ -48,26 +48,59 @@ const AddMember = ({ history, TeamsRef, teamId }) => {
     }).catch()
   }
 
+
+  const handleAdd = (m) => () => {
+    var alraedyExist=false
+    addedMember.map(addedM=>{
+      if(addedM.email===m.email) alraedyExist=true
+    })
+
+    if(!alraedyExist) setAddedMember([...addedMember, m])
+   
+  }
+
   const showSearchResult = () => {
     return searchedMember.map((m) =>
-      <div>
-        {m}
+      <div className="each-member row AIC" onClick={handleAdd(m)}>
+        <div className="img-cont"><img src={m.image} /></div>
+        <div className="username">{m.username}</div>
+        <div className="email">{m.email}</div>
       </div>
     )
   }
 
+  const handleDelete = (index) => (e) => {
+
+    var array = [...addedMember]; // make a separate copy of the array
+    array.splice(index, 1);
+    setAddedMember(array);
+
+  }
+
   const showAddedMember = () => {
-    return addedMember.map((m) =>
-      <div>
-        {m}
-      </div>
+
+    if (addedMember.length < 1) return <></>
+    return (
+      <>
+        <div className="title">Member added</div>
+        <div className="added-member-wrap">
+          {addedMember.map((m, i) =>
+            <div className="each-member row AIC" >
+              <div className="img-cont"><img src={m.image} /></div>
+              <div className="username">{m.username}</div>
+              <div className="email">{m.email}</div>
+              <div className="delete-btn" onClick={handleDelete(i)}>x</div>
+            </div>
+          )}
+        </div>
+      </>
     )
   }
 
   const showForm = () => {
     return (
       <div className="form-cont">
-        <div>Search member </div>
+        <div className="title">Search member </div>
         <div className="row AIC input-cont">
           <input className="name-input input" value={keyword} onChange={handleChange('keyword')} />
           <i class="fas fa-search-plus search-btn" onClick={handleSearch}></i>
@@ -87,7 +120,7 @@ const AddMember = ({ history, TeamsRef, teamId }) => {
       <div className="content-cont">
         <div className="header">Add members to the team</div>
         {showForm()}
-        <div className="row JCE">
+        <div className="row JCE button-cont">
           <div className="cancel-btn btn" onClick={() => setOpened(false)}>Cancel</div>
           <div className="submit-btn btn" onClick={handleSubmit}>Submit</div>
         </div>

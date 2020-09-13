@@ -98,12 +98,7 @@ app.use((req, res, next) => {
 
 let clients = [];
 io.on("connection", (socket) => {
-  // console.log(socket, " has been connected")
   let sessionUserId = "";
-  // testing
-  socket.on("test", async (msg) => {
-    console.log("listening on test and got message : ", msg)
-  });
 
   // Normal Chat Message in a channel
   socket.on("chat-message", async (msg) => {

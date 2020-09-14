@@ -132,8 +132,7 @@ router.put(
     const { name } = req.body;
 
     if (name.length < 4 || name.length > 15) {
-      res.status(400);
-      res.send("Channel name not the right length");
+      res.status(400).send({message: "Channel name not the right length"});
     } else {
       Channel.findById(cId).then((channel) => {
         channel.name = name;

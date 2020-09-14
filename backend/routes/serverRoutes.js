@@ -41,7 +41,11 @@ router.post("/add", passport.authenticate("jwt", { session: false }), async (req
           }
           server.members.push(userId);
           server.save()
-          .then( s => res.status(200).send(s));
+          .then( s => {
+            u.servers.push(s.id);
+            u.save();
+            res.status(200).send(s)
+          });
       })
       .catch((err) => {
         res.status(400).send({ message: "Invalid server code" });

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Switch, Route, withRouter } from "react-router-dom";
 import { createChannel, } from '../../API/channelAPI'
-
+import Select from 'react-select'
 import base from './base.scss'
 import createChannelForm from './CreateChannelForm.scss'
 
@@ -12,6 +12,7 @@ const CreateTeamForm = ({ history, TeamsRef, teamId }) => {
   const { setOpened } = TeamsRef.current
 
   const [values, setValues] = useState({})
+  const [isPrivate, setIsPrivate] = useState(false)
   const { name } = values
 
   useEffect(() => {
@@ -24,7 +25,9 @@ const CreateTeamForm = ({ history, TeamsRef, teamId }) => {
   }
 
   const handleSubmit = () => {
-    createChannel({ teamId, channelName: name }).then(data => {
+    console.log("isPrivate : ", isPrivate)
+
+    createChannel({ teamId, channelName: name, isPrivate }).then(data => {
       console.log("Data: ", data)
       if (data.error) {
 
@@ -37,12 +40,27 @@ const CreateTeamForm = ({ history, TeamsRef, teamId }) => {
     })
   }
 
+  const handleSelect = (e) => {
+    setIsPrivate(e.target.value)
+  }
+
+  const options = [
+    { value: false, label: 'No' },
+    { value: true, label: 'Yes' }
+  ]
+
 
   const showForm = () => {
     return (
       <div className="form-cont">
         <div>Name </div>
         <input className="name-input input" value={name} onChange={handleChange('name')} />
+        {/* <Select options={options} value={options[selected]} onChange={handleSelect} /> */}
+        {/* <br /> */}
+        <select id="select-box" onChange={handleSelect} >
+          <option className="option" value="false">No</option>
+          <option className="option" value="true">Yes</option>
+        </select>
       </div>
     )
   }

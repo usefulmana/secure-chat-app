@@ -150,8 +150,25 @@ export const isAuthenticated = () => {
 };
 
 export const findUser = ({ method, keyword }) => {
-    return fetch(`${API}/user/find?${method}=${keyword}`, {
+    return fetch(`${API}/user/search?${method}=${keyword}`, {
         method: "POST",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `${token}`
+        }
+    })
+        .then(response => {
+            return response.json();
+        })
+        .catch(err => {
+            console.log(err);
+        });
+};
+
+export const getUserById = ({userId }) => {
+    return fetch(`${API}/user/${userId}`, {
+        method: "GET",
         headers: {
             Accept: "application/json",
             "Content-Type": "application/json",

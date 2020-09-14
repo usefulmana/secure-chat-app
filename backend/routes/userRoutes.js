@@ -104,6 +104,7 @@ router.post("/retrieve-pw/:token", (req, res) => {
 
 // Find users by username or email
 router.post("/search", passport.authenticate("jwt", { session: false }), async (req, res) => {
+  console.log("comer here/")
   const { username, email } = req.query;
   console.log("username: email :", username, email)
 

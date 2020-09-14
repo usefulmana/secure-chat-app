@@ -1,10 +1,11 @@
 import { BASE_URL } from "../config";
+import token from "./getToken"
 const API = BASE_URL + '/api'
 
-var token = undefined
-if (JSON.parse(localStorage.getItem('jwt'))) {
-    token = JSON.parse(localStorage.getItem('jwt')).token
-}
+// var token = undefined
+// if (JSON.parse(localStorage.getItem('jwt'))) {
+//     token = JSON.parse(localStorage.getItem('jwt')).token
+// }
 
 export const getTeamInfo = async ({ token, teamId }) => {
     return await fetch(`${API}/server/${teamId}`, {

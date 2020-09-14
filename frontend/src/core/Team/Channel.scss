@@ -4,6 +4,11 @@
     z-index: 0;
     font-size: 1.4vw;
 
+    .private-channel-icon{
+        margin-left:0.5vw;
+        font-size:1.1vw;
+    }
+
     &:hover {
         background-color: rgba(240, 240, 240, 0.932);
         .channel-option-btn {

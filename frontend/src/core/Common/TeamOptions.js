@@ -8,6 +8,7 @@ import Modal from '../../Template/Modal'
 import EditTeamForm from '../Common/EditTeamForm'
 import CreateChannelForm from '../Common/CreateChannelForm'
 import AddMember from '../Common/AddMember'
+import ManageTeamForm from '../Common/ManageTeamForm'
 
 import { TweenLite } from 'gsap'
 
@@ -18,6 +19,7 @@ const TeamOptions = ({ history, team }) => {
     const [editFormOpened, setEditFormOpened] = useState(false)
     const [createFormOpened, setCreateFormOpened] = useState(false)
     const [addMemberFormOpened, setAddMemberFormOpened] = useState(false)
+    const [manageTeamFormOpened, setManageTeamFormOpened] = useState(false)
 
     console.log("Tea in teamOPTIONS : ", team)
 
@@ -99,6 +101,7 @@ const TeamOptions = ({ history, team }) => {
                         <div className="each-option delete-btn" onClick={handleDelete(team._id)}><i class="far fa-trash-alt"></i>Delete team</div>
                         <div className="each-option create-btn" onClick={() => { setCreateFormOpened(true) }}><i class="far fa-plus-square"></i>Create channel</div>
                         <div className="each-option leave-team-btn" onClick={() => { handleLeaveTeam(team._id) }}><i class="fas fa-sign-out-alt"></i>Leave team</div>
+                        <div className="each-option manage-team-btn" onClick={() => { setManageTeamFormOpened(true) }}><i class="fas fa-users-cog"></i>Manage team</div>
                         <div className="each-option " onClick={handleCopyText}><i class="fa fa-clone" aria-hidden="true"></i><input className="join-code" value={team.code} /> Copy join code</div>
 
                     </div>
@@ -118,6 +121,11 @@ const TeamOptions = ({ history, team }) => {
         height: '40vw'
     }
 
+    const addMemberModalStyle = {
+        width: '50vw',
+        height: '47vw'
+      }
+
     return (
         <div className="team-options-cont" >
             {renderTeam()}
@@ -130,8 +138,11 @@ const TeamOptions = ({ history, team }) => {
                 <CreateChannelForm TeamsRef={useRef({ setOpened: setCreateFormOpened })} teamId={team._id} />
             </Modal>
 
-            <Modal opened={addMemberFormOpened} setOpened={addMemberFormOpened} options={modalStyle}>
+            <Modal opened={addMemberFormOpened} setOpened={setAddMemberFormOpened} options={addMemberModalStyle}>
                 <AddMember TeamsRef={useRef({ setOpened: setAddMemberFormOpened })} teamId={team._id} />
+            </Modal>
+            <Modal opened={manageTeamFormOpened} setOpened={setManageTeamFormOpened} options={modalStyle}>
+                <ManageTeamForm TeamsRef={useRef({ setOpened: setManageTeamFormOpened })} teamId={team._id} team={team}/>
             </Modal>
         </div>
     )

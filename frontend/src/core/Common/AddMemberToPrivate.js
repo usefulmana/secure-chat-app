@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Switch, Route, withRouter } from "react-router-dom";
 import { findUser } from '../../API/userAPI'
-import { addMemberToTeam } from '../../API/teamsAPI'
+import { addToPrivateChannel } from '../../API/channelAPI'
 
-import addMember from './AddMember.scss'
+import addMemberToPrivate from './AddMemberToPrivate.scss'
 import base from './base.scss'
 
-const AddMember = ({ history, TeamsRef, teamId }) => {
+const AddMemberToPrivate = ({ history, reference }) => {
   var jwt = JSON.parse(localStorage.getItem("jwt"));
   var token = jwt.token;
-  console.log("teamId in addmember: ", teamId)
-  const { setOpened } = TeamsRef.current
+  const { setOpened, channel } = reference.current
 
   const [addedMember, setAddedMember] = useState([])
   const [searchedMember, setSearchedMember] = useState([])
@@ -33,9 +32,9 @@ const AddMember = ({ history, TeamsRef, teamId }) => {
     var length = addedMember.length
     var count = 0
     addedMember.map((m) => {
-      addMemberToTeam({ teamId, userId: m._id }).then(data => {
+      addToPrivateChannel({ channelId: channel._id, userId: m._id }).then(data => {
         if (data.error) {
-
+          alert(data.error)
         } else {
           if (length - 1 === count) {
             alert("Succesfully added")
@@ -148,4 +147,4 @@ const AddMember = ({ history, TeamsRef, teamId }) => {
   )
 }
 
-export default withRouter(AddMember)
+export default withRouter(AddMemberToPrivate)

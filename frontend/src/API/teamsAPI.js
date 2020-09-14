@@ -1,7 +1,7 @@
 import { BASE_URL } from "../config";
 const API = BASE_URL + '/api'
 
-var token=undefined
+var token = undefined
 if (JSON.parse(localStorage.getItem('jwt'))) {
     token = JSON.parse(localStorage.getItem('jwt')).token
 }
@@ -32,7 +32,7 @@ export const createTeam = async ({ token, name, description }) => {
             "Content-Type": "application/json",
             Authorization: `${token}`
         },
-        body: JSON.stringify({name, description})
+        body: JSON.stringify({ name, description })
 
     })
         .then(response => {
@@ -43,7 +43,28 @@ export const createTeam = async ({ token, name, description }) => {
         });
 };
 
-export const editTeam = async ({  teamId, name, description }) => {
+
+export const joinTeam = async ({ serverCode }) => {
+    console.log("token ! : ", token)
+    return await fetch(`${API}/server/join`, {
+        method: "POST",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `${token}`
+        },
+        body: JSON.stringify({ serverCode })
+
+    })
+        .then(response => {
+            return response.json();
+        })
+        .catch(err => {
+            console.log(err);
+        });
+};
+
+export const editTeam = async ({ teamId, name, description }) => {
     return await fetch(`${API}/server/${teamId}`, {
         method: "PUT",
         headers: {
@@ -51,7 +72,7 @@ export const editTeam = async ({  teamId, name, description }) => {
             "Content-Type": "application/json",
             Authorization: `${token}`
         },
-        body: JSON.stringify({name, description})
+        body: JSON.stringify({ name, description })
 
     })
         .then(response => {
@@ -63,7 +84,7 @@ export const editTeam = async ({  teamId, name, description }) => {
 };
 
 
-export const deleteTeam = async ({  teamId }) => {
+export const deleteTeam = async ({ teamId }) => {
     return await fetch(`${API}/server/${teamId}`, {
         method: "DELETE",
         headers: {
@@ -91,7 +112,28 @@ export const leaveTeam = async ({ serverId }) => {
             "Content-Type": "application/json",
             Authorization: `${token}`
         },
-        body: JSON.stringify({serverId})
+        body: JSON.stringify({ serverId })
+
+    })
+        .then(response => {
+            return response.json();
+        })
+        .catch(err => {
+            console.log(err);
+        });
+};
+
+
+export const addMemberToTeam = async ({ userId, teamId }) => {
+    console.log("token ! : ", token)
+    return await fetch(`${API}/server/add`, {
+        method: "POST",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `${token}`
+        },
+        body: JSON.stringify({ userId, serverId: teamId })
 
     })
         .then(response => {

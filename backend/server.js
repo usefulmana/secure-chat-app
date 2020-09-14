@@ -102,6 +102,9 @@ io.on("connection", (socket) => {
 
   // Normal Chat Message in a channel
   socket.on("chat-message", async (msg) => {
+
+    socket.emit("test","go test")
+
     const newMessage = Message({
       user: msg.userId,
       channel: msg.channelId,
@@ -156,14 +159,14 @@ io.on("connection", (socket) => {
 
     // Find which socket to
     action = {
-        type: 'private-message',
-        payload: { from: message.from, to: message.to, msg: message.msg, user: message.to.toLowerCase() }
-      };
-      clients.find(client => {
-        if (client.userId === from[0].user_id) {
-          io.to(client.id).emit('update', action);
-        }
-      });
+      type: 'private-message',
+      payload: { from: message.from, to: message.to, msg: message.msg, user: message.to.toLowerCase() }
+    };
+    clients.find(client => {
+      if (client.userId === from[0].user_id) {
+        io.to(client.id).emit('update', action);
+      }
+    });
 
   });
 

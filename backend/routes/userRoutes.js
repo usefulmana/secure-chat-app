@@ -28,7 +28,7 @@ router.get(
 router.get(
   "/:id",
   async (req, res) => {
-   
+
 
     const user = await User.findById(req.params.id)
       .select("-password");
@@ -105,6 +105,7 @@ router.post("/retrieve-pw/:token", (req, res) => {
 // Find users by username or email
 router.post("/search", passport.authenticate("jwt", { session: false }), async (req, res) => {
   const { username, email } = req.query;
+  console.log("username: email :", username, email)
 
   if (username) {
     await User.find({ username: {"$regex": username,  "$options": "i"} }).select('-password').then(users => {

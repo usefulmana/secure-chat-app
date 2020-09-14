@@ -8,6 +8,10 @@ import TeamOptions from '../Common/TeamOptions'
 // CSS
 import './Team.scss'
 import Channel from "./Channel";
+import querySearch from "stringquery";
+import { currentUser } from "../../API/userAPI";
+import ChannelContent from "./ChannelContent";
+import socketClient from "../../Socket/clinet"
 
 const Team = ({ history, match }) => {
     var jwt = JSON.parse(localStorage.getItem("jwt"));
@@ -15,32 +19,30 @@ const Team = ({ history, match }) => {
 
     const [teamId, setTeamId] = useState(match.params.teamId)
     const [teamInfo, setTeamInfo] = useState()
+    const [channels, setChannels] = useState([])
+    // const [currentChannel, setCurrentChannel] = useState()
 
     const [editFormOpened, setEditFormOpened] = useState(false)
     const [teamToEdit, setTeamToEdit] = useState()
 
+    
+ 
     useEffect(() => {
+        socketClient.socket.on("test",()=>{
+            alert("on teams")
+        })
+
+
         getTeamInfo({ token, teamId }).then((data) => {
             console.log("data : ", data)
 
             setTeamInfo(data)
-            // initEvent()
+            setChannels(data.channels)
+            // initCurrentChannel(data.channels)
         }).catch((err) => {
             console.log("Error in Teams : ", err)
         })
     }, [])
-
-    const initEvent = () => {
-        console.log("target : ", document.querySelector(".edit-btn"))
-        document.querySelector(".edit-btn").addEventListener("click", (e) => {
-            e.stopPropagation();
-            var teamId = e.target.closest('.edit-btn').id
-            setTeamToEdit(teamId)
-            setEditFormOpened(true);
-        });
-
-
-    }
 
     const renderTeamInfo = () => {
         return (
@@ -48,7 +50,7 @@ const Team = ({ history, match }) => {
                 <TeamOptions team={teamInfo} />
                 <div className="channel-header">Channel</div>
                 <div className="channel-cont">
-                    {teamInfo.channels.map((c) => {
+                    {channels.map((c) => {
                         { console.log("c : ", c) }
                         return <Channel teamId={teamId} channelName={c.name} channelId={c._id} />
                     }
@@ -65,10 +67,12 @@ const Team = ({ history, match }) => {
                 <Layout>
                     <div className="team-cont row" >
                         <div className="first">
+                            {JSON.stringify(teamInfo.members)}
                             {renderTeamInfo()}
                         </div>
                         <div className="second">
                             {/* show chat history */}
+                            <ChannelContent />
                         </div>
                     </div>
                 </Layout>

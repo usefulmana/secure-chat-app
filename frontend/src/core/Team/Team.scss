@@ -4,21 +4,21 @@
     .first {
         width: 25%;
         height: 100%;
-        padding:1vw;
+        padding: 1vw;
 
-        background-color:white;
+        background-color: white;
 
-        .channel-header{
+        .channel-header {
             font-weight: 600;
         }
 
-        .channel-cont{
-            .each-channel{
+        .channel-cont {
+            margin-top:0.5vw;
+
+            .each-channel {
                 cursor: pointer;
-                margin-top:0.5vw;
             }
         }
-
     }
 
     .second {

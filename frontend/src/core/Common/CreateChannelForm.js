@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { BrowserRouter, Switch, Route, withRouter } from "react-router-dom";
 import { createChannel, } from '../../API/channelAPI'
 
-import editTeamForm from './EditTeamForm.scss'
+import base from './base.scss'
+import createChannelForm from './CreateChannelForm.scss'
 
 const CreateTeamForm = ({ history, TeamsRef, teamId }) => {
   var jwt = JSON.parse(localStorage.getItem("jwt"));
@@ -62,7 +63,7 @@ const CreateTeamForm = ({ history, TeamsRef, teamId }) => {
 
 
   return (
-    <div className="edit-team-cont">
+    <div className="create-channel-cont base-cont">
       {renderOption()}
     </div>
   )

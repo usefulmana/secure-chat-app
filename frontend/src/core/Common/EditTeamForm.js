@@ -3,6 +3,7 @@ import { BrowserRouter, Switch, Route, withRouter } from "react-router-dom";
 import { getTeamInfo,editTeam } from '../../API/teamsAPI'
 
 import editTeamForm from './EditTeamForm.scss'
+import base from './base.scss'
 
 const EditTeamForm = ({history, TeamsRef, teamId }) => {
   var jwt = JSON.parse(localStorage.getItem("jwt"));
@@ -71,7 +72,7 @@ const EditTeamForm = ({history, TeamsRef, teamId }) => {
 
 
   return (
-    <div className="edit-team-cont">
+    <div className="edit-team-cont base-cont">
       {renderOption()}
     </div>
   )

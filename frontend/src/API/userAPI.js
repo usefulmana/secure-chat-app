@@ -1,6 +1,12 @@
 import { BASE_URL } from "../config";
 const API = BASE_URL + '/api'
 
+
+var token = undefined
+if (JSON.parse(localStorage.getItem('jwt'))) {
+    token = JSON.parse(localStorage.getItem('jwt')).token
+}
+
 export const currentUser = () => {
     var token = JSON.parse(localStorage.getItem('jwt')).token
     return fetch(`${API}/user/current`, {
@@ -143,9 +149,9 @@ export const isAuthenticated = () => {
     }
 };
 
-export const findUser = ({ token, method, keyword }) => {
+export const findUser = ({ method, keyword }) => {
     return fetch(`${API}/user/find?${method}=${keyword}`, {
-        method: "GET",
+        method: "POST",
         headers: {
             Accept: "application/json",
             "Content-Type": "application/json",

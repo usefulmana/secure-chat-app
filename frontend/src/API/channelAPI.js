@@ -46,8 +46,8 @@ export const editChannel = async ({ channelId, name }) => {
 };
 
 
-export const deleteChannel = async ({ teamId, channelName }) => {
-    console.log("before sending request : ", teamId , channelName)
+export const deleteChannel = async ({ teamId, channelId }) => {
+    console.log("before sending request : ", teamId , channelId)
     return await fetch(`${API}/channel/delete`, {
         method: "DELETE",
         headers: {
@@ -55,7 +55,7 @@ export const deleteChannel = async ({ teamId, channelName }) => {
             "Content-Type": "application/json",
             Authorization: `${token}`
         },
-        body: JSON.stringify({channelName, serverId: teamId})
+        body: JSON.stringify({channelId, serverId: teamId})
 
     })
         .then(response => {

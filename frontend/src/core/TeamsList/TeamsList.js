@@ -7,8 +7,10 @@ import { currentUser } from '../../API/userAPI'
 import Modal from '../../Template/Modal'
 import CreateTeamForm from './CreateTeamForm'
 import EditTeamForm from '../Common/EditTeamForm'
+import AddMember from '../Common/AddMember'
 import Layout from '../Layout'
 import { TweenLite } from 'gsap'
+import socketClient from '../../Socket/clinet'
 
 const TeamsList = ({ history }) => {
   var jwt = JSON.parse(localStorage.getItem("jwt"));
@@ -18,6 +20,7 @@ const TeamsList = ({ history }) => {
   const [createFormOpened, setCreateFormOpened] = useState(false)
   const [editFormOpened, setEditFormOpened] = useState(false)
   const [teamToEdit, setTeamToEdit] = useState()
+  const [addMemberFormOpened, setAddMemberFormOpened] = useState(false)
 
   const TeamsRef = useRef({
     setTeams,
@@ -28,10 +31,15 @@ const TeamsList = ({ history }) => {
   useEffect(() => {
 
     currentUser().then((data) => {
-      var teams = data.servers
+      console.log("data in currentUser : ", data)
+      var teams = data?.servers
       setTeams(teams)
       if (teams.length > 0) initEvent()
     }).catch()
+
+
+    socketClient.init(jwt.user._id)
+    socketClient.sendTestMessage()
 
   }, [])
 
@@ -120,7 +128,19 @@ const TeamsList = ({ history }) => {
         }
       });
     });
-    
+
+    var addMemberBtns = document.querySelectorAll('.add-member-btn');
+    Array.from(addMemberBtns).forEach(addMemberBtn => {
+      addMemberBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        var target = e.target.closest('.add-member-btn')
+        var teamId = target.id
+        // console.log(e.target.closest('.edit-btn').id)
+        setTeamToEdit(teamId)
+        setAddMemberFormOpened(true);
+      });
+    });
+
   }
 
   const renderTeams = () => {
@@ -128,11 +148,11 @@ const TeamsList = ({ history }) => {
     return (
       <div className="teams-list-cont row-w ">
         {teams.map((c) =>
-          <div className="each-team" onClick={() => { history.push(`/team/${c._id}`) }}>
+          <div className="each-team" onClick={() => { history.push(`/team/${c._id}?channel=${c.channels[0]}`) }}>
             <div className="options">
               <div className="show-drop-down-btn" onClick={showDropDown}>...</div>
               <div className="drop-down">
-                <div className="each-option" onClick={handleAddMembers}><i class="fas fa-user-plus"></i>Add members to the team</div>
+                <div className="each-option add-member-btn" c={c._id}><i class="fas fa-user-plus"></i>Add members to the team</div>
                 <div className="each-option edit-btn" id={c._id}><i class="far fa-edit"></i>Edit team</div>
                 <div className="each-option delete-btn" id={c._id}><i class="far fa-trash-alt"></i>Delete team</div>
                 <div className="each-option leave-team-btn" id={c._id}><i class="fas fa-sign-out-alt"></i>Leave team</div>
@@ -177,6 +197,11 @@ const TeamsList = ({ history }) => {
     height: '40vw'
   }
 
+  const addMemberModalStyle = {
+    width: '50vw',
+    height: '47vw'
+  }
+
   return (
     <Layout>
 
@@ -191,6 +216,10 @@ const TeamsList = ({ history }) => {
       </Modal>
       <Modal opened={editFormOpened} setOpened={setEditFormOpened} options={modalStyle}>
         <EditTeamForm TeamsRef={TeamsRef} teamId={teamToEdit} />
+      </Modal>
+
+      <Modal opened={addMemberFormOpened} setOpened={setAddMemberFormOpened} options={addMemberModalStyle}>
+        <AddMember TeamsRef={useRef({ setOpened: setAddMemberFormOpened })} teamId={teamToEdit} />
       </Modal>
     </Layout>
   )

@@ -14,7 +14,8 @@ router.get("/:id",passport.authenticate("jwt", { session: false }), async (req, 
     const options = {
         page: page,
         limit: limit,
-        sort: {created_at: -1}
+        sort: {created_at: -1},
+        populate: 'user'
     }
     
     await Message.paginate({channel: channelId}, options, function(error, pageCount, paginatedResults) {    

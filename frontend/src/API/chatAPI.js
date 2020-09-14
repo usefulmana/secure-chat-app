@@ -4,7 +4,7 @@ import token from "./getToken"
 const API = BASE_URL + '/api'
 
 export const getMessageFromChannel = async ({ channelId}) => {
-    return await fetch(`${API}/chat/${channelId}?page=1&limit=10`, {
+    return await fetch(`${API}/chat/${channelId}?page=1&limit=100&sort=asc`, {
         method: "GET",
         headers: {
             Accept: "application/json",

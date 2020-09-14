@@ -3,7 +3,7 @@ import { BrowserRouter, Switch, Route, Link, withRouter } from "react-router-dom
 import { getChannelInfo } from '../../API/channelAPI'
 import { getMessageFromChannel } from '../../API/chatAPI'
 import querySearch from "stringquery";
-
+import Chat from "../Common/Chat"
 import channelContent from './ChannelContent.scss'
 import socketClient from "../../Socket/clinet"
 import handleAccess from './handleAccess'
@@ -11,7 +11,7 @@ import handleAccess from './handleAccess'
 const ChannelContent = ({ history }) => {
     var jwt = JSON.parse(localStorage.getItem("jwt"));
 
-    const [userId, setUserId]= useState()
+    const [userId, setUserId] = useState()
     const [currentChannelId, setCurrentChannelId] = useState()
     const [channelInfo, setChannelInfo] = useState()
     const [newMessage, setNewMessage] = useState()
@@ -37,8 +37,7 @@ const ChannelContent = ({ history }) => {
     }, [querySearch(history.location.search).channel])
 
     const socketInit = (channelId) => {
-        socketClient.joinChannel(channelId)
-        socketClient.listenToChannel(() => { getMessage(channelId) })
+        socketClient.joinChannel(channelId, () => { getMessage(channelId) })
     }
 
     const initCurrentChannelId = (channels) => {
@@ -63,7 +62,7 @@ const ChannelContent = ({ history }) => {
     ==========================================*/
     const scrollToBottom = () => {
         var contentCont = document.querySelector(".content-cont")
-        if(contentCont) contentCont.scrollTo(0, contentCont.scrollHeight)
+        if (contentCont) contentCont.scrollTo(0, contentCont.scrollHeight)
     }
 
     const handleSubmit = (e) => {
@@ -71,14 +70,22 @@ const ChannelContent = ({ history }) => {
         console.log("currentChannelId : ", currentChannelId)
         socketClient.createNewMessge({ channelId: currentChannelId, userId, message: newMessage })
         // getMessage(currentChannelId)
+        setNewMessage("")
     }
 
+
     const renderMessages = () => {
-        return messages?.docs?.map(m =>
-            <div className="each-message">
-                {m._id}
-                {m.message}
-            </div>
+        return messages?.docs?.map((m, index) => {
+            var previousIndex = 0
+            if (index === 0) {
+                previousIndex = 0
+            } else {
+                previousIndex = index - 1
+            }
+            console.log("previousIndex: ", previousIndex)
+
+            return <Chat message={m} previousChatUser={messages.docs[previousIndex].user.email} index={index} />
+        }
         )
     }
 
@@ -90,7 +97,7 @@ const ChannelContent = ({ history }) => {
         )
     }
 
-    return access&&(
+    return access && (
         <div className="channel-content-cont">
             <div className="content-cont">
                 {/* {currentChannelId} */}

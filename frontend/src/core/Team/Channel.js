@@ -33,8 +33,8 @@ const Channel = ({ history, channel, teamId }) => {
         }
     }
 
-    const initSoket=()=>{
-        
+    const initSoket = () => {
+
     }
 
     useEffect(() => {
@@ -43,14 +43,17 @@ const Channel = ({ history, channel, teamId }) => {
     })
 
     const handleDelete = () => {
-        deleteChannel({ teamId, channelId }).then((data) => {
-            console.log("data in deletechannel : ", data)
-            if (data.error) {
+        var r = window.confirm("Leave the team?")
+        if (r === true) {
+            deleteChannel({ teamId, channelId }).then((data) => {
+                console.log("data in deletechannel : ", data)
+                if (data.error) {
 
-            } else {
-                window.location.reload()
-            }
-        }).catch()
+                } else {
+                    window.location.reload()
+                }
+            }).catch()
+        }
     }
 
     const handleEdit = () => {
@@ -82,9 +85,9 @@ const Channel = ({ history, channel, teamId }) => {
     }
 
     const refForEditChannel = useRef({
-         setOpened: setEditFormOpened,
-         channel: channel,
-        })
+        setOpened: setEditFormOpened,
+        channel: channel,
+    })
     const refForAddToPrivate = useRef({
         setOpened: setAddMemberFormOpened,
         channel: channel
@@ -97,7 +100,7 @@ const Channel = ({ history, channel, teamId }) => {
                     <div className="drop-down">
                     <div className="each-option edit-channel-btn" onClick={() => { setEditFormOpened(true) }}>Edit channel name</div>
                     <div className="each-option delete-channel-btn" onClick={handleDelete}>Delete channel</div>
-                    <div className="each-option delete-channel-btn" onClick={() => { setAddMemberFormOpened(true) }}>Add member</div>
+                    {isPrivate && <div className="each-option delete-channel-btn" onClick={() => { setAddMemberFormOpened(true) }}>Add member</div>}
 
                 </div>
 

@@ -29,9 +29,9 @@ const CreateTeamForm = ({ history, reference }) => {
     console.log("channelName: ", channelName)
 
     editChannel({ channelId, name: newChannelName }).then(data => {
-      alert(data)
-     
-      if (data.error) {
+
+      if (data.error || data.message) {
+        alert(data.message)
         // setError(data.error)
 
       } else {

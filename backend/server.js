@@ -113,8 +113,7 @@ io.on("connection", (socket) => {
       .save()
       .then((data) => {
         payload = { type: "message", payload: data };
-        console.log(msg.channelId)
-        console.log("payload beofre emitting : " , payload)
+
         io.to(msg.channelId).emit("update", payload);
       });
   });

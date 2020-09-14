@@ -1,6 +1,6 @@
-$contentHeight : 74vh;
+$contentHeight : 79vh;
 .channel-content-cont {
-    padding:3vw;
+    padding:1vw;
     .content-cont {
         height: $contentHeight;
         max-height: $contentHeight;
@@ -9,14 +9,7 @@ $contentHeight : 74vh;
         width:100%;
         overflow-y: auto;
 
-        .each-message{
-            font-size:1.3vw;
-            margin:1.5vw;
-            padding:0.9vw;
-            background-color: white;
-            border-radius:0.4vw;
-            width:70%;
-        }
+       
     }
 
     .new-message-cont {

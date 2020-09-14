@@ -39,21 +39,18 @@ class socketClientClass {
     //     });
     // }
 
-    joinChannel(channelId) {
+    joinChannel(channelId, callback) {
         console.log("befor statign lsten : ", channelId)
         this.socket.emit('subscribe', channelId);
 
-
-    }
-
-    listenToChannel(callback) {
         this.socket.on('update', (payload) => {
-            // console.log("payload : ", payload)
-            // alert(JSON.stringify(payload))
             callback()
-            // alert("Dataawe : ", JSON.stringify(data))
         })
+
+
     }
+
+    
 
 }
 

@@ -2,11 +2,13 @@
     position: relative;
    
     .member-cont {
+        background-color: rgba(230, 227, 227, 0.452);
+        border-radius: 0.3vw;
         margin-top: 1vw;
         margin-bottom: 1vw;
         cursor: pointer;
 
-        width: 90%;
+        width: 97%;
         border-bottom-right-radius: 0.4vw;
         border-bottom-left-radius: 0.4vw;
         transform: translateY(-1%);
@@ -17,7 +19,6 @@
         }
 
         .each-member {
-            background-color: rgba(230, 227, 227, 0.452);
         }
 
         .delete-btn {

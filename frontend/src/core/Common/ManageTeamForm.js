@@ -70,10 +70,10 @@ const ManageTeamForm = ({ history, TeamsRef, team }) => {
       <div className="content-cont">
         <div className="header">Manage team</div>
         {showForm()}
-        <div className="row JCE button-cont">
+        {/* <div className="row JCE button-cont">
           <div className="cancel-btn btn" onClick={() => setOpened(false)}>Cancel</div>
           <div className="submit-btn btn" onClick={() => { }}>Submit</div>
-        </div>
+        </div> */}
       </div>
     )
   }

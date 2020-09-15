@@ -34,7 +34,6 @@ export const isUserHasAccessToThisChannel = (channel) => {
 export const isUserInThisTeam = (team) => {
     var access = false
     team.members.forEach(m => {
-        console.log("userId : ", userId, " m : ", m)
 
         if (m === userId) {
             access = true

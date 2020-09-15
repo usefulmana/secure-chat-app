@@ -42,15 +42,18 @@ class socketClientClass {
     joinChannel(channelId, callback) {
         console.log("befor statign lsten : ", channelId)
         this.socket.emit('subscribe', channelId);
-
-        this.socket.on('update', (payload) => {
+        
+        console.log("befor starting channel update : ", `${channelId}-update`)
+        this.socket.on(`${channelId}-update`, (payload) => {
+            console.log("channelId on udpae", channelId)
+            console.log("payload  on udpae", payload)
             callback()
         })
 
 
     }
 
-    
+
 
 }
 

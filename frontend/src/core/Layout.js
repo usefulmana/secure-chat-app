@@ -20,7 +20,6 @@ const Layout = ({ loading, history, children }) => {
         history.push('/')
     }
 
-    console.log("histoyr : ", history.location.pathname)
     const isActive = () => {
 
         var pathname = history.location.pathname

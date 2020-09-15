@@ -1,14 +1,13 @@
 import { BASE_URL } from "../config";
+import getToken from "./getToken";
+
 const API = BASE_URL + '/api'
 
 
-var token = undefined
-if (JSON.parse(localStorage.getItem('jwt'))) {
-    token = JSON.parse(localStorage.getItem('jwt')).token
-}
 
 export const currentUser = () => {
-    var token = JSON.parse(localStorage.getItem('jwt')).token
+    var token = getToken()
+
     return fetch(`${API}/user/current`, {
         method: "GET",
         headers: {
@@ -27,6 +26,7 @@ export const currentUser = () => {
 
 export const register = user => {
     console.log("what is user : ", user)
+    var token = getToken()
 
     return fetch(`${API}/auth/register`, {
         method: "POST",
@@ -45,6 +45,8 @@ export const register = user => {
 };
 
 export const login = user => {
+    var token = getToken()
+
     return fetch(`${API}/auth/login`, {
         method: "POST",
         headers: {
@@ -62,6 +64,8 @@ export const login = user => {
 };
 
 export const changeUsername = ({ username, token }) => {
+    var token = getToken()
+
     return fetch(`${API}/user/current`, {
         method: "PUT",
         headers: {
@@ -80,6 +84,8 @@ export const changeUsername = ({ username, token }) => {
 };
 
 export const changePassword = ({ password, token }) => {
+    var token = getToken()
+
     return fetch(`${API}/user/change-pw`, {
         method: "POST",
         headers: {
@@ -98,6 +104,8 @@ export const changePassword = ({ password, token }) => {
 };
 
 export const changeAvatar = ({ formData, token }) => {
+    var token = getToken()
+
     return fetch(`${API}/user/photo`, {
         method: "PUT",
         headers: {
@@ -118,6 +126,7 @@ export const changeAvatar = ({ formData, token }) => {
 
 
 export const authenticate = (data, next) => {
+
     if (typeof window !== "undefined") {
         localStorage.setItem("jwt", JSON.stringify(data));
         next();
@@ -161,6 +170,8 @@ export const isAuthenticated = async () => {
 };
 
 export const findUser = ({ method, keyword }) => {
+    var token = getToken()
+
     return fetch(`${API}/user/search?${method}=${keyword}`, {
         method: "POST",
         headers: {
@@ -178,6 +189,8 @@ export const findUser = ({ method, keyword }) => {
 };
 
 export const getUserById = ({ userId }) => {
+    var token = getToken()
+
     return fetch(`${API}/user/${userId}`, {
         method: "GET",
         headers: {

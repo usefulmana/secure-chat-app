@@ -31,12 +31,8 @@ const Team = ({ history, match }) => {
     const [error, setError] = useState(false)
     const [access, setAccess] = useState(true)
 
-
-
     useEffect(() => {
-
         getTeamInfo({ token, teamId }).then((data) => {
-            console.log("data : ", data)
             if (data.error) {
                 setError(data.error)
             } else {
@@ -58,7 +54,6 @@ const Team = ({ history, match }) => {
                 <div className="channel-header">Channel</div>
                 <div className="channel-cont">
                     {channels.map((c) => {
-                        { console.log("c : ", c) }
                         return <Channel teamInfo={teamInfo} channel={c} isAdmin={isAdmin} />
                     }
                     )}
@@ -69,7 +64,6 @@ const Team = ({ history, match }) => {
 
 
     const conditionalRender = () => {
-        console.log("access : ", access, "Error : ", error)
         if (teamInfo) {
             return (
                 <Layout>

@@ -8,7 +8,7 @@ import { isUserHasAccessToThisChannel } from './handleAccess'
 import channel from './Channel.scss'
 import AddMemberToPrivate from "../Common/AddMemberToPrivate";
 
-const Channel = ({ history, teamInfo, channel, isAdmin }) => {
+const Channel = ({ history,match, teamInfo, channel, isAdmin }) => {
     const teamId = teamInfo._id
     const isPrivate = channel.isPrivate
     const channelName = channel.name
@@ -20,24 +20,12 @@ const Channel = ({ history, teamInfo, channel, isAdmin }) => {
 
     const [addMemberFormOpened, setAddMemberFormOpened] = useState(false)
 
-    const initCurrentChannelId = (channels) => {
-        var query = querySearch(history.location.search);
-        if (!query.channel) {
-            // general as default
-            if (channelName === "general") {
-                setCurrentChannelId(channelId)
-            }
-        } else {
-            setCurrentChannelId(query.channel)
-        }
-    }
-
     const initSoket = () => {
 
     }
 
     useEffect(() => {
-        initCurrentChannelId()
+        setCurrentChannelId(match.params.channelId)
     })
 
     const handleDelete = () => {
@@ -72,8 +60,7 @@ const Channel = ({ history, teamInfo, channel, isAdmin }) => {
     // }
 
     const handleClick = () => {
-        history.push(`/team/${teamId}?channel=${channelId}`)
-
+        history.push(`/team/${teamId}/${channelId}`)
     }
 
 

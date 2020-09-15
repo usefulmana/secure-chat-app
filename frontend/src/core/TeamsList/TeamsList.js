@@ -161,7 +161,7 @@ const TeamsList = ({ history }) => {
     return (
       <div className="teams-list-cont row-w ">
         {teams.map((c) =>
-          <div className="each-team" onClick={() => { history.push(`/team/${c._id}?channel=${c.channels[0]}`) }}>
+          <div className="each-team" onClick={() => { history.push(`/team/${c._id}/${c.channels[0]}`) }}>
             <div className="options">
               <div className="show-drop-down-btn" onClick={showDropDown}>...</div>
               <div className="drop-down">

@@ -6,12 +6,11 @@ import querySearch from "stringquery";
 import Chat from "../Common/Chat"
 import channelContent from './ChannelContent.scss'
 import socketClient from "../../Socket/clinet"
-import {isUserHasAccessToThisChannel} from './handleAccess'
+import { isUserHasAccessToThisChannel } from './handleAccess'
 
-const ChannelContent = ({ history }) => {
+const ChannelContent = ({ history, match }) => {
     var jwt = JSON.parse(localStorage.getItem("jwt"));
-
-    const [userId, setUserId] = useState()
+    const userId = jwt.user._id
     const [currentChannelId, setCurrentChannelId] = useState()
     const [channelInfo, setChannelInfo] = useState()
     const [newMessage, setNewMessage] = useState()
@@ -25,23 +24,27 @@ const ChannelContent = ({ history }) => {
 
         getChannelInfo({ channelId }).then((data) => {
             console.log("Data in get channel info : ", data)
+
             setChannelInfo(data)
             setAccess(isUserHasAccessToThisChannel(data))
+            setCurrentChannelId(channelId)
+            getMessage(channelId)
+            socketInit(channelId)
+
         }).catch()
 
-        getMessage(channelId)
-        setUserId(jwt.user._id)
-        socketInit(channelId)
 
-    }, [querySearch(history.location.search).channel])
+    }, [match.params.channelId])
 
     const socketInit = (channelId) => {
+        console.log("listenint to : ", JSON.stringify(channelId))
         socketClient.joinChannel(channelId, () => { getMessage(channelId) })
     }
 
     const initCurrentChannelId = (channels) => {
-        var channelId = querySearch(history.location.search).channel;
-        setCurrentChannelId(channelId)
+        console.log("param : ",match.params.channelId)
+        var channelId = match.params.channelId;
+        // var channelId = querySearch(history.location.search).channel;
         return channelId
     }
 
@@ -50,7 +53,7 @@ const ChannelContent = ({ history }) => {
             if (data?.error) {
             } else {
                 setMessages(data)
-                console.log("data in get meesage from channel :", data)
+                console.log("data in get message from channel :", data)
                 scrollToBottom()
             }
         })
@@ -66,7 +69,6 @@ const ChannelContent = ({ history }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        console.log("currentChannelId : ", currentChannelId)
         socketClient.createNewMessge({ channelId: currentChannelId, userId, message: newMessage })
         // getMessage(currentChannelId)
         setNewMessage("")
@@ -81,7 +83,6 @@ const ChannelContent = ({ history }) => {
             } else {
                 previousIndex = index - 1
             }
-            console.log("previousIndex: ", previousIndex)
 
             return <Chat message={m} previousChatUser={messages.docs[previousIndex].user.email} index={index} />
         }
@@ -106,7 +107,7 @@ const ChannelContent = ({ history }) => {
                 {showNewMessageForm()}
             </div>
         </div>
-    ):<></>
+    ) : <></>
 }
 
 export default withRouter(ChannelContent)

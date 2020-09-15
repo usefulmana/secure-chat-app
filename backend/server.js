@@ -103,7 +103,7 @@ io.on("connection", (socket) => {
   // Normal Chat Message in a channel
   socket.on("chat-message", async (msg) => {
 
-    socket.emit("test","go test")
+    socket.emit("test", "go test")
 
     const newMessage = Message({
       user: msg.userId,
@@ -113,8 +113,8 @@ io.on("connection", (socket) => {
       .save()
       .then((data) => {
         payload = { type: "message", payload: data };
-
-        io.to(msg.channelId).emit("update", payload);
+        console.log("before emitting event : ", `${msg.channelId}-update`)
+        io.to(msg.channelId).emit(`${msg.channelId}-update`, payload);
       });
   });
 

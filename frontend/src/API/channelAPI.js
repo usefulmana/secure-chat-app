@@ -1,13 +1,21 @@
 import { BASE_URL } from "../config";
 import Channel from "../core/Team/Channel";
+import getToken from './getToken'
+
 const API = BASE_URL + '/api'
 
-var token = undefined
-if (JSON.parse(localStorage.getItem('jwt'))) {
-    token = JSON.parse(localStorage.getItem('jwt')).token
-}
+
+// const getToken = () => {
+//     var token = undefined
+//     if (JSON.parse(localStorage.getItem('jwt'))) {
+//         token = JSON.parse(localStorage.getItem('jwt')).token
+//     }
+
+//     return token
+// }
 
 export const getChannelInfo = async ({ channelId }) => {
+    var token = getToken()
     return await fetch(`${API}/channel/${channelId}`, {
         method: "GET",
         headers: {
@@ -26,6 +34,8 @@ export const getChannelInfo = async ({ channelId }) => {
 };
 
 export const createChannel = async ({ channelName, teamId, isPrivate }) => {
+    var token = getToken()
+
     return await fetch(`${API}/channel/create`, {
         method: "POST",
         headers: {
@@ -45,6 +55,8 @@ export const createChannel = async ({ channelName, teamId, isPrivate }) => {
 };
 
 export const editChannel = async ({ channelId, name }) => {
+    var token = getToken()
+
     return await fetch(`${API}/channel/${channelId}`, {
         method: "PUT",
         headers: {
@@ -65,6 +77,8 @@ export const editChannel = async ({ channelId, name }) => {
 
 
 export const deleteChannel = async ({ teamId, channelId }) => {
+    var token = getToken()
+
     console.log("before sending request : ", teamId, channelId)
     return await fetch(`${API}/channel/delete`, {
         method: "DELETE",
@@ -85,6 +99,8 @@ export const deleteChannel = async ({ teamId, channelId }) => {
 };
 
 export const addToPrivateChannel = async ({ channelId, userId }) => {
+    var token = getToken()
+
     return await fetch(`${API}/channel/addMember`, {
         method: "POST",
         headers: {

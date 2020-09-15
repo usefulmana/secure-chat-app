@@ -5,14 +5,12 @@ import chat from "./Chat.scss"
 const Chat = ({ history, message, previousChatUser, index }) => {
 
     const [currentUser, setCurrentUser] = useState(message.user)
-    console.log("message:  ", message)
-    console.log("previousChatUser === currentUser.email:  ", previousChatUser === currentUser.email)
 
 
     const parseTimestamp = (time) => {
 
         var date = time.slice(0, 10);
-        var time = time.slice(14, 19);
+        var time = time.slice(11, 16);
 
         return date + " " + time
 

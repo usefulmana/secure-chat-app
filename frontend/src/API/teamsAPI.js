@@ -1,13 +1,10 @@
 import { BASE_URL } from "../config";
-import token from "./getToken"
+import getToken from "./getToken"
 const API = BASE_URL + '/api'
 
-// var token = undefined
-// if (JSON.parse(localStorage.getItem('jwt'))) {
-//     token = JSON.parse(localStorage.getItem('jwt')).token
-// }
-
 export const getTeamInfo = async ({ token, teamId }) => {
+    var token = getToken()
+
     return await fetch(`${API}/server/${teamId}`, {
         method: "GET",
         headers: {
@@ -26,6 +23,8 @@ export const getTeamInfo = async ({ token, teamId }) => {
 
 
 export const createTeam = async ({ token, name, description }) => {
+    var token = getToken()
+
     return await fetch(`${API}/server/create`, {
         method: "POST",
         headers: {
@@ -46,7 +45,8 @@ export const createTeam = async ({ token, name, description }) => {
 
 
 export const joinTeam = async ({ serverCode }) => {
-    console.log("token ! : ", token)
+    var token = getToken()
+
     return await fetch(`${API}/server/join`, {
         method: "POST",
         headers: {
@@ -66,6 +66,8 @@ export const joinTeam = async ({ serverCode }) => {
 };
 
 export const editTeam = async ({ teamId, name, description }) => {
+    var token = getToken()
+
     return await fetch(`${API}/server/${teamId}`, {
         method: "PUT",
         headers: {
@@ -86,6 +88,8 @@ export const editTeam = async ({ teamId, name, description }) => {
 
 
 export const deleteTeam = async ({ teamId }) => {
+    var token = getToken()
+
     return await fetch(`${API}/server/${teamId}`, {
         method: "DELETE",
         headers: {
@@ -106,6 +110,8 @@ export const deleteTeam = async ({ teamId }) => {
 
 
 export const leaveTeam = async ({ serverId }) => {
+    var token = getToken()
+
     return await fetch(`${API}/server/leave`, {
         method: "POST",
         headers: {
@@ -126,7 +132,8 @@ export const leaveTeam = async ({ serverId }) => {
 
 
 export const addMemberToTeam = async ({ userId, teamId }) => {
-    console.log("token ! : ", token)
+    var token = getToken()
+
     return await fetch(`${API}/server/add`, {
         method: "POST",
         headers: {

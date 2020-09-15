@@ -19,7 +19,8 @@ function App() {
         {/* <PrivateRoute path="/dashboard/" exact component={Dashboard} /> */}
         <PrivateRoute path="/teams" exact component={TeamsList} />
         {/* <PrivateRoute path="/dashboard/teams/:id" exact component={Dashboard} /> */}
-        <PrivateRoute path="/team/:teamId" exact component={Team} />
+        <PrivateRoute path="/team/:teamId/:channelId" exact component={Team} />
+        {/* <PrivateRoute path="/team/:teamId" exact component={Team} /> */}
         <PrivateRoute path="/profile/" exact component={Profile} />
         {/* <PrivateRoute path="/dashboard/locations" exact component={LocationPage} /> */}
         {/* <AdminRoute path="/dashboard/users" exact component={UserMg} /> */}

@@ -140,6 +140,8 @@ router.post(
                 }
             }
             server.members.push(userId);
+            u.servers.push(server.id);
+            u.save();
             server.save()
             .then( s => res.status(200).send(s));
         })

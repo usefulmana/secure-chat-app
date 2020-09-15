@@ -114,7 +114,7 @@ io.on("connection", (socket) => {
       .then((data) => {
         payload = { type: "message", payload: data };
 
-        io.to(msg.channelId).emit("update", payload);
+        io.to(msg.channelId).emit(`${msg.channelId}`, payload);
       });
   });
 

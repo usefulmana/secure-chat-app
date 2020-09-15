@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const passport = require("passport");
 const moment = require("moment");
+const randomString = require('random-base64-string');
 const { Server } = require("../models/Server");
 const { Channel } = require("../models/Channel");
 const { User } = require("../models/User");
@@ -97,6 +98,7 @@ router.post(
     const newServer = new Server({
       name: req.body.name,
       description: req.body.description,
+      code: randomString(8),
       owner: req.user.id,
       members: [req.user.id],
     });

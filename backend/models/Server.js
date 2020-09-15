@@ -15,7 +15,6 @@ const ServerSchema = new Schema({
     code: {
         type: String,
         trim: true,
-        default: randomString(8)
     },
 
     description: {

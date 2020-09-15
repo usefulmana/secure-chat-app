@@ -89,7 +89,7 @@ const Channel = ({ history, teamInfo, channel, isAdmin }) => {
     const refForAddToPrivate = useRef({
         setOpened: setAddMemberFormOpened,
         channel: channel,
-        teamMembers: channel.members
+        teamMembers: teamInfo.members
     })
 
     const showOptions = () => {

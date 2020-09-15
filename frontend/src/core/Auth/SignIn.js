@@ -30,6 +30,7 @@ const SignIn = ({ history, visible, flipVisibility }) => {
         e.preventDefault()
         login({ email, password }).then(
             data => {
+                console.log("data: ", data)
                 if (data.errors) {
                     setValues({ ...values, errors: data.errors })
                 }

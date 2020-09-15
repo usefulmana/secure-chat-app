@@ -143,17 +143,18 @@ export const isAuthenticated = async () => {
         return false;
     }
     if (localStorage.getItem("jwt")) {
-        await currentUser().then((data) => {
-            // success case
-            if (data) {
-                return JSON.parse(localStorage.getItem("jwt"));
+        return JSON.parse(localStorage.getItem("jwt"));
+        // await currentUser().then((data) => {
+        //     // success case
+        //     if (data) {
+        //         return JSON.parse(localStorage.getItem("jwt"));
 
-            } else {
-                // Outdated token case
-                localStorage.removeItem("jwt")
-                return false
-            }
-        })
+        //     } else {
+        //         // Outdated token case
+        //         localStorage.removeItem("jwt")
+        //         return false
+        //     }
+        // })
     } else {
         return false;
     }

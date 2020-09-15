@@ -47,7 +47,7 @@ const ChannelContent = ({ history }) => {
 
     const getMessage = (channelId) => {
         getMessageFromChannel({ channelId }).then((data) => {
-            if (data.error) {
+            if (data?.error) {
             } else {
                 setMessages(data)
                 console.log("data in get meesage from channel :", data)

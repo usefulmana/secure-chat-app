@@ -19,10 +19,11 @@ const AddMemberToPrivate = ({ history, reference }) => {
   const { keyword } = values;
 
   useEffect(() => {
+
     var newArr = []
     var count = 0
-    var length = channel.members.length
-    channel.members.map((m) => {
+    var length = teamMembers.length
+    teamMembers.map((m) => {
       getUserById({ userId: m }).then((data) => {
         if (data.error) {
 

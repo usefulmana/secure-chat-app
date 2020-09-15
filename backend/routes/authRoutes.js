@@ -44,7 +44,7 @@ const passport = require("passport");
  *          '400':
  *              description: Failed Request. Something went wrong
  */
-router.post("/register", [checkRegistrationFields], (req, res) => {
+router.post("/register", (req, res) => {
     let errors = [];
 
     User.findOne({ email: req.body.email }).then((user) => {
@@ -123,7 +123,7 @@ router.post("/register", [checkRegistrationFields], (req, res) => {
  *          '400':
  *              description: Failed Request. No user found or wrong password
  */
- router.post('/login', checkLoginFields, async(req, res) => {
+ router.post('/login', async(req, res) => {
     const user = await User.findOne({ email: req.body.email }).select('-password').populate('teams');
 
     

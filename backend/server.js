@@ -113,7 +113,6 @@ io.on("connection", (socket) => {
       .save()
       .then((data) => {
         payload = { type: "message", payload: data };
-        console.log("before emitting event : ", `${msg.channelId}-update`)
         io.to(msg.channelId).emit(`${msg.channelId}-update`, payload);
       });
   });

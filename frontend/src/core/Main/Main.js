@@ -55,24 +55,28 @@ const Main = ({ history }) => {
 
     return (
         <div className={`main-cont ${visible === 1 && 'main-cont-enlarged'} row `}>
+            <div className="background-cont"></div>
+            <div className="logo-cont row AIC">
+                <i class="fab fa-rocketchat"></i>
+                <img className="img" src={require('./img/test.png')} /> Chattr
+            </div>
+            <div className="text-cont">
+                <div className="heading">
+                    <div>Stay connected and organized. </div>
+                    <div>Accomplish more together </div>
+                    <div>across work, school, and life </div>
+                    <div>with Chattr.</div>
+                </div>
+                <div className="border"></div>
+                <div className="body">
+                    <div>Chattr is a persistent chat-based collaboration</div>
+                    <div>platform complete with document sharing,</div>
+                    <div>online meetings, and many more extremely</div>
+                    <div>useful features for business communications.</div>
+                </div>
+            </div>
             <SignIn visible={visible} flipVisibility={flipVisibility} history={history} />
-            <SignUp visible={visible} flipVisibility={flipVisibility} history={history}/>
-
-            {/* <ul id="scene">
-                <li class="layer polygons" data-depth="0.15"><img src="img/main/polygons.png" alt="image" /></li>
-                <li class="layer filledpolygon" data-depth="0.09"><img src="img/main/filledpolygon.png" alt="image" /></li>
-                <li class="layer tour" data-depth="-0.34"><img src="img/main/userfriendly.png" alt="a" /></li>
-                <li class="layer unicorn" data-depth="0.09"><img src="img/main/business.png" alt="image" /></li>
-                <li class="layer ease" data-depth="-0.1"><img src="img/main/easeofuse.png" alt="image" /></li>
-                <li class="layer smart" data-depth="-0.05"><img src="img/main/efficiency.png" alt="image" /></li>
-                <li class="layer tour" data-depth="-0.11"><img src="img/main/inspiration.png" alt="a" /></li>
-                <li class="layer tour" data-depth="-0.14"><img src="img/main/locations.png" alt="a" /></li>
-                <li class="layer tour" data-depth="-0.04"><img src="img/main/management.png" alt="a" /></li>
-                <li class="layer tour" data-depth="0.34"><img src="img/main/plan.png" alt="a" /></li>
-                <li class="layer tour" data-depth="0.14"><img src="img/main/schedule.png" alt="a" /></li>
-                <li class="layer tour" data-depth="-0.24"><img src="img/main/smarttour.png" alt="a" /></li>
-                <li class="layer tour" data-depth="0.24"><img src="img/main/travel.png" alt="a" /></li>
-            </ul> */}
+            <SignUp visible={visible} flipVisibility={flipVisibility} history={history} />
             <Loader loading={loading} />
         </div>
     )

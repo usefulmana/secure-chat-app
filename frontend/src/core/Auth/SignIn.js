@@ -124,7 +124,7 @@ const SignIn = ({ history, visible, flipVisibility }) => {
     }
 
     return visible === 0 && (
-        <div className={`signin-container `}>
+        <div className={`base-container signin-cont `}>
             {showForm()}
         </div>
     )

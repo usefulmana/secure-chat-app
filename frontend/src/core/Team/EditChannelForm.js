@@ -4,11 +4,13 @@ import { createChannel, editChannel, } from '../../API/channelAPI'
 
 import editChannelForm from './EditChannelForm.scss'
 
-const CreateTeamForm = ({ history, TeamsRef, channelName, channelId }) => {
+const CreateTeamForm = ({ history, reference }) => {
   var jwt = JSON.parse(localStorage.getItem("jwt"));
   var token = jwt.token;
-
-  const { setOpened } = TeamsRef.current
+  console.log("REf : ", reference)
+  const { setOpened, channel } = reference.current
+  const channelId = channel._id
+  const channelName = channel.name
 
   const [values, setValues] = useState({ newChannelName: channelName })
   const { newChannelName } = values
@@ -27,7 +29,10 @@ const CreateTeamForm = ({ history, TeamsRef, channelName, channelId }) => {
     console.log("channelName: ", channelName)
 
     editChannel({ channelId, name: newChannelName }).then(data => {
-      if (data.error) {
+
+      if (data.error || data.message) {
+        alert(data.message)
+        // setError(data.error)
 
       } else {
         window.location.reload(false);

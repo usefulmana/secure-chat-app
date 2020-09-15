@@ -28,10 +28,6 @@ const Team = ({ history, match }) => {
     
  
     useEffect(() => {
-        socketClient.socket.on("test",()=>{
-            alert("on teams")
-        })
-
 
         getTeamInfo({ token, teamId }).then((data) => {
             console.log("data : ", data)
@@ -52,7 +48,7 @@ const Team = ({ history, match }) => {
                 <div className="channel-cont">
                     {channels.map((c) => {
                         { console.log("c : ", c) }
-                        return <Channel teamId={teamId} channelName={c.name} channelId={c._id} />
+                        return <Channel teamId={teamId} channel={c}  />
                     }
                     )}
                 </div>
@@ -67,7 +63,6 @@ const Team = ({ history, match }) => {
                 <Layout>
                     <div className="team-cont row" >
                         <div className="first">
-                            {JSON.stringify(teamInfo.members)}
                             {renderTeamInfo()}
                         </div>
                         <div className="second">

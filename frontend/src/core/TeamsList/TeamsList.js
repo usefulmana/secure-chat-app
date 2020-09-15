@@ -38,8 +38,6 @@ const TeamsList = ({ history }) => {
     }).catch()
 
 
-    socketClient.init(jwt.user._id)
-    socketClient.sendTestMessage()
 
   }, [])
 
@@ -152,7 +150,7 @@ const TeamsList = ({ history }) => {
             <div className="options">
               <div className="show-drop-down-btn" onClick={showDropDown}>...</div>
               <div className="drop-down">
-                <div className="each-option add-member-btn" c={c._id}><i class="fas fa-user-plus"></i>Add members to the team</div>
+                <div className="each-option add-member-btn" id={c._id}><i class="fas fa-user-plus"></i>Add members to the team</div>
                 <div className="each-option edit-btn" id={c._id}><i class="far fa-edit"></i>Edit team</div>
                 <div className="each-option delete-btn" id={c._id}><i class="far fa-trash-alt"></i>Delete team</div>
                 <div className="each-option leave-team-btn" id={c._id}><i class="fas fa-sign-out-alt"></i>Leave team</div>

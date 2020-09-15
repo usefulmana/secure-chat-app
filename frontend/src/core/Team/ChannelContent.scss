@@ -1,59 +1,35 @@
-.each-channel {
-    position: relative;
-    padding: 0.5vw;
-    z-index: 0;
-    font-size: 1.4vw;
+$contentHeight : 79vh;
+.channel-content-cont {
+    padding:1vw;
+    .content-cont {
+        height: $contentHeight;
+        max-height: $contentHeight;
 
-    &:hover {
-        background-color: rgba(240, 240, 240, 0.932);
-        .channel-option-btn {
-            display: block;
-        }
+        // background-color: grey;
+        width:100%;
+        overflow-y: auto;
+
+       
     }
 
-    .channel-option-btn {
-        z-index: 1;
-        padding-right: 3vw;
-        position: absolute;
-        display: none;
-        right: -10%;
-        top: -15%;
-        font-size: 2vw;
-        color: grey;
+    .new-message-cont {
+        // height: 10vw;
+        // width: 100%;
+        height:3vh;
+        padding:0.5vw;
 
-        &:hover {
-            .drop-down {
-                display: block;
-            }
-        }
+        input {
+            font-size: 1.4vw;
+            padding:0.9vw;
+            margin-left:0.9vw;
+            margin-bottom:0.9vw;
+            width: 94%;
+            outline: none;
+            border: 0px;
 
-        .drop-down {
-            background: white;
-            z-index: 5;
-            display: none;
-            position: absolute;
-            right: -11.5vw;
-            top: 0;
-            width: 14vw;
-            box-shadow: 0 0.2vw 0.4vw -0.075vw rgba(0, 0, 0, 0.1);
-
-            &:hover {
-                display: block;
-            }
-
-            .each-option {
-                color: black;
-                font-size: 1.2vw;
-                padding: 0.7vw 1.3vw 0.7vw 1.3vw;
-
-                &:hover {
-                    background-color: rgba(240, 240, 240, 0.932);
-                }
+            &:focus{
+                border-bottom: 0.3vw solid rgb(105, 105, 224);
             }
         }
     }
-}
-
-.active-channel {
-    background-color: rgba(240, 240, 240, 0.932);
 }

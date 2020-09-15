@@ -1,43 +1,111 @@
 import React, { useState, useEffect, useRef } from "react";
 import { BrowserRouter, Switch, Route, Link, withRouter } from "react-router-dom";
-import { editChannel, deleteChannel } from '../../API/channelAPI'
-import EditChannelForm from './EditChannelForm'
-import Modal from '../../Template/Modal'
+import { getChannelInfo } from '../../API/channelAPI'
+import { getMessageFromChannel } from '../../API/chatAPI'
 import querySearch from "stringquery";
-
-import channel from './Channel.scss'
+import Chat from "../Common/Chat"
+import channelContent from './ChannelContent.scss'
 import socketClient from "../../Socket/clinet"
+import handleAccess from './handleAccess'
 
 const ChannelContent = ({ history }) => {
     var jwt = JSON.parse(localStorage.getItem("jwt"));
 
-    const [currentChannelId, setCurrentChannelId] = useState()
     const [userId, setUserId] = useState()
+    const [currentChannelId, setCurrentChannelId] = useState()
+    const [channelInfo, setChannelInfo] = useState()
+    const [newMessage, setNewMessage] = useState()
+    const [messages, setMessages] = useState({})
+    const [access, setAccess] = useState(handleAccess())
+
+
+
+    useEffect(() => {
+        var channelId = initCurrentChannelId()
+
+        getChannelInfo({ channelId }).then((data) => {
+            console.log("Data in get channel info : ", data)
+            setChannelInfo(data)
+            console.log("handleAccess(data) : ", handleAccess(data))
+            setAccess(handleAccess(data))
+        }).catch()
+
+        getMessage(channelId)
+        setUserId(jwt.user._id)
+        socketInit(channelId)
+
+    }, [querySearch(history.location.search).channel])
+
+    const socketInit = (channelId) => {
+        socketClient.joinChannel(channelId, () => { getMessage(channelId) })
+    }
 
     const initCurrentChannelId = (channels) => {
         var channelId = querySearch(history.location.search).channel;
         setCurrentChannelId(channelId)
+        return channelId
     }
 
-    useEffect(() => {
-
-        socketClient.socket.on("test",()=>{
-            alert("in channel content")
+    const getMessage = (channelId) => {
+        getMessageFromChannel({ channelId }).then((data) => {
+            if (data.error) {
+            } else {
+                setMessages(data)
+                console.log("data in get meesage from channel :", data)
+                scrollToBottom()
+            }
         })
-
-        setUserId(jwt.user._id)
-        initCurrentChannelId()
-    }, [querySearch(history.location.search).channel])
-
-    const handleSubmit = () => {
-        var message = "hello from the other side"
-        socketClient.createNewMessge({ channelId: currentChannelId, userId, message })
     }
 
-    return (
-        <div  >
-            {currentChannelId}
-            <div onClick={handleSubmit}>send message</div>
+    /*=========================================
+                    Init code above
+    ==========================================*/
+    const scrollToBottom = () => {
+        var contentCont = document.querySelector(".content-cont")
+        if (contentCont) contentCont.scrollTo(0, contentCont.scrollHeight)
+    }
+
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        console.log("currentChannelId : ", currentChannelId)
+        socketClient.createNewMessge({ channelId: currentChannelId, userId, message: newMessage })
+        // getMessage(currentChannelId)
+        setNewMessage("")
+    }
+
+
+    const renderMessages = () => {
+        return messages?.docs?.map((m, index) => {
+            var previousIndex = 0
+            if (index === 0) {
+                previousIndex = 0
+            } else {
+                previousIndex = index - 1
+            }
+            console.log("previousIndex: ", previousIndex)
+
+            return <Chat message={m} previousChatUser={messages.docs[previousIndex].user.email} index={index} />
+        }
+        )
+    }
+
+    const showNewMessageForm = () => {
+        return (
+            <form className="form-cont" onSubmit={handleSubmit} >
+                <input placeholder="Start new chat!" className="" value={newMessage} onChange={(e) => { setNewMessage(e.target.value) }} />
+            </form>
+        )
+    }
+
+    return access && (
+        <div className="channel-content-cont">
+            <div className="content-cont">
+                {/* {currentChannelId} */}
+                {renderMessages()}
+            </div>
+            <div className="new-message-cont ">
+                {showNewMessageForm()}
+            </div>
         </div>
 
     )

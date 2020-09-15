@@ -16,15 +16,11 @@ class socketClientClass {
         // this.userId = userId
     }
 
-    sendTestMessage() {
-        this.socket.emit('test', 'hey can you hear me');
-    }
-
     createNewMessge({ userId, channelId, message }) {
         if (!userId || !channelId || !message) {
             return
         }
-
+        console.log("channelId in client ", channelId)
         var msg = {
             userId,
             channelId,
@@ -33,6 +29,28 @@ class socketClientClass {
         console.log("msg : ", msg)
         this.socket.emit('chat-message', msg);
     }
+
+    // listenToChannel(channelId, callback) {
+    //     alert("befor statign lsten : ", channelId)
+    //     console.log("befor statign lsten : ", channelId)
+    //     this.socket.emit('subscribe', (data) => {
+    //         alert("Data : ", data)
+    //         // callback()
+    //     });
+    // }
+
+    joinChannel(channelId, callback) {
+        console.log("befor statign lsten : ", channelId)
+        this.socket.emit('subscribe', channelId);
+
+        this.socket.on('update', (payload) => {
+            callback()
+        })
+
+
+    }
+
+    
 
 }
 

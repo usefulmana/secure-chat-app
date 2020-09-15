@@ -143,15 +143,42 @@ export const isAuthenticated = () => {
         return false;
     }
     if (localStorage.getItem("jwt")) {
-        return JSON.parse(localStorage.getItem("jwt"));
+        currentUser().then((data) => {
+            // success case
+            if (data) {
+                return JSON.parse(localStorage.getItem("jwt"));
+
+            } else {
+                // Outdated token case
+                localStorage.removeItem("jwt")
+                return false
+            }
+        })
     } else {
         return false;
     }
 };
 
 export const findUser = ({ method, keyword }) => {
-    return fetch(`${API}/user/find?${method}=${keyword}`, {
+    return fetch(`${API}/user/search?${method}=${keyword}`, {
         method: "POST",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `${token}`
+        }
+    })
+        .then(response => {
+            return response.json();
+        })
+        .catch(err => {
+            console.log(err);
+        });
+};
+
+export const getUserById = ({ userId }) => {
+    return fetch(`${API}/user/${userId}`, {
+        method: "GET",
         headers: {
             Accept: "application/json",
             "Content-Type": "application/json",

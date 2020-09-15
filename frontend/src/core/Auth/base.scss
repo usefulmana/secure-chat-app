@@ -6,7 +6,7 @@ $linkSize: 1.2vw;
 $formHeight: 35vw;
 $formWidth: 30vw;
 
-#root .signin-container {
+#root .base-container {
     // position: absolute;
     margin-top:2vw;
     margin-bottom:2vw;
@@ -16,7 +16,8 @@ $formWidth: 30vw;
     z-index: 1;
     transition: 0.5s all ease-in-out;
     position: absolute;
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.4), 0 3px 10px 0 rgba(0, 0, 0, 0.4);
+    box-shadow: 0 0.2vw 0.4vw -0.075vw rgba(0, 0, 0, 0.1);
+
     border-radius: 0.3rem;
 
     .signin-form {
@@ -150,13 +151,9 @@ $formWidth: 30vw;
     }
 }
 
-// #root input:focus + label {
-//     transform: scale(0.7, 0.7) translate(0%, -80%);
-// }
-
-// #root .label-active {
-//     transform: scale(0.7, 0.7) translate(0%, -80%);
-// }
+.signin-cont{
+    margin-top:5vw !important;
+}
 
 .sign-up-link {
     font-weight: 600;

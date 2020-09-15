@@ -143,7 +143,17 @@ export const isAuthenticated = () => {
         return false;
     }
     if (localStorage.getItem("jwt")) {
-        return JSON.parse(localStorage.getItem("jwt"));
+        currentUser().then((data) => {
+            // success case
+            if (data) {
+                return JSON.parse(localStorage.getItem("jwt"));
+
+            } else {
+                // Outdated token case
+                localStorage.removeItem("jwt")
+                return false
+            }
+        })
     } else {
         return false;
     }
@@ -166,7 +176,7 @@ export const findUser = ({ method, keyword }) => {
         });
 };
 
-export const getUserById = ({userId }) => {
+export const getUserById = ({ userId }) => {
     return fetch(`${API}/user/${userId}`, {
         method: "GET",
         headers: {

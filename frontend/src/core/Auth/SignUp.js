@@ -3,6 +3,7 @@ import { BrowserRouter, Switch, Route } from "react-router-dom";
 import { register, authenticate } from '../../API/userAPI'
 import Parallax from 'parallax-js' // Now published on NPM
 import './base.scss'
+import './SignUp.scss'
 import queryString from 'query-string';
 
 const SignUp = ({ history, visible, flipVisibility }) => {
@@ -147,7 +148,7 @@ const SignUp = ({ history, visible, flipVisibility }) => {
 
 
     return visible === 1 && (
-        <div className={`signin-container signup-cont`}>
+        <div className={`base-container signup-cont`}>
             {showForm()}
         </div>
     )

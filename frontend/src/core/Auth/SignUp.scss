@@ -1,0 +1,27 @@
+$headerFontSize: 2vw;
+$FontSize: 1.5vw;
+$buttonSize: 1.5vw;
+$linkSize: 1.2vw;
+
+$formHeight: 35vw;
+$formWidth: 30vw;
+
+.signup-cont {
+
+    .signin-form{
+        padding-top:1vw !important;
+        padding-bottom:2vw !important;
+
+        .my-form{
+            margin-bottom:0.3vw !important;
+        }
+    }
+    
+}
+
+.sign-up-link {
+    font-weight: 600;
+    color: rgb(214, 176, 176);
+    font-size: 1.1vw;
+}
+

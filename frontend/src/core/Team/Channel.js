@@ -3,12 +3,12 @@ import { BrowserRouter, Switch, Route, Link, withRouter } from "react-router-dom
 import { editChannel, deleteChannel } from '../../API/channelAPI'
 import EditChannelForm from './EditChannelForm'
 import Modal from '../../Template/Modal'
-import querySearch from "stringquery";
 import { isUserHasAccessToThisChannel } from './handleAccess'
-import channel from './Channel.scss'
 import AddMemberToPrivate from "../Common/AddMemberToPrivate";
+import channel from "./Channel.scss"
+import socketClient from '../../Socket/clinet'
 
-const Channel = ({ history,match, teamInfo, channel, isAdmin }) => {
+const Channel = ({ history, match, teamInfo, channel, isAdmin }) => {
     const teamId = teamInfo._id
     const isPrivate = channel.isPrivate
     const channelName = channel.name
@@ -18,6 +18,9 @@ const Channel = ({ history,match, teamInfo, channel, isAdmin }) => {
     const [currentChannelId, setCurrentChannelId] = useState()
     const [accesToChannel, setAccessToChannel] = useState(isUserHasAccessToThisChannel(channel))
 
+
+    const [notificationOn, setNotificationOn] = useState(false)
+
     const [addMemberFormOpened, setAddMemberFormOpened] = useState(false)
 
     const initSoket = () => {
@@ -26,7 +29,15 @@ const Channel = ({ history,match, teamInfo, channel, isAdmin }) => {
 
     useEffect(() => {
         setCurrentChannelId(match.params.channelId)
+        socketClient.joinNotification(channel._id, showNotification)
+        if (match.params.channelId === channelId) {
+            setNotificationOn(false)
+        }
     })
+
+    const showNotification = (channelId) => {
+        setNotificationOn(true)
+    }
 
     const handleDelete = () => {
         var r = window.confirm("Leave the team?")
@@ -101,7 +112,8 @@ const Channel = ({ history,match, teamInfo, channel, isAdmin }) => {
                 </div>
 
             </div>
-            <div className="channel-name" onClick={handleClick}>
+            <div className="channel-name row AIC" onClick={handleClick}>
+                {notificationOn && <i class="fas fa-circle notification"></i>}
                 {channelName}
                 {isPrivate && <i class="fas fa-lock private-channel-icon" ></i>}
             </div>

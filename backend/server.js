@@ -114,6 +114,7 @@ io.on("connection", (socket) => {
       .then((data) => {
         payload = { type: "message", payload: data };
         io.to(msg.channelId).emit(`${msg.channelId}-update`, payload);
+        socket.broadcast.to(msg.channelId).emit(`${msg.channelId}-notification`, payload);
       });
   });
 
@@ -184,8 +185,8 @@ io.on("connection", (socket) => {
   });
 
   // Listens for subscribed server
-  socket.on("subscribe", (serverId) => {
-    socket.join(serverId);
+  socket.on("subscribe", (channelId) => {
+    socket.join(channelId);
   });
 
   // Update active status (every 5 minutes)

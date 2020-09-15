@@ -105,6 +105,7 @@ const TeamOptions = ({ history, team }) => {
             </>
             :
             <>
+                <div className="each-option manage-team-btn" onClick={() => { setManageTeamFormOpened(true) }}><i class="fas fa-users-cog"></i>Manage team</div>
                 <div className="each-option leave-team-btn" onClick={handleLeaveTeam(team._id)}><i class="fas fa-sign-out-alt"></i>Leave team</div>
             </>
 

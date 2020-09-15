@@ -38,22 +38,32 @@ const ChannelContent = ({ history, match }) => {
 
     const socketInit = (channelId) => {
         console.log("listenint to : ", JSON.stringify(channelId))
-        socketClient.joinChannel(channelId, () => { getMessage(channelId) })
+        socketClient.joinChannel(channelId, (updatedChannelId) => {
+              
+
+                
+            if (updatedChannelId === match.params.channelId) {
+                getMessage(updatedChannelId)
+            }
+        })
     }
 
     const initCurrentChannelId = (channels) => {
-        console.log("param : ",match.params.channelId)
+        console.log("param : ", match.params.channelId)
         var channelId = match.params.channelId;
         // var channelId = querySearch(history.location.search).channel;
         return channelId
     }
 
     const getMessage = (channelId) => {
+        console.log("updated channel id : ", channelId)
+        console.log("currentChannleid : ", match.params.channelId)
         getMessageFromChannel({ channelId }).then((data) => {
             if (data?.error) {
             } else {
                 setMessages(data)
                 console.log("data in get message from channel :", data)
+                console.log("match.params.channelId:", match.params.channelId)
                 scrollToBottom()
             }
         })

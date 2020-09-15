@@ -6,7 +6,7 @@ import querySearch from "stringquery";
 import Chat from "../Common/Chat"
 import channelContent from './ChannelContent.scss'
 import socketClient from "../../Socket/clinet"
-import handleAccess from './handleAccess'
+import {isUserHasAccessToThisChannel} from './handleAccess'
 
 const ChannelContent = ({ history }) => {
     var jwt = JSON.parse(localStorage.getItem("jwt"));
@@ -16,7 +16,7 @@ const ChannelContent = ({ history }) => {
     const [channelInfo, setChannelInfo] = useState()
     const [newMessage, setNewMessage] = useState()
     const [messages, setMessages] = useState({})
-    const [access, setAccess] = useState(handleAccess())
+    const [access, setAccess] = useState()
 
 
 
@@ -26,8 +26,7 @@ const ChannelContent = ({ history }) => {
         getChannelInfo({ channelId }).then((data) => {
             console.log("Data in get channel info : ", data)
             setChannelInfo(data)
-            console.log("handleAccess(data) : ", handleAccess(data))
-            setAccess(handleAccess(data))
+            setAccess(isUserHasAccessToThisChannel(data))
         }).catch()
 
         getMessage(channelId)
@@ -97,7 +96,7 @@ const ChannelContent = ({ history }) => {
         )
     }
 
-    return access && (
+    return access ? (
         <div className="channel-content-cont">
             <div className="content-cont">
                 {/* {currentChannelId} */}
@@ -107,8 +106,7 @@ const ChannelContent = ({ history }) => {
                 {showNewMessageForm()}
             </div>
         </div>
-
-    )
+    ):<></>
 }
 
 export default withRouter(ChannelContent)

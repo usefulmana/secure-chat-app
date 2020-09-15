@@ -5,7 +5,7 @@ if (JSON.parse(localStorage.getItem('jwt'))) {
     userId = JSON.parse(localStorage.getItem('jwt')).user._id;
 }
 
-const handleAccess = (channel) => {
+export const isUserHasAccessToThisChannel = (channel) => {
     if (!channel) return false;
 
     if (channel.isPrivate === false) {
@@ -31,4 +31,15 @@ const handleAccess = (channel) => {
     }
 }
 
-export default handleAccess
+export const isUserInThisTeam = (team) => {
+    var access = false
+    team.members.forEach(m => {
+        console.log("userId : ", userId, " m : ", m)
+
+        if (m === userId) {
+            access = true
+        }
+    })
+    return access
+}
+

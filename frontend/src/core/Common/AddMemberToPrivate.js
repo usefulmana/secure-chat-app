@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Switch, Route, withRouter } from "react-router-dom";
-import { findUser } from '../../API/userAPI'
+import { findUser, getUserById } from '../../API/userAPI'
 import { addToPrivateChannel } from '../../API/channelAPI'
 
 import addMemberToPrivate from './AddMemberToPrivate.scss'
@@ -9,17 +9,35 @@ import base from './base.scss'
 const AddMemberToPrivate = ({ history, reference }) => {
   var jwt = JSON.parse(localStorage.getItem("jwt"));
   var token = jwt.token;
-  const { setOpened, channel } = reference.current
+  const { setOpened, channel, teamMembers } = reference.current
 
   const [addedMember, setAddedMember] = useState([])
-  const [searchedMember, setSearchedMember] = useState([])
-
+  const [searchedMember, setSearchedMember] = useState([...teamMembers])
+  // alert(JSON.stringify(searchedMember))
   // const [keyword, setKeyword] = useState("")
   const [values, setValues] = useState({ keyword: "" })
   const { keyword } = values;
 
   useEffect(() => {
+    var newArr = []
+    var count = 0
+    var length = channel.members.length
+    channel.members.map((m) => {
+      getUserById({ userId: m }).then((data) => {
+        if (data.error) {
 
+        } else {
+          if (length - 1 === count) {
+            newArr.push(data)
+            setSearchedMember(newArr)
+
+          } else {
+            count += 1
+            newArr.push(data)
+          }
+        }
+      }).catch()
+    })
   }, [])
 
 
@@ -110,11 +128,11 @@ const AddMemberToPrivate = ({ history, reference }) => {
   const showForm = () => {
     return (
       <div className="form-cont">
-        <div className="title">Search member </div>
-        <div className="row AIC input-cont">
+        <div className="title">Members in the team.</div>
+        {/* <div className="row AIC input-cont">
           <input className="name-input input" value={keyword} onChange={handleChange('keyword')} />
           <i class="fas fa-search-plus search-btn" onClick={handleSearch}></i>
-        </div>
+        </div> */}
         <div className="search-result-cont">
           {showSearchResult()}
         </div>

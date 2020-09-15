@@ -4,20 +4,19 @@ import { editChannel, deleteChannel } from '../../API/channelAPI'
 import EditChannelForm from './EditChannelForm'
 import Modal from '../../Template/Modal'
 import querySearch from "stringquery";
-import handleAccess from './handleAccess'
+import { isUserHasAccessToThisChannel } from './handleAccess'
 import channel from './Channel.scss'
 import AddMemberToPrivate from "../Common/AddMemberToPrivate";
 
-const Channel = ({ history, channel, teamId }) => {
-
-
-    const { isPrivate, name, _id } = channel
-    const channelName = name
-    const channelId = _id
+const Channel = ({ history, teamInfo, channel, isAdmin }) => {
+    const teamId = teamInfo._id
+    const isPrivate = channel.isPrivate
+    const channelName = channel.name
+    const channelId = channel._id
 
     const [editFormOpened, setEditFormOpened] = useState(false)
     const [currentChannelId, setCurrentChannelId] = useState()
-    const [accesToChannel, setAccessToChannel] = useState(handleAccess(channel))
+    const [accesToChannel, setAccessToChannel] = useState(isUserHasAccessToThisChannel(channel))
 
     const [addMemberFormOpened, setAddMemberFormOpened] = useState(false)
 
@@ -39,7 +38,6 @@ const Channel = ({ history, channel, teamId }) => {
 
     useEffect(() => {
         initCurrentChannelId()
-        handleAccess()
     })
 
     const handleDelete = () => {
@@ -90,17 +88,28 @@ const Channel = ({ history, channel, teamId }) => {
     })
     const refForAddToPrivate = useRef({
         setOpened: setAddMemberFormOpened,
-        channel: channel
+        channel: channel,
+        teamMembers: channel.members
     })
+
+    const showOptions = () => {
+
+        return isAdmin ?
+            <>
+                <div className="each-option edit-channel-btn" onClick={() => { setEditFormOpened(true) }}>Edit channel name</div>
+                <div className="each-option delete-channel-btn" onClick={handleDelete}>Delete channel</div>
+                {isPrivate && <div className="each-option delete-channel-btn" onClick={() => { setAddMemberFormOpened(true) }}>Add member</div>}
+            </>
+            :
+            <></>
+    }
 
     return accesToChannel ? (
         <div className={isActive()} >
             <div className="channel-option-btn" >
                 ...
-                    <div className="drop-down">
-                    <div className="each-option edit-channel-btn" onClick={() => { setEditFormOpened(true) }}>Edit channel name</div>
-                    <div className="each-option delete-channel-btn" onClick={handleDelete}>Delete channel</div>
-                    {isPrivate && <div className="each-option delete-channel-btn" onClick={() => { setAddMemberFormOpened(true) }}>Add member</div>}
+                <div className="drop-down">
+                    {showOptions()}
 
                 </div>
 

@@ -14,6 +14,7 @@ import socketClient from '../../Socket/clinet'
 
 const TeamsList = ({ history }) => {
   var jwt = JSON.parse(localStorage.getItem("jwt"));
+  var userId = jwt.user._id
   var token = jwt.token;
 
   const [teams, setTeams] = useState([])
@@ -73,7 +74,7 @@ const TeamsList = ({ history }) => {
       if (data.error) {
         console.log("err in handleLeaveTeam : ", data.error)
       } else {
-        // window.location.reload(false);
+        window.location.reload(false);
       }
     }).catch()
   }
@@ -141,6 +142,20 @@ const TeamsList = ({ history }) => {
 
   }
 
+  const showOptions = (c) => {
+    var isAdmin = c.owner === userId
+    return isAdmin ?
+      <>
+        <div className="each-option add-member-btn" id={c._id}><i class="fas fa-user-plus"></i>Add members to the team</div>
+        <div className="each-option edit-btn" id={c._id}><i class="far fa-edit"></i>Edit team</div>
+        <div className="each-option delete-btn" id={c._id}><i class="far fa-trash-alt"></i>Delete team</div>
+      </>
+      :
+      <>
+        <div className="each-option leave-team-btn" id={c._id}><i class="fas fa-sign-out-alt"></i>Leave team</div>
+      </>
+  }
+
   const renderTeams = () => {
     console.log("teasm : ", teams)
     return (
@@ -150,10 +165,7 @@ const TeamsList = ({ history }) => {
             <div className="options">
               <div className="show-drop-down-btn" onClick={showDropDown}>...</div>
               <div className="drop-down">
-                <div className="each-option add-member-btn" id={c._id}><i class="fas fa-user-plus"></i>Add members to the team</div>
-                <div className="each-option edit-btn" id={c._id}><i class="far fa-edit"></i>Edit team</div>
-                <div className="each-option delete-btn" id={c._id}><i class="far fa-trash-alt"></i>Delete team</div>
-                <div className="each-option leave-team-btn" id={c._id}><i class="fas fa-sign-out-alt"></i>Leave team</div>
+                {showOptions(c)}
               </div>
             </div>
             <div class="team-image row JCC AIC">

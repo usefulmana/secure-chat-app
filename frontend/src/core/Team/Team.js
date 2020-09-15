@@ -12,9 +12,11 @@ import querySearch from "stringquery";
 import { currentUser } from "../../API/userAPI";
 import ChannelContent from "./ChannelContent";
 import socketClient from "../../Socket/clinet"
+import { isUserInThisTeam } from "./handleAccess";
 
 const Team = ({ history, match }) => {
     var jwt = JSON.parse(localStorage.getItem("jwt"));
+    var userId = jwt.user._id;
     var token = jwt.token;
 
     const [teamId, setTeamId] = useState(match.params.teamId)
@@ -25,16 +27,25 @@ const Team = ({ history, match }) => {
     const [editFormOpened, setEditFormOpened] = useState(false)
     const [teamToEdit, setTeamToEdit] = useState()
 
-    
- 
+    const [isAdmin, setIsAdmin] = useState()
+    const [error, setError] = useState(false)
+    const [access, setAccess] = useState(true)
+
+
+
     useEffect(() => {
 
         getTeamInfo({ token, teamId }).then((data) => {
             console.log("data : ", data)
+            if (data.error) {
+                setError(data.error)
+            } else {
+                setTeamInfo(data)
+                setChannels(data.channels)
+                setAccess(isUserInThisTeam(data))
+                setIsAdmin(data.owner === userId)
+            }
 
-            setTeamInfo(data)
-            setChannels(data.channels)
-            // initCurrentChannel(data.channels)
         }).catch((err) => {
             console.log("Error in Teams : ", err)
         })
@@ -48,7 +59,7 @@ const Team = ({ history, match }) => {
                 <div className="channel-cont">
                     {channels.map((c) => {
                         { console.log("c : ", c) }
-                        return <Channel teamId={teamId} channel={c}  />
+                        return <Channel teamInfo={teamInfo} channel={c} isAdmin={isAdmin} />
                     }
                     )}
                 </div>
@@ -58,6 +69,7 @@ const Team = ({ history, match }) => {
 
 
     const conditionalRender = () => {
+        console.log("access : ", access, "Error : ", error)
         if (teamInfo) {
             return (
                 <Layout>
@@ -72,6 +84,8 @@ const Team = ({ history, match }) => {
                     </div>
                 </Layout>
             )
+        } else if (error || !access) {
+            return <div>Invalid access</div>
         } else {
             return <></>
         }

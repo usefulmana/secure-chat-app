@@ -138,12 +138,12 @@ export const signout = next => {
     }
 };
 
-export const isAuthenticated = () => {
+export const isAuthenticated = async () => {
     if (typeof window == "undefined") {
         return false;
     }
     if (localStorage.getItem("jwt")) {
-        currentUser().then((data) => {
+        await currentUser().then((data) => {
             // success case
             if (data) {
                 return JSON.parse(localStorage.getItem("jwt"));

@@ -57,6 +57,7 @@ const CreateTeamForm = ({ history, TeamsRef, teamId }) => {
         <input className="name-input input" value={name} onChange={handleChange('name')} />
         {/* <Select options={options} value={options[selected]} onChange={handleSelect} /> */}
         {/* <br /> */}
+        <div>Is it private channel? </div>
         <select id="select-box" onChange={handleSelect} >
           <option className="option" value="false">No</option>
           <option className="option" value="true">Yes</option>

@@ -147,23 +147,14 @@ export const signout = next => {
     }
 };
 
-export const isAuthenticated = async () => {
+export const isAuthenticated =  () => {
     if (typeof window == "undefined") {
         return false;
     }
+
     if (localStorage.getItem("jwt")) {
         return JSON.parse(localStorage.getItem("jwt"));
-        // await currentUser().then((data) => {
-        //     // success case
-        //     if (data) {
-        //         return JSON.parse(localStorage.getItem("jwt"));
-
-        //     } else {
-        //         // Outdated token case
-        //         localStorage.removeItem("jwt")
-        //         return false
-        //     }
-        // })
+      
     } else {
         return false;
     }

@@ -13,17 +13,17 @@ const SignIn = ({ history, visible, flipVisibility }) => {
     const [values, setValues] = useState({
         email: "",
         password: "",
-        errors: [],
+        error: [],
         loading: false,
     })
-    const { email, password, loading, errors } = values;
+    const { email, password, loading, error } = values;
 
     useEffect(() => {
 
     }, [])
 
     const handleChange = name => event => {
-        setValues({ ...values, errors: [], [name]: event.target.value });
+        setValues({ ...values, error: "", [name]: event.target.value });
     };
 
     const handleSubmit = (e) => {
@@ -31,8 +31,8 @@ const SignIn = ({ history, visible, flipVisibility }) => {
         login({ email, password }).then(
             data => {
                 console.log("data: ", data)
-                if (data.errors) {
-                    setValues({ ...values, errors: data.errors })
+                if (data.error) {
+                    setValues({ ...values, error: data.error })
                 }
                 else {
                     console.log("what is data after login is succesfull : ", data.user.servers)
@@ -68,26 +68,26 @@ const SignIn = ({ history, visible, flipVisibility }) => {
         }
     }
 
-    const showErrors = () => {
-        var firstIndex = errors[0]
-        var errorMessage = ""
-        console.log()
-        if (firstIndex.email) {
-            errorMessage = firstIndex.email
-            console.log("1")
+    // const showErrors = () => {
+    //     var firstIndex = errors[0]
+    //     var errorMessage = ""
+    //     console.log()
+    //     if (firstIndex.email) {
+    //         errorMessage = firstIndex.email
+    //         console.log("1")
 
-        } else if (firstIndex.password) {
-            errorMessage = firstIndex.password
-            console.log("2")
+    //     } else if (firstIndex.password) {
+    //         errorMessage = firstIndex.password
+    //         console.log("2")
 
-        } else if (firstIndex.username) {
-            errorMessage = firstIndex.username
-            console.log("3")
+    //     } else if (firstIndex.username) {
+    //         errorMessage = firstIndex.username
+    //         console.log("3")
 
-        }
-        console.log("what is errormeeage : ", errorMessage)
-        return errorMessage
-    }
+    //     }
+    //     console.log("what is errormeeage : ", errorMessage)
+    //     return errorMessage
+    // }
 
     const showForm = () => {
         return (
@@ -108,7 +108,7 @@ const SignIn = ({ history, visible, flipVisibility }) => {
                         <input type="password" class="my-form-input " onChange={handleChange('password')} />
                         <label className={isFilled("password")} data-error="wrong" for="Form-pass1">Your password</label>
                     </div>
-                    {errors.length > 0 && (<div className="position-absolute showError ">{showErrors()}</div>)}
+                    {error!=="" && (<div className="position-absolute showError ">{error}</div>)}
                     <div type="button" class="btn signin-button" onClick={handleSubmit}>Sign in</div>
 
                 </div>

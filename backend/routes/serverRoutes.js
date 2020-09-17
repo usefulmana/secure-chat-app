@@ -63,8 +63,6 @@ router.post("/leave", passport.authenticate("jwt", { session: false }), async (r
       .then(server => {
           for (let i = 0; i < server.members.length; i++){
               if (String(server.members[i]) === String(req.user.id)){
-                  
-                  
                   server.members.splice(i, 1);
                   break;
               }

@@ -20,10 +20,28 @@
     > .first {
         padding-left: 1.5vw;
         width: 30%;
-        .logo-text {
+
+        .logo-cont {
+            width:4vw;
+            height: 3vw;
+            position: relative;
+
+            font-size: 1.5vw;
             color: white;
             font-weight: 600;
-            font-size: 1.8vw;
+
+            i {
+                font-size: 0.95vw;
+                position: absolute;
+                color: rgb(142, 131, 236);
+                left: 20%;
+            }
+
+            img {
+                width: 100%;
+                height: 100%;
+                margin-right: 0.5vw;
+            }
         }
     }
 

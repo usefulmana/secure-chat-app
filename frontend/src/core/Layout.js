@@ -15,7 +15,7 @@ const Layout = ({ loading, history, children }) => {
         history.push(`/${option}`)
     }
 
-    const signout=()=>{
+    const signout = () => {
         localStorage.removeItem('jwt')
         history.push('/')
     }
@@ -52,7 +52,10 @@ const Layout = ({ loading, history, children }) => {
         return (
             <div className="top-navbar-cont row JCB AIC">
                 <div className="first">
-                    <span className="logo-text" >Microsoft Teams</span>
+                    <div className="logo-cont row AIC">
+                        <i class="fab fa-rocketchat"></i>
+                        <img className="img" src={require('./Main/img/test.png')} /> Chattr
+                    </div>
                 </div>
                 <div className="second">
 
@@ -62,7 +65,7 @@ const Layout = ({ loading, history, children }) => {
                         <img className="icon-image" src={`${userImage}`} />
                     </div>
                     <div className="dropdown-cont">
-                        <div onClick={()=>history.push('/profile')}>Profile</div>
+                        <div onClick={() => history.push('/profile')}>Profile</div>
                         <div onClick={signout}>Sign out</div>
                     </div>
                 </div>

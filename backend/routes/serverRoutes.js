@@ -70,7 +70,7 @@ router.post("/leave", passport.authenticate("jwt", { session: false }), async (r
               }
           }
           for (let i = 0; i < u.servers.length; i++){
-            if (u.servers[i] === serverId){
+            if (String(u.servers[i]) === String(serverId)){
                 u.servers.splice(i, 1);
                 break;
             }

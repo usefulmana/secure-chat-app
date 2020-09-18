@@ -123,7 +123,7 @@ router.post("/register", (req, res) => {
  *          '400':
  *              description: Failed Request. No user found or wrong password
  */
- router.post('/login', async(req, res) => {
+ router.post('/login', checkLoginFields, async(req, res) => {
     const user = await User.findOne({ email: req.body.email }).select('-password').populate('teams');
 
     

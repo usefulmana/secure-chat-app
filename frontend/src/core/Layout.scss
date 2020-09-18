@@ -1,0 +1,148 @@
+#root {
+    overflow-x: hidden;
+    overflow-y: hidden;
+    height: 100vh;
+    width: 100vw;
+
+    // min-width: 1920px;
+    // min-height: 1080px;
+}
+
+.top-navbar-cont {
+    z-index: 1;
+
+    height: 3vw;
+    width: 100vw;
+    background-color: #464775;
+    padding-top: 0.5vw;
+    padding-bottom: 0.5vw;
+
+    > .first {
+        padding-left: 1.5vw;
+        width: 30%;
+
+        .logo-cont {
+            width:4vw;
+            height: 3vw;
+            position: relative;
+
+            font-size: 1.5vw;
+            color: white;
+            font-weight: 600;
+
+            i {
+                font-size: 0.95vw;
+                position: absolute;
+                color: rgb(142, 131, 236);
+                left: 20%;
+            }
+
+            img {
+                width: 100%;
+                height: 100%;
+                margin-right: 0.5vw;
+            }
+        }
+    }
+
+    > .second {
+        width: 30%;
+    }
+
+    .third {
+        width: 6%;
+        height: 100%;
+        position: relative;
+
+        .icon-image-cont {
+            cursor: pointer;
+            width: 3vw;
+            height: 100%;
+            .icon-image {
+                border-radius: 3vw;
+                width: 100%;
+                height: 100%;
+            }
+        }
+
+        &:hover {
+            .dropdown-cont {
+                display: block;
+            }
+        }
+
+        .dropdown-cont {
+            z-index: 1;
+            box-shadow: 0 0.2vw 0.4vw -0.075vw rgba(0, 0, 0, 0.1);
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 10%;
+            width: 15vw;
+            background-color: white;
+
+            &:hover {
+                display: block;
+            }
+
+            div {
+                padding: 0.6vw 2vw 0.6vw 2vw;
+                color: black;
+                cursor: pointer;
+                &:hover {
+                    background-color: rgb(245, 238, 238);
+                }
+            }
+        }
+    }
+}
+
+$navbarFontSize: 1vw;
+$navbarIconSize: 2vw;
+.layout-cont {
+    // first is for side navbar
+    > .first {
+        width: 6vw;
+        background-color: #33344a;
+        height: 96vh;
+
+        .side-navbar-cont {
+            font-size: $navbarFontSize;
+            text-align: center;
+            color: white;
+
+            .active-each-section {
+                border-left: 0.4vw solid rgb(226, 226, 246);
+
+                background-image: linear-gradient(180deg, rgba(60, 62, 93, 0.6), rgba(60, 62, 93, 0) 33%),
+                    linear-gradient(225deg, rgba(60, 62, 93, 0.6) 33%, rgba(60, 62, 93, 0) 70%),
+                    linear-gradient(270deg, rgba(60, 62, 93, 0.6) 70%, rgba(60, 62, 93, 0) 94%),
+                    linear-gradient(315deg, rgba(60, 62, 93, 0.6) 33%, rgba(60, 62, 93, 0) 70%),
+                    linear-gradient(360deg, rgba(60, 62, 93, 0.6), rgba(60, 62, 93, 0) 33%),
+                    linear-gradient(90deg, rgba(98, 100, 167, 0.75) 6%, rgba(98, 100, 167, 0) 70%);
+            }
+
+            .each-section {
+                cursor: pointer;
+                padding-top: 1.6vw;
+                padding-bottom: 1vw;
+
+                &:hover {
+                    background-color: #41425a;
+                }
+
+                .icon {
+                    margin-bottom: 0.5vw;
+                }
+                .teams-icon {
+                    font-size: $navbarIconSize;
+                }
+            }
+        }
+    }
+
+    // seoncd is for content
+    > .second {
+        width: 94vw;
+    }
+}

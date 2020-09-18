@@ -1,7 +1,13 @@
 import { BASE_URL } from "../config";
+import getToken from "./getToken";
+
 const API = BASE_URL + '/api'
 
-export const currentUser = ({ token }) => {
+
+
+export const currentUser = () => {
+    var token = getToken()
+
     return fetch(`${API}/user/current`, {
         method: "GET",
         headers: {
@@ -20,6 +26,7 @@ export const currentUser = ({ token }) => {
 
 export const register = user => {
     console.log("what is user : ", user)
+    var token = getToken()
 
     return fetch(`${API}/auth/register`, {
         method: "POST",
@@ -38,6 +45,8 @@ export const register = user => {
 };
 
 export const login = user => {
+    var token = getToken()
+
     return fetch(`${API}/auth/login`, {
         method: "POST",
         headers: {
@@ -55,6 +64,8 @@ export const login = user => {
 };
 
 export const changeUsername = ({ username, token }) => {
+    var token = getToken()
+
     return fetch(`${API}/user/current`, {
         method: "PUT",
         headers: {
@@ -73,6 +84,8 @@ export const changeUsername = ({ username, token }) => {
 };
 
 export const changePassword = ({ password, token }) => {
+    var token = getToken()
+
     return fetch(`${API}/user/change-pw`, {
         method: "POST",
         headers: {
@@ -91,6 +104,8 @@ export const changePassword = ({ password, token }) => {
 };
 
 export const changeAvatar = ({ formData, token }) => {
+    var token = getToken()
+
     return fetch(`${API}/user/photo`, {
         method: "PUT",
         headers: {
@@ -98,7 +113,7 @@ export const changeAvatar = ({ formData, token }) => {
             // "Content-Type": "form-data",
             Authorization: `${token}`
         },
-        body: formData 
+        body: formData
     })
         .then(response => {
             return response.json();
@@ -111,6 +126,7 @@ export const changeAvatar = ({ formData, token }) => {
 
 
 export const authenticate = (data, next) => {
+
     if (typeof window !== "undefined") {
         localStorage.setItem("jwt", JSON.stringify(data));
         next();
@@ -131,19 +147,42 @@ export const signout = next => {
     }
 };
 
-export const isAuthenticated = () => {
+export const isAuthenticated =  () => {
     if (typeof window == "undefined") {
         return false;
     }
+
     if (localStorage.getItem("jwt")) {
         return JSON.parse(localStorage.getItem("jwt"));
+      
     } else {
         return false;
     }
 };
 
-export const findUser = ({ token, method, keyword }) => {
-    return fetch(`${API}/user/find?${method}=${keyword}`, {
+export const findUser = ({ method, keyword }) => {
+    var token = getToken()
+
+    return fetch(`${API}/user/search?${method}=${keyword}`, {
+        method: "POST",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `${token}`
+        }
+    })
+        .then(response => {
+            return response.json();
+        })
+        .catch(err => {
+            console.log(err);
+        });
+};
+
+export const getUserById = ({ userId }) => {
+    var token = getToken()
+
+    return fetch(`${API}/user/${userId}`, {
         method: "GET",
         headers: {
             Accept: "application/json",

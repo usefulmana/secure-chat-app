@@ -8,6 +8,8 @@
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
     "animejs": "^3.2.0",
+    "greensock": "^1.20.2",
+    "gsap": "^3.5.1",
     "node-sass": "^4.14.1",
     "parallax-js": "^3.1.0",
     "react": "^16.13.1",
@@ -15,7 +17,10 @@
     "react-dom": "^16.13.1",
     "react-parallax": "^3.0.3",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "3.4.1"
+    "react-scripts": "3.4.1",
+    "react-select": "^3.1.0",
+    "socket.io-client": "^2.3.0",
+    "stringquery": "^1.0.8"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -21,6 +21,7 @@ $formWidth: 30vw;
     border-radius: 0.3rem;
 
     .signin-form {
+        position: relative;
         // max-height: 37vw;
         overflow: auto;
         background-color: rgb(255, 255, 255);
@@ -51,6 +52,7 @@ $formWidth: 30vw;
         .signin-body {
             // height: 45%;
             // font-size:1.2rem;
+            position: relative;
             margin-top: 5vw;
 
             .my-form {
@@ -160,6 +162,28 @@ $formWidth: 30vw;
     color: rgb(214, 176, 176);
     font-size: 1.1vw;
 }
+.signin-cont{
+    .showError{
+        font-size:1.4vw;
+        position: absolute;
+        top:-20%;
+        left:0;
+        z-index: 1;
+        
+    }
+}
+
+.signup-cont{
+    .showError{
+        font-size:1.4vw;
+        z-index: 1;
+        position: absolute;
+        top:-17%;
+        left:0;
+        
+    }
+}
+
 
 // #root .sign-in-slide-down {
 //     transform: translateY(0%);

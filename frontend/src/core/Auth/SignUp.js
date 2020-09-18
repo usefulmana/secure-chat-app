@@ -35,18 +35,24 @@ const SignUp = ({ history, visible, flipVisibility }) => {
         e.preventDefault()
         if (!passwordCheck()) return false
         console.log({ username, email, password })
-        register({ username, email, password }).then(
-            data => {
-                console.log("data : ", data)
-                if (data.error) {
-                    setValues({ ...values, error: data.error })
-                }
-                else {
-                    authenticate(data, () => {
-                        history.push('/teams/')
-                    });
-                }
-            })
+
+        if (!ValidateEmail(email)) {
+            setValues({ ...values, error: "Wrong email format" })
+        } else {
+            register({ username, email, password }).then(
+                data => {
+                    console.log("data : ", data)
+                    if (data.error) {
+                        setValues({ ...values, error: data.error })
+                    }
+                    else {
+                        authenticate(data, () => {
+                            history.push('/teams/')
+                        });
+                    }
+                })
+        }
+
     }
 
     const ValidateEmail = (mail) => {
@@ -113,6 +119,7 @@ const SignUp = ({ history, visible, flipVisibility }) => {
                     <div className="">Sign Up</div>
                 </div>
                 <div class="signin-body">
+                    {error !== "" && (<div className="position-absolute showError ">{error}</div>)}
                     <div class="my-form ">
                         <input type="email" class="my-form-input" onChange={handleChange('username')} />
                         <label data-error="wrong" className={isFilled("username")} for="Form-email1">Your username</label>
@@ -130,7 +137,6 @@ const SignUp = ({ history, visible, flipVisibility }) => {
                         <input type="password" class="my-form-input " onChange={handleChange('password2')} />
                         <label className={isFilled("password2")} data-error="wrong" for="Form-pass1">Confirm your password</label>
                     </div>
-                    {error !== "" && (<div className="position-absolute showError ">{error}</div>)}
                     <div type="button" class="btn signin-button" onClick={handleSubmit}>Sign Up</div>
 
                 </div>

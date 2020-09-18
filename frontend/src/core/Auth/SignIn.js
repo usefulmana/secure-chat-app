@@ -31,8 +31,8 @@ const SignIn = ({ history, visible, flipVisibility }) => {
         login({ email, password }).then(
             data => {
                 console.log("data: ", data)
-                if (data.error) {
-                    setValues({ ...values, error: data.error })
+                if (data.error || data.message) {
+                    setValues({ ...values, error: data.message })
                 }
                 else {
                     console.log("what is data after login is succesfull : ", data.user.servers)
@@ -99,6 +99,7 @@ const SignIn = ({ history, visible, flipVisibility }) => {
                     <div className="">Sign in</div>
                 </div>
                 <div class="signin-body">
+                    {error !== "" && (<div className="position-absolute showError ">{error}</div>)}
                     <div class="my-form ">
                         <input type="email" class="my-form-input" onChange={handleChange('email')} />
                         <label data-error="wrong" className={isFilled("email")} for="Form-email1">Your email</label>
@@ -108,7 +109,6 @@ const SignIn = ({ history, visible, flipVisibility }) => {
                         <input type="password" class="my-form-input " onChange={handleChange('password')} />
                         <label className={isFilled("password")} data-error="wrong" for="Form-pass1">Your password</label>
                     </div>
-                    {error!=="" && (<div className="position-absolute showError ">{error}</div>)}
                     <div type="button" class="btn signin-button" onClick={handleSubmit}>Sign in</div>
 
                 </div>

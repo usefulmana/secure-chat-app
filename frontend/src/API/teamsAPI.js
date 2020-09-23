@@ -1,5 +1,6 @@
 import { BASE_URL } from "../config";
 import getToken from "./getToken"
+
 const API = BASE_URL + '/api'
 
 export const getTeamInfo = async ({ token, teamId }) => {

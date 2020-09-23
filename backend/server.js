@@ -97,6 +97,12 @@ app.use((req, res, next) => {
 // ** SocketIO
 
 let clients = [];
+
+
+// ** For live chatting
+const users = {};
+const socketToRoom = {};
+
 io.on("connection", (socket) => {
   let sessionUserId = "";
 
@@ -113,7 +119,9 @@ io.on("connection", (socket) => {
       .save()
       .then((data) => {
         payload = { type: "message", payload: data };
+        // send event to everyone inside the room including sender
         io.to(msg.channelId).emit(`${msg.channelId}-update`, payload);
+        // send event to everyone inside the room except sender
         socket.broadcast.to(msg.channelId).emit(`${msg.channelId}-notification`, payload);
       });
   });
@@ -196,88 +204,151 @@ io.on("connection", (socket) => {
     user.save();
   });
 
+  /*========================
+  Sam's live chat code
+  ========================*/
+  console.log("socket joined : ", socket.id)
+  socket.on("join room", roomID => {
+    console.log("socket id: ", socket.id, " joined room event received roomId: ", roomID)
+    if (users[roomID]) {
+      // const length = users[roomID].length;
+      // if (length === 4) {
+      //   socket.emit("room full");
+      //   return;
+      // }
+      users[roomID].push(socket.id);
+    } else {
+      users[roomID] = [socket.id];
+    }
+    socketToRoom[socket.id] = roomID;
+    const usersInThisRoom = users[roomID].filter(id => id !== socket.id);
+    console.log("sedning all userse event and user in room : ", usersInThisRoom)
+
+    socket.emit("all users", usersInThisRoom);
+  });
+
+  socket.on("sending signal", payload => {
+    console.log("sending user joined event to ", payload.userToSignal)
+    io.to(payload.userToSignal).emit('user joined', { signal: payload.signal, callerID: payload.callerID });
+  });
+
+  socket.on("returning signal", payload => {
+    console.log("received returning signal and sending receiving returned signal to ", payload.callerID)
+    io.to(payload.callerID).emit('receiving returned signal', { signal: payload.signal, id: socket.id });
+  });
+
+  socket.on('disconnect', () => {
+    const roomID = socketToRoom[socket.id];
+    let room = users[roomID];
+    if (room) {
+      room = room.filter(id => id !== socket.id);
+      users[roomID] = room;
+
+      room.map((id) => {
+        io.to(id).emit('user left', { peerId: socket.id });
+      })
+    }
+  });
+
+  socket.on('disconnect-live-chat', () => {
+    const roomID = socketToRoom[socket.id];
+    let room = users[roomID];
+    if (room) {
+      room = room.filter(id => id !== socket.id);
+      users[roomID] = room;
+    }
+
+    room.map((id) => {
+      io.to(id).emit('user left', { peerId: socket.id });
+    })
+  });
+
+  /*========================
+  Anh's live chat code
+   ========================*/
+
   // Signaling for webRTC
-  socket.on("voice-signal", (data) => {
-    const toId = data.userId;
-    data.userId = sessionUserId;
-    let action = { type: "voice-signal ", payload: data };
-    clients.find((client) => {
-      if (client.userId === toId) {
-        io.to(client.id).emit("update", action);
-      }
-    });
-  });
+  //   socket.on("voice-signal", (data) => {
+  //     const toId = data.userId;
+  //     data.userId = sessionUserId;
+  //     let action = { type: "voice-signal ", payload: data };
+  //     clients.find((client) => {
+  //       if (client.userId === toId) {
+  //         io.to(client.id).emit("update", action);
+  //       }
+  //     });
+  //   });
 
-  // Emit list of connections when user joins voice on specific channel
-  socket.on("user-join-voice", (data) => {
-    // Join room with channel id
-    socket.join(data.channelId);
-    // Get socket ids for users in that channel
-    const socketIdsInChannel = Object.keys(
-      io.sockets.in(data.channelId).sockets
-    );
-    const userIdsInChannel = [];
-    // Find user ids in channel
-    clients.forEach((client) => {
-      socketIdsInChannel.forEach((socketId) => {
-        if (client.id === socketId)
-          userIdsInChannel.push({
-            userId: client.userId,
-            userName: client.userName,
-          });
-      });
-    });
+  //   // Emit list of connections when user joins voice on specific channel
+  //   socket.on("user-join-voice", (data) => {
+  //     // Join room with channel id
+  //     socket.join(data.channelId);
+  //     // Get socket ids for users in that channel
+  //     const socketIdsInChannel = Object.keys(
+  //       io.sockets.in(data.channelId).sockets
+  //     );
+  //     const userIdsInChannel = [];
+  //     // Find user ids in channel
+  //     clients.forEach((client) => {
+  //       socketIdsInChannel.forEach((socketId) => {
+  //         if (client.id === socketId)
+  //           userIdsInChannel.push({
+  //             userId: client.userId,
+  //             userName: client.userName,
+  //           });
+  //       });
+  //     });
 
-    // Emit to everyone on this channel, the socketid of new user, and list of clients in room
-    let action = {
-      type: "user-join-voice",
-      payload: { userId: data.userId, clients: userIdsInChannel },
-    };
-    io.to(data.channelId).emit("update", action);
-  });
+  //     // Emit to everyone on this channel, the socketid of new user, and list of clients in room
+  //     let action = {
+  //       type: "user-join-voice",
+  //       payload: { userId: data.userId, clients: userIdsInChannel },
+  //     };
+  //     io.to(data.channelId).emit("update", action);
+  //   });
 
-  // Emit list of connections when user leaves voice on specific channel
-  socket.on("user-leave-voice", (data) => {
-    // Leave channel
-    socket.leave(data.channelId);
-    const userIdsInChannel = [];
-    // Emit to everyone in that room that user left voice
-    io.in(data.channelId).clients((error, socketClients) => {
-      socketClients.forEach((socketClientId) => {
-        // Find user ids in channel
-        clients.forEach((client) => {
-          if (client.id === socketClientId) {
-            userIdsInChannel.push({
-              userId: client.userId,
-              userName: client.userName,
-            });
-          }
-        });
-      });
+  //   // Emit list of connections when user leaves voice on specific channel
+  //   socket.on("user-leave-voice", (data) => {
+  //     // Leave channel
+  //     socket.leave(data.channelId);
+  //     const userIdsInChannel = [];
+  //     // Emit to everyone in that room that user left voice
+  //     io.in(data.channelId).clients((error, socketClients) => {
+  //       socketClients.forEach((socketClientId) => {
+  //         // Find user ids in channel
+  //         clients.forEach((client) => {
+  //           if (client.id === socketClientId) {
+  //             userIdsInChannel.push({
+  //               userId: client.userId,
+  //               userName: client.userName,
+  //             });
+  //           }
+  //         });
+  //       });
 
-      let action = {
-        type: "user-leave-voice",
-        payload: { userId: data.userId, clients: userIdsInChannel },
-      };
-      io.to(data.channelId).emit("update", action);
-    });
-  });
+  //       let action = {
+  //         type: "user-leave-voice",
+  //         payload: { userId: data.userId, clients: userIdsInChannel },
+  //       };
+  //       io.to(data.channelId).emit("update", action);
+  //     });
+  //   });
 
-  // On disconnect, remove from the client list
-  socket.on("disconnect", () => {
-    clients.find((client, i) => {
-      if (client.userId === sessionUserId) {
-        // Emit to all connected users that this user left (disconnects all voice peering calls with him)
-        let action = {
-          type: "user-leave-voice",
-          payload: { userId: client.userId },
-        };
-        socket.emit("update", action);
-        // Remove from global socket client list
-        return clients.splice(i, 1);
-      }
-    });
-  });
+  //   // On disconnect, remove from the client list
+  //   socket.on("disconnect", () => {
+  //     clients.find((client, i) => {
+  //       if (client.userId === sessionUserId) {
+  //         // Emit to all connected users that this user left (disconnects all voice peering calls with him)
+  //         let action = {
+  //           type: "user-leave-voice",
+  //           payload: { userId: client.userId },
+  //         };
+  //         socket.emit("update", action);
+  //         // Remove from global socket client list
+  //         return clients.splice(i, 1);
+  //       }
+  //     });
+  //   });
 });
 
 // ** Run server **

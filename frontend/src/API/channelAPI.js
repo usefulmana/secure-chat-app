@@ -1,9 +1,7 @@
 import { BASE_URL } from "../config";
 import Channel from "../core/Team/Channel";
 import getToken from './getToken'
-
 const API = BASE_URL + '/api'
-
 
 // const getToken = () => {
 //     var token = undefined

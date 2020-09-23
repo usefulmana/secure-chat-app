@@ -225,7 +225,7 @@ const TeamsList = ({ history }) => {
         <EditTeamForm TeamsRef={TeamsRef} teamId={teamToEdit} />
       </Modal>
 
-      <Modal opened={addMemberFormOpened} setOpened={setAddMemberFormOpened} options={addMemberModalStyle}>
+      <Modal opened={addMemberFormOpened} setOpened={setAddMemberFormOpened} options={modalStyle}>
         <AddMember TeamsRef={useRef({ setOpened: setAddMemberFormOpened })} teamId={teamToEdit} />
       </Modal>
     </Layout>

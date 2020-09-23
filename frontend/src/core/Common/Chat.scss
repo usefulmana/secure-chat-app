@@ -41,5 +41,18 @@
         .message {
             font-size: 1.2vw;
         }
+
+        .image-message{
+            width:25vw;
+            height:20vw;
+
+        }
+
+        .file-message{
+            i{
+                margin-right:0.7vw;
+                color:grey;
+            }
+        }
     }
 }

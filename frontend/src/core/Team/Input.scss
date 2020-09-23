@@ -1,0 +1,50 @@
+.form-cont {
+    position: relative;
+    input {
+        font-size: 1.4vw;
+        padding: 0.9vw;
+        margin-left: 0.9vw;
+        margin-bottom: 0.9vw;
+        width: 94%;
+        outline: none;
+        border: 0px;
+
+        &:focus {
+            border-bottom: 0.3vw solid rgb(105, 105, 224);
+        }
+    }
+
+    input[type="file"] {
+        display: none;
+    }
+
+    .custom-file-upload {
+        // border: 1px solid #ccc;
+        display: inline-block;
+        padding: 6px 6px;
+        cursor: pointer;
+        position: absolute;
+        right: 2%;
+        top: 0;
+
+        i {
+            color: rgb(63, 63, 63);
+        }
+    }
+
+    .emojo-cont {
+        position: absolute;
+        padding: 6px 6px;
+        cursor: pointer;
+        color: rgb(71, 71, 71);
+
+        right: 6%;
+        top: 0;
+
+        .drop-up {
+            position: absolute;
+            bottom: 0%;
+            right: 0;
+        }
+    }
+}

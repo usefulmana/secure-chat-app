@@ -207,10 +207,7 @@ const TeamsList = ({ history }) => {
     height: '40vw'
   }
 
-  const addMemberModalStyle = {
-    width: '50vw',
-    height: '47vw'
-  }
+  
 
   return (
     <Layout>

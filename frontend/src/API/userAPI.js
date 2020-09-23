@@ -1,5 +1,5 @@
 import { BASE_URL } from "../config";
-import getToken from "./getToken";
+import { getToken, getUserId } from './getToken'
 
 const API = BASE_URL + '/api'
 

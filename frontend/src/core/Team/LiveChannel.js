@@ -38,68 +38,90 @@ const LiveChannel = ({ history, channelId }) => {
         console.log("peersRef:", peersRef)
         console.log("peers:", peers)
         setPeers([])
-        navigator.mediaDevices.getUserMedia({ video: false, audio: true }).then(stream => {
-            userVideo.current.srcObject = stream;
-            socketClient.socket.emit("join room", roomID);
-            socketClient.socket.on("all users", users => {
-                console.log("all uesrs event reciveed : useres: ", users)
-                const peers = [];
-                users.forEach(userID => {
-                    const peer = createPeer(userID, socketClient.socket.id, stream);
-                    peersRef.current.push({
-                        peerID: userID,
-                        peer,
-                    })
-                    peers.push(peer);
-                })
-                console.log("before setpeer 1")
-                setPeers(peers);
-            })
-
-            socketClient.socket.on("user joined", payload => {
-                console.log("user join event")
-                const peer = addPeer(payload.signal, payload.callerID, stream);
-                peersRef.current.push({
-                    peerID: payload.callerID,
-                    peer,
-                })
-                console.log("before setpeer 2")
-
-                setPeers(users => [...users, peer]);
-            });
-
-            socketClient.socket.on("user left", payload => {
-                var newPeers = [...peers].filter(p => {
-                    if (p.peerId !== payload.peerId) {
-                        return false
-                    } else {
-                        return true
-                    }
-                }
-                )
-                console.log("peersRef.current bofre filtering : ", peersRef.current)
-                var newPeersRef = peersRef.current.filter((p) => {
-                    if (p.peerId !== payload.peerId) {
-                        return false
-                    } else {
-                        return true
-                    }
-                })
-                console.log("peersRef.current after filtering : ", newPeersRef)
-                peersRef.current = newPeersRef
-                console.log("peersRef.current after assing : ", peersRef.current)
-
-                setPeers([...newPeers]);
-            });
-
-            socketClient.socket.on("receiving returned signal", payload => {
-                const item = peersRef.current.find(p => p.peerID === payload.id);
-                console.log("what is item: ", item)
-
-                item.peer.signal(payload.signal);
-            });
+        navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
+            initPeer(stream)
+        }).catch(() => {
+            requireAudio()
         })
     }, []);
+
+    const requireAudio = () => {
+        navigator.mediaDevices.getUserMedia({ video: false, audio: true }).then(stream => {
+            initPeer(stream)
+        }).catch(() => {
+            requireNone()
+        })
+    }
+
+    const requireNone = () => {
+        navigator.mediaDevices.getUserMedia({ video: false, audio: false }).then(stream => {
+            initPeer(stream)
+        }).catch(() => {
+
+        })
+    }
+
+    const initPeer = (stream) => {
+        userVideo.current.srcObject = stream;
+        socketClient.socket.emit("join room", roomID);
+        socketClient.socket.on("all users", users => {
+            console.log("all uesrs event reciveed : useres: ", users)
+            const peers = [];
+            users.forEach(userID => {
+                const peer = createPeer(userID, socketClient.socket.id, stream);
+                peersRef.current.push({
+                    peerID: userID,
+                    peer,
+                })
+                peers.push(peer);
+            })
+            console.log("before setpeer 1")
+            setPeers(peers);
+        })
+
+        socketClient.socket.on("user joined", payload => {
+            console.log("user join event")
+            const peer = addPeer(payload.signal, payload.callerID, stream);
+            peersRef.current.push({
+                peerID: payload.callerID,
+                peer,
+            })
+            console.log("before setpeer 2")
+
+            setPeers(users => [...users, peer]);
+        });
+
+        socketClient.socket.on("user left", payload => {
+            var newPeers = [...peers].filter(p => {
+                if (p.peerId !== payload.peerId) {
+                    return false
+                } else {
+                    return true
+                }
+            }
+            )
+            console.log("peersRef.current bofre filtering : ", peersRef.current)
+            var newPeersRef = peersRef.current.filter((p) => {
+                if (p.peerId !== payload.peerId) {
+                    return false
+                } else {
+                    return true
+                }
+            })
+            console.log("peersRef.current after filtering : ", newPeersRef)
+            peersRef.current = newPeersRef
+            console.log("peersRef.current after assing : ", peersRef.current)
+
+            setPeers([...newPeers]);
+        });
+
+        socketClient.socket.on("receiving returned signal", payload => {
+            const item = peersRef.current.find(p => p.peerID === payload.id);
+            console.log("what is item: ", item)
+
+            item.peer.signal(payload.signal);
+        });
+    }
 
     function createPeer(userToSignal, callerID, stream) {
         const peer = new Peer({

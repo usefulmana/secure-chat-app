@@ -8,6 +8,7 @@ import './Input.scss'
 import socketClient from "../../Socket/clinet"
 import { isUserHasAccessToThisChannel } from './handleAccess'
 import Picker from 'emoji-picker-react';
+import { parseFileMessage, parseFileName } from "../Common/parse"
 
 const Input = ({ history, match, currentChannelId }) => {
     var jwt = JSON.parse(localStorage.getItem("jwt"));
@@ -16,15 +17,17 @@ const Input = ({ history, match, currentChannelId }) => {
     const [formData, setFormdata] = useState(new FormData())
     const [chosenEmoji, setChosenEmoji] = useState(null);
     const [emojoOpened, setEmojoOpened] = useState(false);
+    const [caretPosition, setCaretPosition] = useState();
+    const [pendingFile, setPendingFile] = useState("")
 
     const onEmojiClick = (event, emojiObject) => {
-        // setNewMessage(newMessage+JSON.parse(emojiObject))
-        setNewMessage(newMessage + emojiObject.emoji)
-        // setChosenEmoji(emojiObject);
+        var firstString = newMessage.slice(0, caretPosition)
+        var secondString = newMessage.slice(caretPosition)
+        setNewMessage(firstString + emojiObject.emoji + secondString)
     };
     useEffect(() => {
         window.addEventListener('click', (e) => {
-            console.log(e.target)
+            // console.log(e.target)
 
             var inside = e.target.closest('.emojo-cont')
             if (!inside) {
@@ -32,6 +35,14 @@ const Input = ({ history, match, currentChannelId }) => {
             } else {
                 setEmojoOpened(true)
             }
+        })
+
+        document.querySelector('.message-input').addEventListener('click', e => {
+            setCaretPosition(e.target.selectionStart)
+        })
+
+        document.querySelector('.message-input').addEventListener('keyup', e => {
+            setCaretPosition(e.target.selectionStart)
         })
     }, [])
 
@@ -61,10 +72,14 @@ const Input = ({ history, match, currentChannelId }) => {
         console.log("file : ", file)
 
         const formattedMessage = file.secure_url + `?filename=${file.original_filename}`
-        socketClient.createNewMessge({ channelId: currentChannelId, userId, message: formattedMessage })
-        // getMessage(currentChannelId)
-        setNewMessage("")
 
+
+        setPendingFile(formattedMessage)
+
+        // socketClient.createNewMessge({ channelId: currentChannelId, userId, message: formattedMessage })
+        // // getMessage(currentChannelId)
+
+        // setNewMessage("")
     }
 
     // const handleFileSubmit = async () => {
@@ -84,17 +99,47 @@ const Input = ({ history, match, currentChannelId }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        socketClient.createNewMessge({ channelId: currentChannelId, userId, message: newMessage })
+        var messaegeToSend = newMessage
+        if (pendingFile !== "") messaegeToSend = pendingFile + `&message=${newMessage}`
+        console.log("messaegeToSend : " , messaegeToSend)
+        socketClient.createNewMessge({ channelId: currentChannelId, userId, message: messaegeToSend })
         // getMessage(currentChannelId)
         setNewMessage("")
+        setPendingFile("")
     }
 
+    const handleOpenFile = (url) => (e) => {
+        var win = window.open(url, '_blank');
+        win.focus();
+    }
 
+    const filePreView = () => {
+        var isImage = pendingFile?.includes('.png') || pendingFile?.includes('.jpg') || pendingFile?.includes('.jpeg')
+        var fileName = parseFileName(pendingFile)
+
+        if (isImage) {
+            return <div className="btn file-message" >
+                <img src={pendingFile} />
+            </div>
+        } else {
+
+            return <div className="btn file-message" >
+                <i class="fa fa-file" aria-hidden="true" ></i>
+                {fileName}
+            </div>
+        }
+    }
 
     const showNewMessageForm = () => {
         return (
             <form className="form-cont" onSubmit={handleSubmit} >
-                <input placeholder="Start new chat!" className="" value={newMessage} onChange={(e) => { setNewMessage(e.target.value) }} />
+                {pendingFile &&
+                    <div className="file-preview-cont">
+                        <div className="delete-btn btn">x</div>
+                        {filePreView()}
+                    </div>
+                }
+                <input placeholder="Start new chat!" className="message-input" value={newMessage} onChange={(e) => { setNewMessage(e.target.value) }} />
                 <div className="emojo-cont">
                     <i class="fa fa-smile-o" aria-hidden="true" ></i>
                     {emojoOpened && <div className="drop-up">

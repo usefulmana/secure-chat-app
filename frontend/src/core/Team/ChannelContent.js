@@ -23,13 +23,12 @@ const ChannelContent = ({ history, match }) => {
     const [liveChatPopUp, setLiveChatPopUp] = useState(false)
     const [maximized, setMaximized] = useState(true)
 
+    const [channelOnCall, setChannelOnCall] = useState(false)
 
     useEffect(() => {
         var channelId = initCurrentChannelId()
-
+        setChannelOnCall(false)
         getChannelInfo({ channelId }).then((data) => {
-            console.log("Data in get channel info : ", data)
-
             setChannelInfo(data)
             setAccess(isUserHasAccessToThisChannel(data))
             setCurrentChannelId(channelId)
@@ -42,33 +41,36 @@ const ChannelContent = ({ history, match }) => {
     }, [match.params.channelId])
 
     const socketInit = (channelId) => {
-        console.log("listenint to : ", JSON.stringify(channelId))
         socketClient.joinChannel(channelId, (updatedChannelId) => {
-
-
-
             if (updatedChannelId === match.params.channelId) {
                 getMessage(updatedChannelId)
             }
         })
+
+        socketClient.isChannelOnCall(channelId, (isOnline) => {
+            if (isOnline) setChannelOnCall(true)
+        })
+
+        socketClient.listenChannelCall(channelId, () => {
+            setChannelOnCall(true)
+        })
+
+        socketClient.listenCallFinish( () => {
+            setChannelOnCall(false)
+        })
     }
 
     const initCurrentChannelId = (channels) => {
-        console.log("param : ", match.params.channelId)
         var channelId = match.params.channelId;
         // var channelId = querySearch(history.location.search).channel;
         return channelId
     }
 
     const getMessage = (channelId) => {
-        console.log("updated channel id : ", channelId)
-        console.log("currentChannleid : ", match.params.channelId)
         getMessageFromChannel({ channelId }).then((data) => {
             if (data?.error) {
             } else {
                 setMessages(data)
-                console.log("data in get message from channel :", data)
-                console.log("match.params.channelId:", match.params.channelId)
                 scrollToBottom()
             }
         })
@@ -135,12 +137,23 @@ const ChannelContent = ({ history, match }) => {
         )
     }
 
+    const isChannelOnCall = () => {
+        if (channelOnCall) {
+            return 'channel-on-call'
+        }
+    }
+
+    const handleJoinCall=()=>{
+        if(!channelOnCall) socketClient.initCallOnChannel(currentChannelId)
+        setLiveChatPopUp(true)
+    }
+
     return access ? (
         <>
             <div className="channel-content-cont">
-                <div className="live-chat-btn btn" onClick={() => setLiveChatPopUp(true)}>
+                <div className={`live-chat-btn btn ${isChannelOnCall()}`} onClick={handleJoinCall}>
                     <i class="fa fa-phone-square" aria-hidden=""></i>
-
+                    {channelOnCall && <span className="channel-on-call-msg">Channel is on call</span>}
                 </div>
                 <div className="content-cont">
                     {/* {currentChannelId} */}

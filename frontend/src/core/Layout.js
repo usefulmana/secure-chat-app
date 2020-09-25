@@ -39,7 +39,7 @@ const Layout = ({ loading, history, children }) => {
                         <div className="text-center">Teams</div>
                     </div>
                     <div className={isActive('dm')} onClick={handleClick('dm/awe')}>
-                        <i class="fa fa-users teams-icon icon"></i>
+                        <i class="fa fa-comments icon" aria-hidden="true"></i>
                         <div className="text-center">Chats</div>
                     </div>
                     {/* <div className="btn option-btn" onClick={handleClick('contact')}>Contact</div> */}

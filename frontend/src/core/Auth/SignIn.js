@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
-import { login, authenticate } from '../../API/userAPI'
+import { login, authenticate, forgotPassword } from '../../API/userAPI'
+import { OAuthSignIn } from '../../API/OAuthAPI'
 import './base.scss'
 import queryString from 'query-string';
 
@@ -89,6 +90,22 @@ const SignIn = ({ history, visible, flipVisibility }) => {
     //     return errorMessage
     // }
 
+    const handleOAuth = (option) => (e) => {
+        OAuthSignIn({ option }).then((data) => {
+
+        }).catch()
+    }
+
+    const handleForgotPassword = () => {
+        forgotPassword({ email }).then((data) => {
+            if (data.error) {
+                setValues({ ...values, error: data.error })
+            }else{
+                
+            }
+        }).catch()
+    }
+
     const showForm = () => {
         return (
             <form onKeyDown={handleEnter} className={`signin-form `}>
@@ -109,16 +126,26 @@ const SignIn = ({ history, visible, flipVisibility }) => {
                         <input type="password" class="my-form-input " onChange={handleChange('password')} />
                         <label className={isFilled("password")} data-error="wrong" for="Form-pass1">Your password</label>
                     </div>
-                    <div type="button" class="btn signin-button" onClick={handleSubmit}>Sign in</div>
+                    <div type="button" class="btn signin-button oauth-base" onClick={handleSubmit}>Sign in</div>
+                    <div type="button" class="btn signin-button-facebook oauth-base" onClick={handleOAuth('facebook')}>
+
+                        <i class="fa fa-facebook-official" aria-hidden="true"></i>Sign in with Facebook
+
+                    </div>
+                    <div type="button" class="btn signin-button-google oauth-base" onClick={handleOAuth('google')}>
+                        <i class="fa fa-google" aria-hidden="true"></i>Sign in with Google
+
+                    </div>
 
                 </div>
                 <div className="signin-footer">
                     <div className="text-center no-have-account">
                         Have not had account yet?
                     </div>
-                    <div className="text-center sign-up-link btn" onClick={flipVisibility}>
-                        Sign up
+                    <div className="text-center ">
+                        <span className="sign-up-link btn" onClick={flipVisibility}>Sign up or</span><span className="forgot-password-link" onClick={handleForgotPassword}>Forgot passwrod?</span>
                     </div>
+
                 </div>
             </form>
         )

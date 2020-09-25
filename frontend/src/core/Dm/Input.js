@@ -24,8 +24,7 @@ const Input = ({ history, match, currentChannelId }) => {
     };
     useEffect(() => {
         window.addEventListener('click', (e) => {
-            console.log(e.target)
-
+            // console.log(e.target)
             var inside = e.target.closest('.emojo-cont')
             if (!inside) {
                 setEmojoOpened(false)
@@ -33,6 +32,10 @@ const Input = ({ history, match, currentChannelId }) => {
                 setEmojoOpened(true)
             }
         })
+
+        document.querySelector('.message-input').addEventListener('click', e => {
+            console.log('Careaweft at: ', e.target.selectionStart)
+          })
     }, [])
 
     const renderEmojo = () => {
@@ -94,7 +97,7 @@ const Input = ({ history, match, currentChannelId }) => {
     const showNewMessageForm = () => {
         return (
             <form className="form-cont" onSubmit={handleSubmit} >
-                <input placeholder="Start new chat!" className="" value={newMessage} onChange={(e) => { setNewMessage(e.target.value) }} />
+                <input placeholder="Start new chat!" className="message-input" value={newMessage} onChange={(e) => { setNewMessage(e.target.value) }} />
                 <div className="emojo-cont">
                     <i class="fa fa-smile-o" aria-hidden="true" ></i>
                     {emojoOpened && <div className="drop-up">

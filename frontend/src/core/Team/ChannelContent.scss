@@ -28,6 +28,24 @@ $contentHeight: 80vh;
             color: white;
         }
     }
+
+    .channel-on-call {
+        animation: channelOnCall 1.2s infinite;
+
+        .channel-on-call-msg{
+            margin-left:0.3vw;
+        }
+    }
+
+    @keyframes channelOnCall {
+        0% {
+            background-color: rgb(134, 181, 243);
+        }
+
+        100% {
+            background-color: rgb(98, 102, 223);
+        }
+    }
 }
 
 .draggable-cont {

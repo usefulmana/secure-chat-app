@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { BrowserRouter, Switch, Route, Link, withRouter } from "react-router-dom";
 import chat from "./Chat.scss"
+import { parseFileMessage, parseFileName } from "./parse"
 const queryString = require('query-string');
 
 const Chat = ({ history, message, previousChatUser, index }) => {
@@ -22,14 +23,6 @@ const Chat = ({ history, message, previousChatUser, index }) => {
         win.focus();
     }
 
-    const parseMessage = (url) => {
-        var saerchQuery = url.split("?")
-        const parsed = queryString.parse(saerchQuery[1]);
-        console.log("parsed : ", parsed)
-        var fileName = parsed.filename
-        return fileName
-
-    }
 
     const renderMessageContent = (message) => {
 
@@ -37,14 +30,18 @@ const Chat = ({ history, message, previousChatUser, index }) => {
         var isImage = message?.includes('.png') || message?.includes('.jpg') || message?.includes('.jpeg')
 
         if (isFile && !isImage) {
-            var fileName = parseMessage(message)
-            return <div className="btn file-message" onClick={handleOpenFile(message)}>
-                <i class="fa fa-file" aria-hidden="true" ></i>
-                {fileName}
+            var fileName = parseFileName(message)
+            var text = parseFileMessage(message)
+            return <div className="" onClick={handleOpenFile(message)}>
+                <div className="file-message">  <i class="fa fa-file" aria-hidden="true" ></i>{fileName}</div>
+                <div>{text}</div>
             </div>
 
         } else if (isImage && isFile) {
-            return <img className="image-message btn" src={message} onClick={handleOpenFile(message)} />
+            return <>
+                <img className="image-message btn" src={message} onClick={handleOpenFile(message)} />
+                <div>{parseFileMessage(message)}</div>
+            </>
 
         } else {
             return message

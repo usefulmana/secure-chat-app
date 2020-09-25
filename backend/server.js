@@ -100,7 +100,7 @@ let clients = [];
 
 
 // ** For live chatting
-const users = {};
+const rooms = {};
 const socketToRoom = {};
 
 io.on("connection", (socket) => {
@@ -126,59 +126,61 @@ io.on("connection", (socket) => {
       });
   });
 
+  // Sam's comment : this is not used
   // Normal Chat Message in a channel
-  socket.on("private-channel-message", async (msg) => {
-    const newMessage = Message({
-      user: msg.userId,
-      channel: msg.channelId,
-      message: msg.message,
-    })
-      .save()
-      .then((msg) => {
-        payload = { type: "message", payload: msg };
+  // socket.on("private-channel-message", async (msg) => {
+  //   const newMessage = Message({
+  //     user: msg.userId,
+  //     channel: msg.channelId,
+  //     message: msg.message,
+  //   })
+  //     .save()
+  //     .then((msg) => {
+  //       payload = { type: "message", payload: msg };
 
-        io.to(msg.channelId).emit("update", payload);
-      });
-  });
+  //       io.to(msg.channelId).emit("update", payload);
+  //     });
+  // });
 
+  // Sam's comment : this is not used
   // One to one direct message
-  socket.on("private-chat-message", async (msg) => {
-    const newPrivateMessage = PrivateMessage({
-      message: msg.message,
-      from: msg.from,
-      to: msg.to,
-    }).save();
+  // socket.on("private-chat-message", async (msg) => {
+  //   const newPrivateMessage = PrivateMessage({
+  //     message: msg.message,
+  //     from: msg.from,
+  //     to: msg.to,
+  //   }).save();
 
-    // Find which socket to send TO
-    action = {
-      type: "private-message",
-      payload: {
-        from: message.from,
-        to: message.to,
-        msg: message.msg,
-        user: message.from.toLowerCase(),
-      },
-    };
-    clients.find((client) => {
-      if (client.userId === to[0].user_id) {
-        io.to(client.id).emit("update", action);
-      }
-    });
+  //   // Find which socket to send TO
+  //   action = {
+  //     type: "private-message",
+  //     payload: {
+  //       from: message.from,
+  //       to: message.to,
+  //       msg: message.msg,
+  //       user: message.from.toLowerCase(),
+  //     },
+  //   };
+  //   clients.find((client) => {
+  //     if (client.userId === to[0].user_id) {
+  //       io.to(client.id).emit("update", action);
+  //     }
+  //   });
 
-    // Find which socket to
-    action = {
-      type: 'private-message',
-      payload: { from: message.from, to: message.to, msg: message.msg, user: message.to.toLowerCase() }
-    };
-    clients.find(client => {
-      if (client.userId === from[0].user_id) {
-        io.to(client.id).emit('update', action);
-      }
-    });
+  //   // Find which socket to
+  //   action = {
+  //     type: 'private-message',
+  //     payload: { from: message.from, to: message.to, msg: message.msg, user: message.to.toLowerCase() }
+  //   };
+  //   clients.find(client => {
+  //     if (client.userId === from[0].user_id) {
+  //       io.to(client.id).emit('update', action);
+  //     }
+  //   });
 
-  });
+  // });
 
-  // When a users sign in, he/she sends over his/her userId
+  // When a rooms sign in, he/she sends over his/her userId
   // Add to a list of clients userId to identify socket.id
   socket.on("sign-in", (data) => {
     sessionUserId = data.userId;
@@ -208,23 +210,43 @@ io.on("connection", (socket) => {
   Sam's live chat code
   ========================*/
   console.log("socket joined : ", socket.id)
+
+  socket.on("is-channel-on-call", roomID => {
+    console.log("evnt is-channel-on-call received : roomId : ", roomID)
+    var isOnline = false
+    if (rooms[roomID] && rooms[roomID].length > 0) {
+      isOnline = true
+    }
+
+    console.log("Emitting channel-status : isOnline : ", isOnline)
+    socket.emit('channel-status', isOnline)
+  })
+
+  socket.on("calling", channelId => {
+    console.log("Receiving  calling : ", channelId)
+
+    socket.broadcast.to(channelId).emit('receiving call');
+    console.log("Sending calling : ", channelId)
+  })
+
+
   socket.on("join room", roomID => {
     console.log("socket id: ", socket.id, " joined room event received roomId: ", roomID)
-    if (users[roomID]) {
-      // const length = users[roomID].length;
+    if (rooms[roomID]) {
+      // const length = rooms[roomID].length;
       // if (length === 4) {
       //   socket.emit("room full");
       //   return;
       // }
-      users[roomID].push(socket.id);
+      rooms[roomID].push(socket.id);
     } else {
-      users[roomID] = [socket.id];
+      rooms[roomID] = [socket.id];
     }
     socketToRoom[socket.id] = roomID;
-    const usersInThisRoom = users[roomID].filter(id => id !== socket.id);
-    console.log("sedning all userse event and user in room : ", usersInThisRoom)
+    const roomsInThisRoom = rooms[roomID].filter(id => id !== socket.id);
+    console.log("sedning all roomse event and user in room : ", roomsInThisRoom)
 
-    socket.emit("all users", usersInThisRoom);
+    socket.emit("all rooms", roomsInThisRoom);
   });
 
   socket.on("sending signal", payload => {
@@ -239,29 +261,44 @@ io.on("connection", (socket) => {
 
   socket.on('disconnect', () => {
     const roomID = socketToRoom[socket.id];
-    let room = users[roomID];
+    let room = rooms[roomID];
     if (room) {
       room = room.filter(id => id !== socket.id);
-      users[roomID] = room;
+      rooms[roomID] = room;
 
       room.map((id) => {
         io.to(id).emit('user left', { peerId: socket.id });
       })
+      console.log("room.length : ", room.length)
+
+      if (room.length === 0) {
+        console.log("emit call finisehd event : room : ", room)
+        // console.log("emit call finisehd event")
+        io.to(roomID).emit('call finished');
+        // socket.broadcast.to(roomID).emit('call finished');
+
+      }
     }
   });
 
-  socket.on('disconnect-live-chat', () => {
-    const roomID = socketToRoom[socket.id];
-    let room = users[roomID];
-    if (room) {
-      room = room.filter(id => id !== socket.id);
-      users[roomID] = room;
-    }
+  // socket.on('disconnect-live-chat', () => {
+  //   const roomID = socketToRoom[socket.id];
+  //   let room = rooms[roomID];
+  //   if (room) {
+  //     room = room.filter(id => id !== socket.id);
+  //     rooms[roomID] = room;
 
-    room.map((id) => {
-      io.to(id).emit('user left', { peerId: socket.id });
-    })
-  });
+  //     room.map((id) => {
+  //       io.to(id).emit('user left', { peerId: socket.id });
+  //     })
+
+  //     console.log("room.length : ", room.length)
+  //     if (room.length === 0) {
+  //       console.log("emit call finisehd event")
+  //       io.to(room).emit('call finished');
+  //     }
+  //   }
+  // });
 
   /*========================
   Anh's live chat code
@@ -283,7 +320,7 @@ io.on("connection", (socket) => {
   //   socket.on("user-join-voice", (data) => {
   //     // Join room with channel id
   //     socket.join(data.channelId);
-  //     // Get socket ids for users in that channel
+  //     // Get socket ids for rooms in that channel
   //     const socketIdsInChannel = Object.keys(
   //       io.sockets.in(data.channelId).sockets
   //     );
@@ -338,7 +375,7 @@ io.on("connection", (socket) => {
   //   socket.on("disconnect", () => {
   //     clients.find((client, i) => {
   //       if (client.userId === sessionUserId) {
-  //         // Emit to all connected users that this user left (disconnects all voice peering calls with him)
+  //         // Emit to all connected rooms that this user left (disconnects all voice peering calls with him)
   //         let action = {
   //           type: "user-leave-voice",
   //           payload: { userId: client.userId },

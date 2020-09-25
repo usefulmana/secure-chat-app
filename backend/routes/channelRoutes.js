@@ -81,7 +81,8 @@ router.post(
     }).populate({
       path: "members",
       populate: { path: "members" },
-    }).select("-password").select("-servers");
+      select: '-password -servers'
+    })
 
     res.json(channel)
   }

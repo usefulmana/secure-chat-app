@@ -3,8 +3,6 @@ import { getToken, getUserId } from './getToken'
 
 const API = BASE_URL + '/api'
 
-
-
 export const currentUser = () => {
     var token = getToken()
 
@@ -147,14 +145,14 @@ export const signout = next => {
     }
 };
 
-export const isAuthenticated =  () => {
+export const isAuthenticated = () => {
     if (typeof window == "undefined") {
         return false;
     }
 
     if (localStorage.getItem("jwt")) {
         return JSON.parse(localStorage.getItem("jwt"));
-      
+
     } else {
         return false;
     }
@@ -197,3 +195,43 @@ export const getUserById = ({ userId }) => {
             console.log(err);
         });
 };
+
+
+export const forgotPassword = ({ email }) => {
+
+    return fetch(`${API}/user/forgot-pw`, {
+        method: "POST",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email })
+    })
+        .then(response => {
+            return response.json();
+        })
+        .catch(err => {
+            console.log(err);
+        });
+};
+
+
+// export const retrievePassword = ({ formData, token }) => {
+//     var token = getToken()
+
+//     return fetch(`${API}/user/forgot-pw`, {
+//         method: "POST",
+//         headers: {
+//             Accept: "application/json",
+//             // "Content-Type": "form-data",
+//             Authorization: `${token}`
+//         },
+//         body: formData
+//     })
+//         .then(response => {
+//             return response.json();
+//         })
+//         .catch(err => {
+//             console.log(err);
+//         });
+// };

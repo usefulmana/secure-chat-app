@@ -16,7 +16,6 @@ class socketClientClass {
     }
 
     init(userId) {
-        console.log("userId in socketClient : ", userId)
         // this.socket = socketIOClient(BASE_URL);
         // this.userId = userId
     }
@@ -25,13 +24,11 @@ class socketClientClass {
         if (!userId || !channelId || !message) {
             return
         }
-        console.log("channelId in client ", channelId)
         var msg = {
             userId,
             channelId,
             message
         }
-        console.log("msg : ", msg)
         this.socket.emit('chat-message', msg);
     }
 
@@ -63,10 +60,8 @@ class socketClientClass {
         if (!this.isAlreadyListening(channelId)) {
             this.socket.emit('subscribe', channelId);
             this.events.notification.push(channelId)
-            console.log("listening to : ", `${channelId}-notification`)
             this.socket.on(`${channelId}-notification`, (payload) => {
                 // alert("got it")
-                console.log("payload : ", payload)
                 callback(payload.channelId)
             })
             this.events.notification.push(channelId)
@@ -100,16 +95,35 @@ class socketClientClass {
             this.socket.off(c)
         })
 
-        console.log("befor starting channel update : ", `${channelId}-update`)
         this.socket.on(`${channelId}-update`, (payload) => {
-            console.log("channelId on udpae", channelId)
-            console.log("payload  on udpae", payload)
             callback(channelId)
         })
         this.events.channels.push(`${channelId}-update`)
     }
 
+    isChannelOnCall(channelId, callback) {
+        this.socket.emit('is-channel-on-call', channelId);
 
+        this.socket.on(`channel-status`, (isOnline) => {
+            callback(isOnline)
+        })
+    }
+
+    listenChannelCall(channelId, callback) {
+        this.socket.on(`receiving call`, (data) => {
+            callback()
+        })
+    }
+
+    initCallOnChannel(channelId) {
+        this.socket.emit(`calling`, channelId)
+    }
+
+    listenCallFinish(callback) {
+        this.socket.on(`call finished`, () => {
+            callback()
+        })
+    }
 
 }
 

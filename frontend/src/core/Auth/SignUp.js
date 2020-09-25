@@ -133,11 +133,11 @@ const SignUp = ({ history, visible, flipVisibility }) => {
                         <input type="password" class="my-form-input " onChange={handleChange('password')} />
                         <label className={isFilled("password")} data-error="wrong" for="Form-pass1">Your password</label>
                     </div>
-                    <div class="my-form ">
+                    <div class="my-form">
                         <input type="password" class="my-form-input " onChange={handleChange('password2')} />
                         <label className={isFilled("password2")} data-error="wrong" for="Form-pass1">Confirm your password</label>
                     </div>
-                    <div type="button" class="btn signin-button" onClick={handleSubmit}>Sign Up</div>
+                    <div type="button" class="btn signin-button oauth-base" onClick={handleSubmit}>Sign Up</div>
 
                 </div>
                 <div className="signin-footer">

@@ -1,13 +1,20 @@
-
 import { BASE_URL } from "../config";
-import token from "./getToken"
 import { getToken, getUserId } from './getToken'
 
 const API = BASE_URL + '/api'
 
-export const getMessageFromChannel = async ({ channelId }) => {
+// ** Social Auth Routes **
+// router.get('/google', passport.authenticate('google'));
+// router.get('/facebook', passport.authenticate('facebook', {scope: 'email'}));
+
+// // ** Social Auth Callbacks **
+// router.get('/google/redirect', passport.authenticate('google', {failureRedirect: '/login'}), socialAuthActions.google);
+// router.get('/facebook/redirect', passport.authenticate('facebook'), socialAuthActions.facebook);
+
+export const OAuthSignIn = ({ option }) => {
     var token = getToken()
-    return await fetch(`${API}/chat/${channelId}?page=1&limit=100&sort=asc`, {
+
+    return fetch(`${API}/auth/${option}`, {
         method: "GET",
         headers: {
             Accept: "application/json",
@@ -23,10 +30,10 @@ export const getMessageFromChannel = async ({ channelId }) => {
         });
 };
 
-
-export const getLastMessage = async ({ channelId }) => {
+export const facebookSignin = () => {
     var token = getToken()
-    return await fetch(`${API}/chat/last/${channelId}`, {
+
+    return fetch(`${API}/facebook`, {
         method: "GET",
         headers: {
             Accept: "application/json",

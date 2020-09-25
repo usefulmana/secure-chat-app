@@ -35,8 +35,6 @@ const LiveChannel = ({ history, channelId }) => {
     const roomID = channelId;
 
     useEffect(() => {
-        console.log("peersRef:", peersRef)
-        console.log("peers:", peers)
         setPeers([])
         navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
             initPeer(stream)
@@ -65,7 +63,6 @@ const LiveChannel = ({ history, channelId }) => {
         userVideo.current.srcObject = stream;
         socketClient.socket.emit("join room", roomID);
         socketClient.socket.on("all users", users => {
-            console.log("all uesrs event reciveed : useres: ", users)
             const peers = [];
             users.forEach(userID => {
                 const peer = createPeer(userID, socketClient.socket.id, stream);
@@ -75,18 +72,15 @@ const LiveChannel = ({ history, channelId }) => {
                 })
                 peers.push(peer);
             })
-            console.log("before setpeer 1")
             setPeers(peers);
         })
 
         socketClient.socket.on("user joined", payload => {
-            console.log("user join event")
             const peer = addPeer(payload.signal, payload.callerID, stream);
             peersRef.current.push({
                 peerID: payload.callerID,
                 peer,
             })
-            console.log("before setpeer 2")
 
             setPeers(users => [...users, peer]);
         });
@@ -100,7 +94,6 @@ const LiveChannel = ({ history, channelId }) => {
                 }
             }
             )
-            console.log("peersRef.current bofre filtering : ", peersRef.current)
             var newPeersRef = peersRef.current.filter((p) => {
                 if (p.peerId !== payload.peerId) {
                     return false
@@ -108,16 +101,13 @@ const LiveChannel = ({ history, channelId }) => {
                     return true
                 }
             })
-            console.log("peersRef.current after filtering : ", newPeersRef)
             peersRef.current = newPeersRef
-            console.log("peersRef.current after assing : ", peersRef.current)
 
             setPeers([...newPeers]);
         });
 
         socketClient.socket.on("receiving returned signal", payload => {
             const item = peersRef.current.find(p => p.peerID === payload.id);
-            console.log("what is item: ", item)
 
             item.peer.signal(payload.signal);
         });
@@ -131,7 +121,6 @@ const LiveChannel = ({ history, channelId }) => {
         });
 
         peer.on("signal", signal => {
-            console.log("send sending signla evennt")
             socketClient.socket.emit("sending signal", { userToSignal, callerID, signal })
         })
 
@@ -150,7 +139,6 @@ const LiveChannel = ({ history, channelId }) => {
         })
 
         // why you sending too much siganl
-        console.log("sending signal")
         peer.signal(incomingSignal);
 
         return peer;
@@ -173,7 +161,6 @@ const LiveChannel = ({ history, channelId }) => {
     return (
         <div className={`live-chat-cont row-w AIC JCC ${styleVideoBasedOnNum()}`}>
             {/* <StyledVideo muted ref={userVideo} autoPlay playsInline /> */}
-            {console.log("peers: ", peers)}
             <video className="peer-video" muted ref={userVideo} autoPlay playsInline />
             {peers.map((peer, index) => {
 

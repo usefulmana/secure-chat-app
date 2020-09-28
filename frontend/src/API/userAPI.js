@@ -216,22 +216,22 @@ export const forgotPassword = ({ email }) => {
 };
 
 
-// export const retrievePassword = ({ formData, token }) => {
-//     var token = getToken()
+export const retrievePassword = ({ formData, token }) => {
+    var token = getToken()
 
-//     return fetch(`${API}/user/forgot-pw`, {
-//         method: "POST",
-//         headers: {
-//             Accept: "application/json",
-//             // "Content-Type": "form-data",
-//             Authorization: `${token}`
-//         },
-//         body: formData
-//     })
-//         .then(response => {
-//             return response.json();
-//         })
-//         .catch(err => {
-//             console.log(err);
-//         });
-// };
+    return fetch(`${API}/user/retrieve-pw`, {
+        method: "POST",
+        headers: {
+            Accept: "application/json",
+            // "Content-Type": "form-data",
+            Authorization: `${token}`
+        },
+        body: formData
+    })
+        .then(response => {
+            return response.json();
+        })
+        .catch(err => {
+            console.log(err);
+        });
+};

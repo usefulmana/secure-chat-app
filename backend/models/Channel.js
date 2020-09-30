@@ -8,7 +8,7 @@ const ChannelSchema = new Schema(
       required: true,
       trim: true,
       minlength: ["4", "Channel name must be at least 4 characters long"],
-      maxlength: ["15", "Channel name have to be less than 15 characters long"],
+      maxlength: ["50", "Channel name have to be less than 50 characters long"],
     },
     isPrivate: {
       type: Boolean,
@@ -16,7 +16,7 @@ const ChannelSchema = new Schema(
     },
     server: {
       type: Schema.Types.ObjectId,
-      required: true,
+      // required: true,
       ref: "Server",
     },
     members: [

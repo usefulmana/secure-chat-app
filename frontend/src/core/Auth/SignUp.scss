@@ -6,17 +6,20 @@ $linkSize: 1.2vw;
 $formHeight: 35vw;
 $formWidth: 30vw;
 
+
 .signup-cont {
+    margin-top: 2vw !important;
+}
 
-    .signin-form{
-        padding-top:1vw !important;
-        padding-bottom:2vw !important;
-
-        .my-form{
-            margin-bottom:0.3vw !important;
-        }
+.signup-cont {
+    .my-form {
+        margin-top: 0.1vw !important;
+        margin-bottom: 1vw !important;
     }
-    
+
+    .signin-button{
+        margin-top:1.5vw !important;
+    }
 }
 
 .sign-up-link {
@@ -24,4 +27,3 @@ $formWidth: 30vw;
     color: rgb(214, 176, 176);
     font-size: 1.1vw;
 }
-

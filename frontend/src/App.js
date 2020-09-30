@@ -9,21 +9,21 @@ import Profile from "./core/Profile/Profile";
 import PrivateRoute from "./auth/PrivateRoute";
 import TeamsList from './core/TeamsList/TeamsList';
 import Team from './core/Team/Team';
+import DmPage from './core/Dm/DmPage';
 
 function App() {
   return (
     <BrowserRouter>
       <Switch>
         <Route path="/" exact component={Main} />
-
         {/* <PrivateRoute path="/dashboard/" exact component={Dashboard} /> */}
+        
         <PrivateRoute path="/teams" exact component={TeamsList} />
-        {/* <PrivateRoute path="/dashboard/teams/:id" exact component={Dashboard} /> */}
         <PrivateRoute path="/team/:teamId/:channelId" exact component={Team} />
-        {/* <PrivateRoute path="/team/:teamId" exact component={Team} /> */}
+        <PrivateRoute path="/dm/:channelId" exact component={DmPage} />
+        
         <PrivateRoute path="/profile/" exact component={Profile} />
-        {/* <PrivateRoute path="/dashboard/locations" exact component={LocationPage} /> */}
-        {/* <AdminRoute path="/dashboard/users" exact component={UserMg} /> */}
+    
       </Switch>
     </BrowserRouter>
   );

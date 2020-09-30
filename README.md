@@ -10,14 +10,27 @@
 
 ## Records
 
-* Live application: https://chatrr-pp1.herokuapp.com/
+* Live application: https://latest-chattr-o5uuteegxq-ts.a.run.app/
 * Github repository : https://github.com/usefulmana/secure-chat-app
 * Google Drive: https://drive.google.com/drive/folders/1k7C7kY92FgoUpl27_qr1sY3MPOn9xP2S?usp=sharing
 * Trello board : https://trello.com/b/dhiFdITj
 
 # Changelog
 
-## [0.5] - 2020-06-20
+## [0.7] - 2020-09-30
+
+### Added
+
+* Emoji Support
+* Gif Support
+* Voice/Video Chat
+* Direct Messaging
+
+### Changed
+
+* Restyling of the application
+
+## [0.5] - 2020-09-18
 
 ### Added
 
@@ -33,7 +46,7 @@
 * Server page redesigned
 * User can now leave servers
 
-## [0.3] - 2020-06-20
+## [0.3] - 2020-09-01
 
 ### Added
 
@@ -55,7 +68,7 @@
 * Channels in a server now cannot have the same name
 
 
-## [0.1] - 2020-06-20
+## [0.1] - 2020-08-15
 
 ### Added
 

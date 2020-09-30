@@ -86,6 +86,7 @@ router.post("/verify/:token", (req, res) => {
 
 // Send Retrieve Password Email
 router.post("/forgot-pw", async (req, res) => {
+  console.log("body eami : ", req.body.email)
   const user = await User.findOne({ email: req.body.email });
 
   if (!user)
@@ -109,15 +110,15 @@ router.post("/search", passport.authenticate("jwt", { session: false }), async (
   console.log("username: email :", username, email)
 
   if (username) {
-    await User.find({ username: {"$regex": username,  "$options": "i"} }).select('-password').then(users => {
+    await User.find({ username: { "$regex": username, "$options": "i" } }).select('-password').then(users => {
       return res.status(200).json(users)
-      
+
     }).catch(err => res.status(404).send({ "message": `No users were found with username: ${username}` }));
-   
+
   }
   else if (email) {
 
-    const users = await User.find({ email: {"$regex": email,  "$options": "i"}}).select('-password');
+    const users = await User.find({ email: { "$regex": email, "$options": "i" } }).select('-password');
     if (!users) {
       return res.status(404).send({ "message": `No users were found with username: ${email}` })
     }

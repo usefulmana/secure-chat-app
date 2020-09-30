@@ -1,5 +1,5 @@
 
-const getToken = () => {
+export const getToken = () => {
     var token = undefined
     if (JSON.parse(localStorage.getItem('jwt'))) {
         token = JSON.parse(localStorage.getItem('jwt')).token
@@ -8,4 +8,11 @@ const getToken = () => {
     return token
 }
 
-export default getToken
+export const getUserId = () => {
+    var userID = undefined
+    if (JSON.parse(localStorage.getItem('jwt'))) {
+        userID = JSON.parse(localStorage.getItem('jwt')).user._id
+    }
+
+    return userID
+}

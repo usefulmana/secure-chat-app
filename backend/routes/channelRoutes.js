@@ -11,6 +11,10 @@ router.post(
   async (req, res) => {
     const { channelName, serverId, isPrivate } = req.body;
 
+    if (channelName.length > 20) {
+      return res.status(400).send({ message: "Channel name should be less than 20" });
+    }
+
     const server = await Server.findById(serverId)
       .then((s) => {
         const newChannel = Channel({
@@ -30,6 +34,57 @@ router.post(
           });
       })
       .catch((err) => res.status(404).send({ message: "Server Not Found" }));
+  }
+);
+
+// Create DM channel
+router.post(
+  "/create/dm",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    const { members } = req.body;
+
+    const channelName = `${members[0]}:${members[1]}`
+    const channel = await Channel.find({
+      name: { "$regex": members[0], "$options": "i" },
+      name: { "$regex": members[1], "$options": "i" }
+    })
+    console.log("channel : ", channel)
+    if (channel.length > 0) {
+      return res.status(400).send({ message: "Channel already exists" });
+    }
+
+    var newChannel = new Channel({ name: channelName, members })
+
+    newChannel.save((err, result) => {
+      if (err) {
+        return res.status(400).json({
+          error: err
+        });
+      }
+      console.log("result : ", result)
+      res.json(result);
+    });
+  }
+);
+
+
+// Get user's DM channel
+router.post(
+  "/get/dm",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    const { userId } = req.body;
+
+    const channel = await Channel.find({
+      name: { "$regex": userId, "$options": "i" },
+    }).populate({
+      path: "members",
+      populate: { path: "members" },
+      select: '-password -servers'
+    })
+
+    res.json(channel)
   }
 );
 
@@ -132,7 +187,7 @@ router.put(
     const { name } = req.body;
 
     if (name.length < 4 || name.length > 15) {
-      res.status(400).send({message: "Channel name not the right length"});
+      res.status(400).send({ message: "Channel name not the right length" });
     } else {
       Channel.findById(cId).then((channel) => {
         channel.name = name;
@@ -162,16 +217,16 @@ router.delete(
             }
           }
           s.save();
-          Channel.findByIdAndDelete(channelId).then( c =>
+          Channel.findByIdAndDelete(channelId).then(c =>
             res.status(200).json(c)
           );
         }
         else {
-            return res
-              .status(400)
-              .send({ message: "You do not have permission to do that" });
-          }
-      }).catch(err => res.status(400).send({message: "Server does not exists!"}));
+          return res
+            .status(400)
+            .send({ message: "You do not have permission to do that" });
+        }
+      }).catch(err => res.status(400).send({ message: "Server does not exists!" }));
   }
 );
 

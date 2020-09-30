@@ -1,9 +1,7 @@
 import { BASE_URL } from "../config";
 import Channel from "../core/Team/Channel";
-import getToken from './getToken'
-
+import { getToken, getUserId } from './getToken'
 const API = BASE_URL + '/api'
-
 
 // const getToken = () => {
 //     var token = undefined
@@ -23,6 +21,52 @@ export const getChannelInfo = async ({ channelId }) => {
             "Content-Type": "application/json",
             Authorization: `${token}`
         },
+
+    })
+        .then(response => {
+            return response.json();
+        })
+        .catch(err => {
+            console.log(err);
+        });
+};
+
+// Get user's dm channels
+export const getDmChannel = () => {
+    var userId = getUserId()
+    var token = getToken()
+
+    return fetch(`${API}/channel/get/dm`, {
+        method: "POST",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `${token}`
+        },
+        body: JSON.stringify({ userId })
+
+    })
+        .then(response => {
+            return response.json();
+        })
+        .catch(err => {
+            console.log(err);
+        });
+};
+
+// Create dm channel
+export const createDmChannel = ({ addedMember }) => {
+    var userId = getUserId()
+    var token = getToken()
+
+    return fetch(`${API}/channel/create/dm`, {
+        method: "POST",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `${token}`
+        },
+        body: JSON.stringify({ members: [userId, addedMember] })
 
     })
         .then(response => {

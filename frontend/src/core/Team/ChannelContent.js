@@ -4,9 +4,13 @@ import { getChannelInfo } from '../../API/channelAPI'
 import { getMessageFromChannel } from '../../API/chatAPI'
 import querySearch from "stringquery";
 import Chat from "../Common/Chat"
-import channelContent from './ChannelContent.scss'
+import './ChannelContent.scss'
 import socketClient from "../../Socket/clinet"
 import { isUserHasAccessToThisChannel } from './handleAccess'
+import Input from "./Input";
+import Draggable from "react-draggable";
+import { TweenLite } from 'gsap'
+import LiveChannel from "./LiveChannel";
 
 const ChannelContent = ({ history, match }) => {
     var jwt = JSON.parse(localStorage.getItem("jwt"));
@@ -16,15 +20,15 @@ const ChannelContent = ({ history, match }) => {
     const [newMessage, setNewMessage] = useState()
     const [messages, setMessages] = useState({})
     const [access, setAccess] = useState()
+    const [liveChatPopUp, setLiveChatPopUp] = useState(false)
+    const [maximized, setMaximized] = useState(true)
 
-
+    const [channelOnCall, setChannelOnCall] = useState(false)
 
     useEffect(() => {
         var channelId = initCurrentChannelId()
-
+        setChannelOnCall(false)
         getChannelInfo({ channelId }).then((data) => {
-            console.log("Data in get channel info : ", data)
-
             setChannelInfo(data)
             setAccess(isUserHasAccessToThisChannel(data))
             setCurrentChannelId(channelId)
@@ -37,33 +41,36 @@ const ChannelContent = ({ history, match }) => {
     }, [match.params.channelId])
 
     const socketInit = (channelId) => {
-        console.log("listenint to : ", JSON.stringify(channelId))
         socketClient.joinChannel(channelId, (updatedChannelId) => {
-              
-
-                
             if (updatedChannelId === match.params.channelId) {
                 getMessage(updatedChannelId)
             }
         })
+
+        socketClient.isChannelOnCall(channelId, (isOnline) => {
+            if (isOnline) setChannelOnCall(true)
+        })
+
+        socketClient.listenChannelCall(channelId, () => {
+            setChannelOnCall(true)
+        })
+
+        socketClient.listenCallFinish( () => {
+            setChannelOnCall(false)
+        })
     }
 
     const initCurrentChannelId = (channels) => {
-        console.log("param : ", match.params.channelId)
         var channelId = match.params.channelId;
         // var channelId = querySearch(history.location.search).channel;
         return channelId
     }
 
     const getMessage = (channelId) => {
-        console.log("updated channel id : ", channelId)
-        console.log("currentChannleid : ", match.params.channelId)
         getMessageFromChannel({ channelId }).then((data) => {
             if (data?.error) {
             } else {
                 setMessages(data)
-                console.log("data in get message from channel :", data)
-                console.log("match.params.channelId:", match.params.channelId)
                 scrollToBottom()
             }
         })
@@ -99,24 +106,65 @@ const ChannelContent = ({ history, match }) => {
         )
     }
 
-    const showNewMessageForm = () => {
-        return (
-            <form className="form-cont" onSubmit={handleSubmit} >
-                <input placeholder="Start new chat!" className="" value={newMessage} onChange={(e) => { setNewMessage(e.target.value) }} />
-            </form>
+    const isMaximized = () => {
+        if (maximized) {
+            return 'maximized draggable-cont'
+        } else {
+            return 'draggable-cont'
+        }
+    }
+
+    const moveDraggable = () => {
+        var target = document.querySelector('.draggable-cont')
+        TweenLite.to(target, 0, { x: 0, y: 0 })
+    }
+
+    const renderDraggable = () => {
+        return liveChatPopUp && (
+            <Draggable disabled={maximized} >
+                <div className={isMaximized()}>
+                    <div className="button-cont row">
+                        {maximized && <div className="size-icon" onClick={() => setMaximized(!maximized)}><i class="fa fa-minus-square-o" aria-hidden="true"></i>
+                        </div>}
+                        {!maximized && <div className="size-icon" onClick={() => { setMaximized(!maximized); moveDraggable() }}><i class="fa fa-window-maximize" aria-hidden="true"></i>
+                        </div>}
+                        <div className="leave-icon" onClick={() => { setLiveChatPopUp(false); socketClient.socket.emit("disconnect-live-chat"); window.location.reload() }}><i class="fa fa-times" aria-hidden="true"></i>
+                        </div>
+                    </div>
+                    <LiveChannel channelId={currentChannelId} />
+                </div>
+            </Draggable>
         )
     }
 
+    const isChannelOnCall = () => {
+        if (channelOnCall) {
+            return 'channel-on-call'
+        }
+    }
+
+    const handleJoinCall=()=>{
+        if(!channelOnCall) socketClient.initCallOnChannel(currentChannelId)
+        setLiveChatPopUp(true)
+    }
+
     return access ? (
-        <div className="channel-content-cont">
-            <div className="content-cont">
-                {/* {currentChannelId} */}
-                {renderMessages()}
+        <>
+            <div className="channel-content-cont">
+                <div className={`live-chat-btn btn ${isChannelOnCall()}`} onClick={handleJoinCall}>
+                    <i class="fa fa-phone-square" aria-hidden=""></i>
+                    {channelOnCall && <span className="channel-on-call-msg">Channel is on call</span>}
+                </div>
+                <div className="content-cont">
+                    {/* {currentChannelId} */}
+                    {renderDraggable()}
+                    {renderMessages()}
+                </div>
+                <div className="new-message-cont ">
+                    <Input currentChannelId={currentChannelId} />
+                </div>
             </div>
-            <div className="new-message-cont ">
-                {showNewMessageForm()}
-            </div>
-        </div>
+        </>
     ) : <></>
 }
 

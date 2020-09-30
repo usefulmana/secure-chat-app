@@ -20,11 +20,10 @@ const Layout = ({ loading, history, children }) => {
         history.push('/')
     }
 
-    const isActive = () => {
+    const isActive = (option) => {
 
         var pathname = history.location.pathname
-
-        if (pathname.includes('teams')) {
+        if (pathname.includes(option)) {
             return "each-section active-each-section"
         } else {
             return "each-section"
@@ -35,9 +34,13 @@ const Layout = ({ loading, history, children }) => {
         return (
             <>
                 <div className="side-navbar-cont">
-                    <div className={isActive()} onClick={handleClick('teams')}>
+                    <div className={isActive('teams')} onClick={handleClick('teams')}>
                         <i class="fa fa-users teams-icon icon"></i>
                         <div className="text-center">Teams</div>
+                    </div>
+                    <div className={isActive('dm')} onClick={handleClick('dm/awe')}>
+                        <i class="fa fa-comments icon" aria-hidden="true"></i>
+                        <div className="text-center">Chats</div>
                     </div>
                     {/* <div className="btn option-btn" onClick={handleClick('contact')}>Contact</div> */}
                     {/* <div className="btn option-btn" onClick={handleClick('chats')}>Chats</div> */}

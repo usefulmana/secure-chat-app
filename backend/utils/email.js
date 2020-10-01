@@ -25,7 +25,7 @@ const sendEMail =  async (user, type) =>{
         from: process.env.EMAIL_USER,
         to: user.email,
         subject: type === 'forgotpw'? 'Chattr - Recover your password': 'Welcome to Chattr - Please verify your email',
-        html: `Click <a href='${process.env.CLIENT_URL}/${token}'> here</a>  to finish this action!`
+        html: `Click <a href='${process.env.CLIENT_URL}/forgot/${token}'> here</a>  to finish this action!`
     })
 
     console.log("Message sent: %s", info.messageId);

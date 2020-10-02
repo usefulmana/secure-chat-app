@@ -243,10 +243,10 @@ io.on("connection", (socket) => {
       rooms[roomID] = [socket.id];
     }
     socketToRoom[socket.id] = roomID;
-    const roomsInThisRoom = rooms[roomID].filter(id => id !== socket.id);
-    console.log("sedning all roomse event and user in room : ", roomsInThisRoom)
+    const usersInThisRoom = rooms[roomID].filter(id => id !== socket.id);
+    console.log("sedning all roomse event and user in room : ", usersInThisRoom)
 
-    socket.emit("all rooms", roomsInThisRoom);
+    socket.emit("all users", usersInThisRoom);
   });
 
   socket.on("sending signal", payload => {

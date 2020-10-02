@@ -36,7 +36,6 @@ const SignIn = ({ history, visible, flipVisibility }) => {
                     setValues({ ...values, error: data.message })
                 }
                 else {
-                    console.log("what is data after login is succesfull : ", data.user.servers)
                     authenticate(data, () => {
                         history.push(`/teams`)
                     });

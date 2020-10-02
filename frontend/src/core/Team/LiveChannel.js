@@ -29,6 +29,7 @@ const LiveChannel = ({ history, channelId }) => {
 
 
     const [peers, setPeers] = useState([]);
+    const [tracks, setTracks] = useState({})
     const socketRef = useRef();
     const userVideo = useRef();
     const peersRef = useRef([]);
@@ -37,6 +38,13 @@ const LiveChannel = ({ history, channelId }) => {
     useEffect(() => {
         setPeers([])
         navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
+
+            setTracks({
+                ...tracks,
+                videoTrack: stream.getVideoTracks()[0],
+                audioTrack: stream.getAudioTracks()[0]
+            })
+
             initPeer(stream)
         }).catch(() => {
             requireAudio()
@@ -45,6 +53,10 @@ const LiveChannel = ({ history, channelId }) => {
 
     const requireAudio = () => {
         navigator.mediaDevices.getUserMedia({ video: false, audio: true }).then(stream => {
+
+            console.log("before setting")
+            setTracks({ ...tracks, audioTrack: stream.getAudioTracks()[0] })
+
             initPeer(stream)
         }).catch(() => {
             requireNone()
@@ -158,9 +170,39 @@ const LiveChannel = ({ history, channelId }) => {
         }
     }
 
+    const handleToggle = (option) => () => {
+        if (tracks[option]) {
+            tracks[option].enabled = !tracks[option].enabled
+            setTracks({ ...tracks })
+        }
+    }
+
+    const renderOptions = () => {
+        return (
+            <div className="option-cont row">
+                {console.log(tracks.audioTrack?.enabled)}
+                {tracks.audioTrack?.enabled === true ?
+                    <i class="fa fa-microphone" aria-hidden="true" onClick={handleToggle('audioTrack')}></i>
+                    :
+                    <i class="fa fa-microphone-slash" aria-hidden="true" onClick={handleToggle('audioTrack')}></i>
+
+                }
+                {tracks.videoTrack?.enabled === true ?
+                    <i class="fa fa-video-camera" aria-hidden="true" onClick={handleToggle('videoTrack')}></i>
+                    :
+                    <div className="disable-video-cont">
+                        <i class="fa fa-video-camera" aria-hidden="true" onClick={handleToggle('videoTrack')}></i>
+                        <span>\</span>
+                    </div>
+                }
+            </div>
+        )
+    }
+
     return (
         <div className={`live-chat-cont row-w AIC JCC ${styleVideoBasedOnNum()}`}>
             {/* <StyledVideo muted ref={userVideo} autoPlay playsInline /> */}
+            {console.log("peers: ", peers)}
             <video className="peer-video" muted ref={userVideo} autoPlay playsInline />
             {peers.map((peer, index) => {
 
@@ -168,6 +210,7 @@ const LiveChannel = ({ history, channelId }) => {
                     <Video key={index} peer={peer} />
                 );
             })}
+            {renderOptions()}
         </div>
     );
 

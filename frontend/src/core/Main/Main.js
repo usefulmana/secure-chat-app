@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
 import './Main.scss'
-import { signin, authenticate } from '../../API/userAPI'
 import Loader from '../Loader'
 import SignIn from '../Auth/SignIn'
 import SignUp from "../Auth/SignUp";
-
+import querySearch from "stringquery";
+import { authenticate, currentUser } from "../../API/userAPI"
 
 const Main = ({ history }) => {
     var jwt = JSON.parse(localStorage.getItem("jwt"));
@@ -25,24 +24,19 @@ const Main = ({ history }) => {
     const { email, password, loading, error } = values;
 
     useEffect(() => {
-        // var parallax = new Parallax(document.getElementById('scene'))
+        var token = querySearch(history.location.search).token;
+        if (token) {
+            localStorage.setItem('jwt', { token: `Bearer ${token}` })
+            currentUser().then(data => {
+                if (data.errors || data.message) {
 
-        // anime({
-        //     targets: '.morph',
-        //     easing: 'easeInOutQuint',
-        //     duration: 1000,
-        //     loop: false,
-        //     d: [
-        //         {
-        //             value: middleValue
-        //         }
-
-        //         // {
-        //         //     value: "M0,0S35.68,426.3,270.517,423.268,414.871,297.2,590.707,297.2c106.908,0,277.86,195.024,310.862,194.475,84.187-1.4,283.11-278.521,469.674-281.556s126.164,323.813,272.15,378.21,240.9-18.452,265.62-31.059S1922.585,1080,1922.585,1080H0Z"
-        //         // },
-        //         // {value: "M0,1080s24.4-.675,254.065,0,145.874,0,321.71,0,233.022.586,322.1,0,194.1-.675,379.879,0,107.792-.586,258.4,0,217.906-.675,244.382,0,142.046,0,142.046,0H0Z" }
-        //     ],
-        // });
+                } else {
+                    authenticate(data)
+                    history.push('/teams')
+                }
+            }
+            ).catch()
+        }
     }, [])
 
     const flipVisibility = () => {

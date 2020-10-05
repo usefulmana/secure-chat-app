@@ -1,10 +1,25 @@
 import React, { Component } from "react";
-import { Route, Redirect } from "react-router-dom";
-import { isAuthenticated } from "../API/userAPI";
+import { Route, Redirect, withRouter } from "react-router-dom";
+import { isAuthenticated, currentUser } from "../API/userAPI";
 
-const PrivateRoute = ({ component, ...rest }) => {
-    return isAuthenticated() ? 
-    <Route {...rest} component={component} />: <Redirect to={'/'}/>
+const PrivateRoute = ({ history, component, ...rest }) => {
+
+    if (!isAuthenticated) {
+        history.push('/no/access')
+        window.location.reload()
+    }
+
+    currentUser().then((data) => {
+        if (data === null || data===undefined) {
+            localStorage.removeItem('jwt')
+            history.push('/')
+            window.location.reload()
+        }
+    }).catch()
+
+
+    return isAuthenticated() ?
+        <Route {...rest} component={component} /> : <Redirect to={'/'} />
 };
 
-export default PrivateRoute;
+export default withRouter(PrivateRoute);

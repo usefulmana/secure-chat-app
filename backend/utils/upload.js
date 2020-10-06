@@ -21,7 +21,7 @@ s3 = new aws.S3();
 const upload = multer({
   storage: multerS3({
     s3: s3,
-    bucket: "public-chattr",
+    bucket: process.env.AWS_S3_BUCKET || "public-chattr",
     acl: "public-read",
     fileFilter: fileFilter,
     key: function (req, file, cb) {

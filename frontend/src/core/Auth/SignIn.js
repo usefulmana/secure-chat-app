@@ -122,13 +122,13 @@ const SignIn = ({ history, visible, flipVisibility }) => {
                         <label className={isFilled("password")} data-error="wrong" for="Form-pass1">Your password</label>
                     </div>
                     <div type="button" class="btn signin-button oauth-base" onClick={handleSubmit}>Sign in</div>
-                    <div type="button" class="btn signin-button-facebook oauth-base" >
+                    {/* <div type="button" class="btn signin-button-facebook oauth-base" >
 
                         <a href={OAuthSignIn('facebook')}>
                             <i class="fa fa-facebook-official" aria-hidden="true"></i>Sign in with Facebook
                             <i class="fa fa-gogle" aria-hidden="true"></i>Sign in with Google
                         </a>
-                    </div>
+                    </div> */}
                     <div type="button" class="btn signin-button-google oauth-base" >
                         <a href={OAuthSignIn('google')}>
                             <i class="fa fa-google" aria-hidden="true"></i>Sign in with Google

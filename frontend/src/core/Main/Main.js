@@ -26,9 +26,9 @@ const Main = ({ history }) => {
     useEffect(() => {
         var token = querySearch(history.location.search).token;
         if (token) {
-            localStorage.setItem('jwt', JSON.stringify({token: `Bearer ${token}` }))
+            localStorage.setItem('jwt', JSON.stringify({ token: `Bearer ${token}` }))
             currentUser().then(data => {
-                if (data.errors || data.message) {
+                if (data === null || data === undefined) {
 
                 } else {
                     var jwt = JSON.parse(localStorage.getItem('jwt'))

@@ -25,9 +25,8 @@ const Main = ({ history }) => {
 
     useEffect(() => {
         var token = querySearch(history.location.search).token;
-        console.log("querySearch(history.location.search) : ", querySearch(history.location.search))
         if (token) {
-            localStorage.setItem('jwt', JSON.stringify({ token: `Bearer ${token}` }))
+            localStorage.setItem('jwt', JSON.stringify({token: `Bearer ${token}` }))
             currentUser().then(data => {
                 if (data.errors || data.message) {
 

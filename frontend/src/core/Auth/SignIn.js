@@ -89,18 +89,14 @@ const SignIn = ({ history, visible, flipVisibility }) => {
     //     return errorMessage
     // }
 
-    const handleOAuth = (option) => (e) => {
-        OAuthSignIn({ option }).then((data) => {
 
-        }).catch()
-    }
 
     const handleForgotPassword = () => {
         forgotPassword({ email }).then((data) => {
             if (data.error) {
                 setValues({ ...values, error: data.error })
-            }else{
-                
+            } else {
+
             }
         }).catch()
     }
@@ -126,14 +122,15 @@ const SignIn = ({ history, visible, flipVisibility }) => {
                         <label className={isFilled("password")} data-error="wrong" for="Form-pass1">Your password</label>
                     </div>
                     <div type="button" class="btn signin-button oauth-base" onClick={handleSubmit}>Sign in</div>
-                    <div type="button" class="btn signin-button-facebook oauth-base" onClick={handleOAuth('facebook')}>
+                    <div type="button" class="btn signin-button-facebook oauth-base" onClick={OAuthSignIn('facebook')}>
 
                         <i class="fa fa-facebook-official" aria-hidden="true"></i>Sign in with Facebook
 
                     </div>
-                    <div type="button" class="btn signin-button-google oauth-base" onClick={handleOAuth('google')}>
-                        <i class="fa fa-google" aria-hidden="true"></i>Sign in with Google
-
+                    <div type="button" class="btn signin-button-google oauth-base" onClick={OAuthSignIn('google')}>
+                        <a href={OAuthSignIn('google')}>
+                            <i class="fa fa-google" aria-hidden="true"></i>Sign in with Google
+                        </a>
                     </div>
 
                 </div>

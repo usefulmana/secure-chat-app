@@ -11,23 +11,8 @@ const API = BASE_URL + '/api'
 // router.get('/google/redirect', passport.authenticate('google', {failureRedirect: '/login'}), socialAuthActions.google);
 // router.get('/facebook/redirect', passport.authenticate('facebook'), socialAuthActions.facebook);
 
-export const OAuthSignIn = ({ option }) => {
-    var token = getToken()
-
-    return fetch(`${API}/auth/${option}`, {
-        method: "GET",
-        headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `${token}`
-        }
-    })
-        .then(response => {
-            return response.json();
-        })
-        .catch(err => {
-            console.log(err);
-        });
+export const OAuthSignIn = (option) => {
+    return `${API}/auth/${option}`
 };
 
 export const facebookSignin = () => {

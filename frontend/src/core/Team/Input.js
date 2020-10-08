@@ -21,9 +21,14 @@ const Input = ({ history, match, currentChannelId }) => {
     const [pendingFile, setPendingFile] = useState("")
 
     const onEmojiClick = (event, emojiObject) => {
-        var firstString = newMessage.slice(0, caretPosition)
-        var secondString = newMessage.slice(caretPosition)
-        setNewMessage(firstString + emojiObject.emoji + secondString)
+        if (newMessage) {
+            var firstString = newMessage.slice(0, caretPosition)
+            var secondString = newMessage.slice(caretPosition)
+            setNewMessage(firstString + emojiObject.emoji + secondString)
+        } else{
+            setNewMessage(emojiObject.emoji)
+        }
+
     };
     useEffect(() => {
         window.addEventListener('click', (e) => {
@@ -101,7 +106,7 @@ const Input = ({ history, match, currentChannelId }) => {
         e.preventDefault()
         var messaegeToSend = newMessage
         if (pendingFile !== "") messaegeToSend = pendingFile + `&message=${newMessage}`
-        console.log("messaegeToSend : " , messaegeToSend)
+        console.log("messaegeToSend : ", messaegeToSend)
         socketClient.createNewMessge({ channelId: currentChannelId, userId, message: messaegeToSend })
         // getMessage(currentChannelId)
         setNewMessage("")

@@ -10,6 +10,7 @@ const PrivateRoute = ({ history, component, ...rest }) => {
     }
 
     currentUser().then((data) => {
+        console.log("data : ", data)
         if (data === null || data===undefined) {
             localStorage.removeItem('jwt')
             history.push('/')

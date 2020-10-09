@@ -128,6 +128,7 @@ export const authenticate = (data, next) => {
         localStorage.setItem("jwt", JSON.stringify(data));
         next()
     }
+    next();
 };
 
 export const signout = next => {

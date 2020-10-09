@@ -140,7 +140,9 @@ const SignIn = ({ history, visible, flipVisibility }) => {
                         Have not had account yet?
                     </div>
                     <div className="text-center ">
-                        <span className="sign-up-link btn" onClick={flipVisibility}>Sign up or</span><span className="forgot-password-link" onClick={handleForgotPassword}>Forgot passwrod?</span>
+                        <span className="sign-up-link btn" onClick={flipVisibility}>Sign up <span className="or-text">or</span></span>
+                        
+                        <span className="forgot-password-link" onClick={handleForgotPassword}>Forgot passwrod?</span>
                     </div>
 
                 </div>

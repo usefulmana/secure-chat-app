@@ -12,29 +12,45 @@ import Peer from "simple-peer";
 const Video = (props) => {
 
     const ref = useRef();
+    var videoEnabled = undefined
+    var micEnabled = undefined
 
+    const { username, videoTrack, audioTrack } = props.peerRef
+    console.log("props.peerRef in vdeio : ", props.peerRef)
     useEffect(() => {
         props.peer.on("stream", stream => {
+            console.log("peer.getVideoTracks : ", stream.getVideoTracks())
+            console.log("peer.getAudioTracks : ", stream.getAudioTracks())
+
             ref.current.srcObject = stream;
         })
     }, []);
 
     return (
-        // <StyledVideo playsInline autoPlay ref={ref} />
-        <video className="peer-video" playsInline autoPlay ref={ref} />
+        <div className="video-cont peer-video">
+            {videoTrack === false ?
+                <div className="video-disabled row AIC JCC">
+                    <div className="username row AIC JCC">{username}</div>
+                </div>
+                :
+                <div className="username">{username}</div>
+            }
+            <video className="peer-video" playsInline autoPlay ref={ref} />
+        </div>
     );
 }
 
 const LiveChannel = ({ history, channelId }) => {
 
-
+    var jwt = JSON.parse(localStorage.getItem("jwt"));
+    const username = jwt.user.username
     const [peers, setPeers] = useState([]);
     const [tracks, setTracks] = useState({})
     const socketRef = useRef();
     const userVideo = useRef();
-    const peersRef = useRef([]);
+    var peersRef = useRef([]);
     const roomID = channelId;
-
+    const [dummy, setDummy] = useState(0)
     useEffect(() => {
         setPeers([])
         navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
@@ -53,8 +69,6 @@ const LiveChannel = ({ history, channelId }) => {
 
     const requireAudio = () => {
         navigator.mediaDevices.getUserMedia({ video: false, audio: true }).then(stream => {
-
-            console.log("before setting")
             setTracks({ ...tracks, audioTrack: stream.getAudioTracks()[0] })
 
             initPeer(stream)
@@ -67,13 +81,14 @@ const LiveChannel = ({ history, channelId }) => {
         navigator.mediaDevices.getUserMedia({ video: false, audio: false }).then(stream => {
             initPeer(stream)
         }).catch(() => {
-
+            // user has no mic and video enabled
+            initPeer(new MediaStream)
         })
     }
 
     const initPeer = (stream) => {
         userVideo.current.srcObject = stream;
-        socketClient.socket.emit("join room", roomID);
+        socketClient.socket.emit("join room", { roomID, username });
         socketClient.socket.on("all users", users => {
             const peers = [];
             users.forEach(userID => {
@@ -88,10 +103,12 @@ const LiveChannel = ({ history, channelId }) => {
         })
 
         socketClient.socket.on("user joined", payload => {
+            console.log("user joined", payload)
             const peer = addPeer(payload.signal, payload.callerID, stream);
             peersRef.current.push({
                 peerID: payload.callerID,
                 peer,
+                username: payload.username
             })
 
             setPeers(users => [...users, peer]);
@@ -119,9 +136,24 @@ const LiveChannel = ({ history, channelId }) => {
         });
 
         socketClient.socket.on("receiving returned signal", payload => {
-            const item = peersRef.current.find(p => p.peerID === payload.id);
+            console.log("peersRef: ", peersRef.current)
+            console.log("payload: ", payload)
+            const item = peersRef.current.find(p => p.peerID.socketId === payload.id);
 
             item.peer.signal(payload.signal);
+        });
+
+        socketClient.socket.on("send-video-toggled", payload => {
+
+            peersRef.current = peersRef.current.map(p => {
+                if (p.peerID === payload.id) {
+                    p[payload.option] = payload.value
+                    return p
+                } else {
+                    return p
+                }
+            })
+            setDummy(payload)
         });
     }
 
@@ -133,7 +165,7 @@ const LiveChannel = ({ history, channelId }) => {
         });
 
         peer.on("signal", signal => {
-            socketClient.socket.emit("sending signal", { userToSignal, callerID, signal })
+            socketClient.socket.emit("sending signal", { userToSignal, callerID, signal, username })
         })
 
         return peer;
@@ -170,10 +202,13 @@ const LiveChannel = ({ history, channelId }) => {
         }
     }
 
+
+
     const handleToggle = (option) => () => {
         if (tracks[option]) {
             tracks[option].enabled = !tracks[option].enabled
             setTracks({ ...tracks })
+            socketClient.socket.emit("user-toggle-video", { roomID, option, value: tracks[option].enabled })
         }
     }
 
@@ -201,13 +236,22 @@ const LiveChannel = ({ history, channelId }) => {
 
     return (
         <div className={`live-chat-cont row-w AIC JCC ${styleVideoBasedOnNum()}`}>
-            {/* <StyledVideo muted ref={userVideo} autoPlay playsInline /> */}
-            {console.log("peers: ", peers)}
-            <video className="peer-video" muted ref={userVideo} autoPlay playsInline />
-            {peers.map((peer, index) => {
+            <div className="peer-video video-cont">
+                <div>
+                    {(!tracks.videoTrack || tracks?.videoTrack?.enabled === false) &&
+                        <div className="video-disabled AIC JCC row">
+                            You
+                        </div>
+                    }
+                </div>
+                <video className="peer-video" muted ref={userVideo} autoPlay playsInline />
 
+            </div>
+
+            {peers.map((peer, index) => {
+                console.log("peersRef.current[index] : ", peersRef.current[index])
                 return index < 3 && (
-                    <Video key={index} peer={peer} />
+                    <Video key={index} peer={peer} peerRef={peersRef.current[index]} />
                 );
             })}
             {renderOptions()}

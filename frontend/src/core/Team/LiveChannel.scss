@@ -51,6 +51,32 @@
     }
 }
 
+.video-cont {
+    position: relative;
+    .video-disabled {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        // background-color: rgb(68, 68, 68);
+        // color: black;
+        z-index: 1;
+        font-size: 1.5vw;
+        color:white;
+        // .username {
+        //     width: 35%;
+        //     height: 40%;
+        //     border-radius: 30vw;
+        //     // border: 1vw solid rgb(135, 141, 228);
+        //     // background-color: rgb(60, 166, 228);
+        //     text-align: center;
+          
+        //     font-weight: 600;
+        // }
+    }
+}
+
 .p-1 {
     .peer-video {
         width: 50%;

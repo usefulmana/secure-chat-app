@@ -230,7 +230,7 @@ io.on("connection", (socket) => {
   })
 
 
-  socket.on("join room", roomID => {
+  socket.on("join room", ({ roomID, username }) => {
     console.log("socket id: ", socket.id, " joined room event received roomId: ", roomID)
     if (rooms[roomID]) {
       // const length = rooms[roomID].length;
@@ -238,12 +238,12 @@ io.on("connection", (socket) => {
       //   socket.emit("room full");
       //   return;
       // }
-      rooms[roomID].push(socket.id);
+      rooms[roomID].push({ socketId: socket.id, username });
     } else {
-      rooms[roomID] = [socket.id];
+      rooms[roomID] = [{ socketId: socket.id, username }];
     }
     socketToRoom[socket.id] = roomID;
-    const usersInThisRoom = rooms[roomID].filter(id => id !== socket.id);
+    const usersInThisRoom = rooms[roomID].filter(user => user.socketId !== socket.id);
     console.log("sedning all roomse event and user in room : ", usersInThisRoom)
 
     socket.emit("all users", usersInThisRoom);
@@ -251,7 +251,7 @@ io.on("connection", (socket) => {
 
   socket.on("sending signal", payload => {
     console.log("sending user joined event to ", payload.userToSignal)
-    io.to(payload.userToSignal).emit('user joined', { signal: payload.signal, callerID: payload.callerID });
+    io.to(payload.userToSignal.socketId).emit('user joined', { signal: payload.signal, callerID: payload.callerID, username: payload.username });
   });
 
   socket.on("returning signal", payload => {
@@ -259,11 +259,16 @@ io.on("connection", (socket) => {
     io.to(payload.callerID).emit('receiving returned signal', { signal: payload.signal, id: socket.id });
   });
 
+  socket.on("user-toggle-video", payload => {
+    console.log("user-toggle-vdeio event : ", { roomId: payload.roomID, id: socket.id, video: payload.video })
+    io.to(payload.roomID).emit('send-video-toggled', { id: socket.id, ...payload });
+  });
+
   socket.on('disconnect', () => {
     const roomID = socketToRoom[socket.id];
     let room = rooms[roomID];
     if (room) {
-      room = room.filter(id => id !== socket.id);
+      room = room.filter(user => user.socketId !== socket.id);
       rooms[roomID] = room;
 
       room.map((id) => {

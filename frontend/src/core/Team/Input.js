@@ -25,7 +25,7 @@ const Input = ({ history, match, currentChannelId }) => {
             var firstString = newMessage.slice(0, caretPosition)
             var secondString = newMessage.slice(caretPosition)
             setNewMessage(firstString + emojiObject.emoji + secondString)
-        } else{
+        } else {
             setNewMessage(emojiObject.emoji)
         }
 
@@ -59,11 +59,6 @@ const Input = ({ history, match, currentChannelId }) => {
 
 
     const handleFormData = async (e) => {
-        var arr = []
-        var length = e.target.files.length
-        // for (let i = 0; i < length; i++) {
-        //     formData.append(`file-${i}`, e.target.files[i])
-        // }
         formData.append('file', e.target.files[0])
         formData.append('upload_preset', 'chattr')
         formData.append('folder', `chattr/${currentChannelId}`)
@@ -77,30 +72,9 @@ const Input = ({ history, match, currentChannelId }) => {
         console.log("file : ", file)
 
         const formattedMessage = file.secure_url + `?filename=${file.original_filename}`
-
-
+        console.log("formattedMessage : ", formattedMessage)
         setPendingFile(formattedMessage)
-
-        // socketClient.createNewMessge({ channelId: currentChannelId, userId, message: formattedMessage })
-        // // getMessage(currentChannelId)
-
-        // setNewMessage("")
     }
-
-    // const handleFileSubmit = async () => {
-    //     var res = await fetch('https://api.cloudinary.com/v1_1/ddd5rvj1e/image/upload', {
-    //         method: 'POST',
-    //         body: formData
-    //     })
-
-    //     const file = await res.json()
-    //     console.log("file : ", file)
-
-    //     const formattedMessage = file.secure_url + `?filename=${ file.original_filename }`
-    //     socketClient.createNewMessge({ channelId: currentChannelId, userId, message: formattedMessage })
-    //     // getMessage(currentChannelId)
-    //     setNewMessage("")
-    // }
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -135,12 +109,16 @@ const Input = ({ history, match, currentChannelId }) => {
         }
     }
 
+    const removeFile = () => {
+        setPendingFile("")
+    }
+
     const showNewMessageForm = () => {
         return (
             <form className="form-cont" onSubmit={handleSubmit} >
                 {pendingFile &&
                     <div className="file-preview-cont">
-                        <div className="delete-btn btn">x</div>
+                        <div className="delete-btn btn" onClick={removeFile}>x</div>
                         {filePreView()}
                     </div>
                 }

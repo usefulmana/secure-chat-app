@@ -28,9 +28,9 @@ const Video = (props) => {
 
     return (
         <div className="video-cont peer-video">
-            {videoTrack === false ?
+            {videoTrack === false || videoTrack === undefined ?
                 <div className="video-disabled row AIC JCC">
-                    <div className="username row AIC JCC">{username}</div>
+                    {username}
                 </div>
                 :
                 <div className="username">{username}</div>

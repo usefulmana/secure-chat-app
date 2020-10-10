@@ -10,7 +10,7 @@ import { isUserHasAccessToThisChannel } from './handleAccess'
 import Picker from 'emoji-picker-react';
 import { parseFileMessage, parseFileName } from "../Common/parse"
 
-const Input = ({ history, match, currentChannelId }) => {
+const Input = ({ history, match, currentChannelId, setLoading }) => {
     var jwt = JSON.parse(localStorage.getItem("jwt"));
     const userId = jwt.user._id
     const [newMessage, setNewMessage] = useState()
@@ -59,6 +59,8 @@ const Input = ({ history, match, currentChannelId }) => {
 
 
     const handleFormData = async (e) => {
+        setLoading(true)
+
         formData.append('file', e.target.files[0])
         formData.append('upload_preset', 'chattr')
         formData.append('folder', `chattr/${currentChannelId}`)
@@ -74,6 +76,8 @@ const Input = ({ history, match, currentChannelId }) => {
         const formattedMessage = file.secure_url + `?filename=${file.original_filename}`
         console.log("formattedMessage : ", formattedMessage)
         setPendingFile(formattedMessage)
+        setLoading(false)
+
     }
 
     const handleSubmit = (e) => {

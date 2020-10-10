@@ -6,7 +6,6 @@ import { TweenLite } from 'gsap'
 import TeamOptions from '../Common/TeamOptions'
 // CSS
 import './DmPage.scss'
-import Channel from "./Channel";
 import querySearch from "stringquery";
 import { currentUser } from "../../API/userAPI";
 import { getDmChannel } from '../../API/channelAPI'

@@ -94,9 +94,14 @@ const Channel = ({ history, match, teamInfo, channel, isAdmin }) => {
 
         return isAdmin ?
             <>
-                <div className="each-option edit-channel-btn" onClick={() => { setEditFormOpened(true) }}>Edit channel name</div>
-                <div className="each-option delete-channel-btn" onClick={handleDelete}>Delete channel</div>
-                {isPrivate && <div className="each-option delete-channel-btn" onClick={() => { setAddMemberFormOpened(true) }}>Add member</div>}
+                <div className="channel-option-btn" >
+                    ...
+                <div className="drop-down">
+                        <div className="each-option edit-channel-btn" onClick={() => { setEditFormOpened(true) }}>Edit channel name</div>
+                        <div className="each-option delete-channel-btn" onClick={handleDelete}>Delete channel</div>
+                        {isPrivate && <div className="each-option delete-channel-btn" onClick={() => { setAddMemberFormOpened(true) }}>Add member</div>}
+                    </div>
+                </div>
             </>
             :
             <></>
@@ -104,14 +109,7 @@ const Channel = ({ history, match, teamInfo, channel, isAdmin }) => {
 
     return accesToChannel ? (
         <div className={isActive()} >
-            <div className="channel-option-btn" >
-                ...
-                <div className="drop-down">
-                    {showOptions()}
-
-                </div>
-
-            </div>
+            {showOptions()}
             <div className="channel-name row AIC" onClick={handleClick}>
                 {notificationOn && <i class="fas fa-circle notification"></i>}
                 {channelName}

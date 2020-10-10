@@ -11,6 +11,7 @@ import Input from "./Input";
 import Draggable from "react-draggable";
 import { TweenLite } from 'gsap'
 import LiveChannel from "./LiveChannel";
+import Loader from "../Common/Loader"
 
 const ChannelContent = ({ history, match }) => {
     var jwt = JSON.parse(localStorage.getItem("jwt"));
@@ -22,10 +23,12 @@ const ChannelContent = ({ history, match }) => {
     const [access, setAccess] = useState()
     const [liveChatPopUp, setLiveChatPopUp] = useState(false)
     const [maximized, setMaximized] = useState(true)
+    const [loading, setLoading] = useState(true)
 
     const [channelOnCall, setChannelOnCall] = useState(false)
 
     useEffect(() => {
+        setLoading(true)
         var channelId = initCurrentChannelId()
         setChannelOnCall(false)
         getChannelInfo({ channelId }).then((data) => {
@@ -34,7 +37,7 @@ const ChannelContent = ({ history, match }) => {
             setCurrentChannelId(channelId)
             getMessage(channelId)
             socketInit(channelId)
-
+            setLoading(false)
         }).catch()
 
 
@@ -55,7 +58,7 @@ const ChannelContent = ({ history, match }) => {
             setChannelOnCall(true)
         })
 
-        socketClient.listenCallFinish( () => {
+        socketClient.listenCallFinish(() => {
             setChannelOnCall(false)
         })
     }
@@ -143,28 +146,27 @@ const ChannelContent = ({ history, match }) => {
         }
     }
 
-    const handleJoinCall=()=>{
-        if(!channelOnCall) socketClient.initCallOnChannel(currentChannelId)
+    const handleJoinCall = () => {
+        if (!channelOnCall) socketClient.initCallOnChannel(currentChannelId)
         setLiveChatPopUp(true)
     }
 
     return access ? (
-        <>
-            <div className="channel-content-cont">
-                <div className={`live-chat-btn btn ${isChannelOnCall()}`} onClick={handleJoinCall}>
-                    <i class="fa fa-phone-square" aria-hidden=""></i>
-                    {channelOnCall && <span className="channel-on-call-msg">Channel is on call</span>}
-                </div>
-                <div className="content-cont">
-                    {/* {currentChannelId} */}
-                    {renderDraggable()}
-                    {renderMessages()}
-                </div>
-                <div className="new-message-cont ">
-                    <Input currentChannelId={currentChannelId} />
-                </div>
+        <div className="channel-content-cont">
+            <div className={`live-chat-btn btn ${isChannelOnCall()}`} onClick={handleJoinCall}>
+                <i class="fa fa-phone-square" aria-hidden=""></i>
+                {channelOnCall && <span className="channel-on-call-msg">Channel is on call</span>}
             </div>
-        </>
+            <div className="content-cont">
+                {/* {currentChannelId} */}
+                {renderDraggable()}
+                {renderMessages()}
+            </div>
+            <div className="new-message-cont ">
+                <Input currentChannelId={currentChannelId} setLoading={setLoading}/>
+            </div>
+            <Loader loading={loading} />
+        </div>
     ) : <></>
 }
 

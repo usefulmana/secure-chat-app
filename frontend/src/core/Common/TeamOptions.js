@@ -100,12 +100,12 @@ const TeamOptions = ({ history, team }) => {
                 <div className="each-option edit-btn" onClick={() => { setEditFormOpened(true) }} ><i class="far fa-edit"></i>Edit team</div>
                 <div className="each-option delete-btn" onClick={handleDelete(team._id)}><i class="far fa-trash-alt"></i>Delete team</div>
                 <div className="each-option create-btn" onClick={() => { setCreateFormOpened(true) }}><i class="far fa-plus-square"></i>Create channel</div>
-                <div className="each-option manage-team-btn" onClick={() => { setManageTeamFormOpened(true) }}><i class="fas fa-users-cog"></i>Manage team</div>
+                <div className="each-option manage-team-btn" onClick={() => { setManageTeamFormOpened(true) }}><i class="fas fa-users-cog"></i>List of members</div>
                 <div className="each-option " onClick={handleCopyText}><i class="fa fa-clone" aria-hidden="true"></i><input className="join-code" value={team.code} /> Copy join code</div>
             </>
             :
             <>
-                <div className="each-option manage-team-btn" onClick={() => { setManageTeamFormOpened(true) }}><i class="fas fa-users-cog"></i>Manage team</div>
+                <div className="each-option manage-team-btn" onClick={() => { setManageTeamFormOpened(true) }}><i class="fas fa-users-cog"></i>List of members</div>
                 <div className="each-option leave-team-btn" onClick={handleLeaveTeam(team._id)}><i class="fas fa-sign-out-alt"></i>Leave team</div>
             </>
 

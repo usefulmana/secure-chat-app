@@ -37,7 +37,6 @@ const ChannelContent = ({ history, match }) => {
             setCurrentChannelId(channelId)
             getMessage(channelId)
             socketInit(channelId)
-            setLoading(false)
         }).catch()
 
 
@@ -75,6 +74,7 @@ const ChannelContent = ({ history, match }) => {
             } else {
                 setMessages(data)
                 scrollToBottom()
+                setLoading(false)
             }
         })
     }
@@ -150,7 +150,7 @@ const ChannelContent = ({ history, match }) => {
         if (!channelOnCall) socketClient.initCallOnChannel(currentChannelId)
         setLiveChatPopUp(true)
     }
-
+    console.log("access : ", access)
     return access ? (
         <div className="channel-content-cont">
             <div className={`live-chat-btn btn ${isChannelOnCall()}`} onClick={handleJoinCall}>
@@ -163,11 +163,15 @@ const ChannelContent = ({ history, match }) => {
                 {renderMessages()}
             </div>
             <div className="new-message-cont ">
-                <Input currentChannelId={currentChannelId} setLoading={setLoading}/>
+                <Input currentChannelId={currentChannelId} setLoading={setLoading} />
             </div>
             <Loader loading={loading} />
         </div>
-    ) : <></>
+    ) : (
+            <div className="no-access-cont row JCC AIC" >
+                {/* You have no access to this channel. */}
+            </div>
+        )
 }
 
 export default withRouter(ChannelContent)

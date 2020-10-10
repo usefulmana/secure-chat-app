@@ -43,12 +43,14 @@ router.post(
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     const { members } = req.body;
-
+    console.log("members : ", members)
     const channelName = `${members[0]}:${members[1]}`
+
     const channel = await Channel.find({
-      name: { "$regex": members[0], "$options": "i" },
-      name: { "$regex": members[1], "$options": "i" }
+      name: { "$regex": `${members[0]}:${members[1]}`, "$options": "i" },
+      name: { "$regex": `${members[1]}:${members[0]}`, "$options": "i" }
     })
+    
     console.log("channel : ", channel)
     if (channel.length > 0) {
       return res.status(400).send({ message: "Channel already exists" });

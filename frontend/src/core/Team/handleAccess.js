@@ -1,11 +1,19 @@
 
 
-var userId = undefined
-if (JSON.parse(localStorage.getItem('jwt'))) {
-    userId = JSON.parse(localStorage.getItem('jwt')).user._id;
+const getUserId = () => {
+    if (JSON.parse(localStorage.getItem('jwt'))) {
+        return JSON.parse(localStorage.getItem('jwt')).user._id;
+    } else {
+        return null
+    }
 }
 
 export const isUserHasAccessToThisChannel = (channel) => {
+
+    var userId = getUserId()
+
+    console.log("channel : ", channel)
+    console.log("userId : ", userId)
     if (!channel) return false;
 
     if (channel.isPrivate === false) {
@@ -27,11 +35,12 @@ export const isUserHasAccessToThisChannel = (channel) => {
             return false
         }
 
-        return false
     }
 }
 
 export const isUserInThisTeam = (team) => {
+    var userId = getUserId()
+
     var access = false
     team.members.forEach(m => {
 

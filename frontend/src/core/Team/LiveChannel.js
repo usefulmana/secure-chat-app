@@ -210,6 +210,7 @@ const LiveChannel = ({ history, channelId }) => {
 
 
     const handleToggle = (option) => () => {
+        alert("?")
         if (tracks[option]) {
             tracks[option].enabled = !tracks[option].enabled
             setTracks({ ...tracks })
@@ -230,9 +231,9 @@ const LiveChannel = ({ history, channelId }) => {
                 {tracks.videoTrack?.enabled === true ?
                     <i class="fa fa-video-camera" aria-hidden="true" onClick={handleToggle('videoTrack')}></i>
                     :
-                    <div className="disable-video-cont">
-                        <i class="fa fa-video-camera" aria-hidden="true" onClick={handleToggle('videoTrack')}></i>
+                    <div className="disable-video-cont" onClick={handleToggle('videoTrack')}>
                         <span>\</span>
+                        <i class="fa fa-video-camera" aria-hidden="true" ></i>
                     </div>
                 }
             </div>

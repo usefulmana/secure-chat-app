@@ -210,7 +210,6 @@ const LiveChannel = ({ history, channelId }) => {
 
 
     const handleToggle = (option) => () => {
-        alert("?")
         if (tracks[option]) {
             tracks[option].enabled = !tracks[option].enabled
             setTracks({ ...tracks })

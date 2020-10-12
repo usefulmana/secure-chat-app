@@ -249,7 +249,7 @@ const LiveChannel = ({ history, channelId }) => {
                         </div>
                     }
                 </div>
-                <video className="peer-video" muted ref={userVideo} autoPlay playsInline />
+                <video className="" muted ref={userVideo} autoPlay playsInline />
 
             </div>
 

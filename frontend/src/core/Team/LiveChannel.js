@@ -28,14 +28,17 @@ const Video = (props) => {
 
     return (
         <div className="video-cont peer-video">
+            {console.log("videoTrack : ", videoTrack)}
             {videoTrack === false || videoTrack === undefined ?
-                <div className="video-disabled row AIC JCC">
+               <div className="video-enabled row AIC JCC">
+               {username}
+           </div>
+                :
+                <div className="video-enabled row AIC JCC">
                     {username}
                 </div>
-                :
-                <div className="username">{username}</div>
             }
-            <video className="peer-video" playsInline autoPlay ref={ref} />
+            <video className="" playsInline autoPlay ref={ref} />
         </div>
     );
 }
@@ -124,6 +127,8 @@ const LiveChannel = ({ history, channelId }) => {
             }
             )
             var newPeersRef = peersRef.current.filter((p) => {
+                console.log("p: ", p )
+                console.log("payload: ", payload )
                 if (p.peerId !== payload.peerId) {
                     return false
                 } else {
@@ -197,8 +202,8 @@ const LiveChannel = ({ history, channelId }) => {
             return 'p-3'
         } else if (peers.length === 3) {
             return 'p-4'
-        } else if (peers.length > 4) {
-            return 'p-5'
+        } else if (peers.length > 3) {
+            return 'p-4'
         }
     }
 
@@ -239,7 +244,7 @@ const LiveChannel = ({ history, channelId }) => {
             <div className="peer-video video-cont">
                 <div>
                     {(!tracks.videoTrack || tracks?.videoTrack?.enabled === false) &&
-                        <div className="video-disabled AIC JCC row">
+                        <div className="my-video-disabled AIC JCC row">
                             You
                         </div>
                     }

@@ -53,23 +53,43 @@
 
 .video-cont {
     position: relative;
-    .video-disabled {
+    &:hover {
+        .video-enabled {
+            display: block;
+        }
+    }
+    .video-enabled {
+        display: none;
         position: absolute;
-        top: 0;
-        left: 0;
+        top: 50%;
+        left: 40%;
         width: 100%;
         height: 100%;
         z-index: 1;
         font-size: 1.5vw;
-        color:white;
+        color: white;
     }
 
-    .username{
+    .my-video-disabled{
         position: absolute;
-        top:100%;
-        left:1%;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+        font-size: 1.5vw;
+        color: white;
+    }
+
+    .username {
+        position: absolute;
+        top: 100%;
+        left: 1%;
         text-align: center;
-        color:white;
+        color: white;
+    }
+
+    video {
+        width: 100%;
+        height: 100%;
     }
 }
 
@@ -84,31 +104,31 @@
 .p-2 {
     .peer-video {
         width: 45%;
-        height: 70%;
+        height:68%;
         background-color: black;
         margin: 0.5vw;
     }
 }
 .p-3 {
     .peer-video {
-        width: 40%;
-        height: 40%;
+        width: 31%;
+        height: 47%;
         background-color: black;
         margin: 0.5vw;
     }
 }
 .p-4 {
     .peer-video {
-        width: 34%;
-        height: 43%;
+        width: 30%;
+        height: 45%;
         background-color: black;
         margin: 0.5vw;
     }
 }
 .p-5 {
     .peer-video {
-        width: 35%;
-        height: 35%;
+        width: 30%;
+        height: 45%;
         background-color: black;
         margin: 0.5vw;
     }

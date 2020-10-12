@@ -131,7 +131,7 @@ const ChannelContent = ({ history, match }) => {
                         </div>}
                         {!maximized && <div className="size-icon" onClick={() => { setMaximized(!maximized); moveDraggable() }}><i class="fa fa-window-maximize" aria-hidden="true"></i>
                         </div>}
-                        <div className="leave-icon" onClick={() => { setLiveChatPopUp(false); socketClient.socket.emit("disconnect-live-chat"); window.location.reload() }}><i class="fa fa-times" aria-hidden="true"></i>
+                        <div className="leave-icon" onClick={() => { setLiveChatPopUp(false); window.location.reload() }}><i class="fa fa-times" aria-hidden="true"></i>
                         </div>
                     </div>
                     <LiveChannel channelId={currentChannelId} />

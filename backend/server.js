@@ -265,14 +265,17 @@ io.on("connection", (socket) => {
   });
 
   socket.on('disconnect', () => {
+    console.log(socket.id, " has been disconnected")
     const roomID = socketToRoom[socket.id];
     let room = rooms[roomID];
+    console.log("room : ", room)
     if (room) {
       room = room.filter(user => user.socketId !== socket.id);
       rooms[roomID] = room;
 
-      room.map((id) => {
-        io.to(id).emit('user left', { peerId: socket.id });
+      console.log("room after filter: ", room)
+      room.map((user) => {
+        io.to(user.socketId).emit('user left', { peerId: socket.id });
       })
       console.log("room.length : ", room.length)
 

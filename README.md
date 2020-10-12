@@ -10,7 +10,7 @@
 
 ## Records
 
-* Live application: https://chattr-o5uuteegxq-ts.a.run.app
+* Live application: https://chattr-o5uuteegxq-as.a.run.app
 * Github repository : https://github.com/usefulmana/secure-chat-app
 * Google Drive: https://drive.google.com/drive/folders/1k7C7kY92FgoUpl27_qr1sY3MPOn9xP2S?usp=sharing
 * Trello board : https://trello.com/b/dhiFdITj

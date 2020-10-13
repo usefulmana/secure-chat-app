@@ -15,13 +15,19 @@ const Video = (props) => {
     var videoEnabled = undefined
     var micEnabled = undefined
 
-    const { username, videoTrack, audioTrack } = props.peerRef
-    // console.log("props.peerRef in vdeio : ", props.peerRef)
+    const { username, videoTrack, audioTrack, peer } = props.peerRef
+    console.log("props.peerRef in video : ", props.peerRef)
     useEffect(() => {
-        props.peer.on("stream", stream => {
+
+        peer.on("stream", stream => {
 
             ref.current.srcObject = stream;
         })
+        
+        // props.peer.on("stream", stream => {
+
+        //     ref.current.srcObject = stream;
+        // })
     }, []);
 
     return (
@@ -123,10 +129,14 @@ const LiveChannel = ({ history, channelId }) => {
 
             console.log("peersRef :", peersRef.current)
             console.log("===the end of user joined ==== ")
-            // setPeers(users => [...users, peer]);
 
-            var newPeer = peersRef.current.map((c) => c.peer)
-            setPeers([...newPeer]);
+            // var newPeer = peersRef.current.map((c) => c.peer)
+            // setPeers([...newPeer]);
+
+            console.log("peers : ", peers)
+
+            setPeers(users => [...users, peer]);
+
         });
 
         socketClient.socket.on("user left", payload => {
@@ -143,10 +153,11 @@ const LiveChannel = ({ history, channelId }) => {
             //     }
             // }
             // )
-
-            var newPeersRef = peersRef.current.filter((p) => {
+            var peerIndex = undefined
+            var newPeersRef = peersRef.current.filter((p, index) => {
 
                 if (p.peerID.socketId === payload.peerID) {
+                    peerIndex = index
                     console.log("p.peerID.socketId :  ", p.peerID.socketId, "|| payload.peerID : ", payload.peerID)
                     return false
                 } else {
@@ -157,12 +168,22 @@ const LiveChannel = ({ history, channelId }) => {
 
 
             var newPeer = newPeersRef.map((c) => c.peer)
+
+            console.log("peerIndex : ", peerIndex)
+            // setPeers(peers.filter((p, index) => {
+            //     console.log("fucking hle")
+            //     if (
+            //         index === peerIndex) {
+
+            //     }
+            // }
+            // ));
+
             setPeers([...newPeer]);
 
             console.log("newPeer after ", newPeer)
             console.log("peersRef after ", newPeersRef)
             console.log("===the end of user left ==== ")
-
         });
 
         socketClient.socket.on("receiving returned signal", payload => {
@@ -279,7 +300,7 @@ const LiveChannel = ({ history, channelId }) => {
                 <video className="" muted ref={userVideo} autoPlay playsInline />
 
             </div>
-
+            {console.log("peers in body : ", peers)}
             {peers.map((peer, index) => {
                 return index < 3 && (
                     <Video key={index} peer={peer} peerRef={peersRef.current[index]} />

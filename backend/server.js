@@ -69,7 +69,6 @@ const messageRoutes = require("./routes/messageRoutes");
 
 // ** Model **
 const { Message } = require("./models/Message");
-const { PrivateMessage } = require("./models/PrivateMessage");
 const { User } = require("./models/User");
 
 // ** Middleware **
@@ -275,7 +274,7 @@ io.on("connection", (socket) => {
 
       console.log("room after filter: ", room)
       room.map((user) => {
-        io.to(user.socketId).emit('user left', { peerId: socket.id });
+        io.to(user.socketId).emit('user left', { peerID: socket.id });
       })
       console.log("room.length : ", room.length)
 

@@ -118,18 +118,22 @@ const LiveChannel = ({ history, channelId }) => {
         });
 
         socketClient.socket.on("user left", payload => {
-            var newPeers = [...peers].filter(p => {
-                if (p.peerId !== payload.peerId) {
-                    return false
-                } else {
-                    return true
-                }
-            }
-            )
+            console.log("user left event payload: ", payload )
+            console.log("peers before ", peers )
+            console.log("peersRef.current before ", peersRef.current )
+
+            // var newPeers = [...peers].filter(p => {
+            //     if (p.peerID === payload.peerID) {
+            //         return true
+            //     } else {
+            //         return false
+            //     }
+            // }
+            // )
+
             var newPeersRef = peersRef.current.filter((p) => {
-                console.log("p: ", p )
-                console.log("payload: ", payload )
-                if (p.peerId !== payload.peerId) {
+              
+                if (p.peerID === payload.peerID) {
                     return false
                 } else {
                     return true
@@ -137,7 +141,12 @@ const LiveChannel = ({ history, channelId }) => {
             })
             peersRef.current = newPeersRef
 
-            setPeers([...newPeers]);
+
+            var newPeer = newPeersRef.map((c)=> c.peer)
+            setPeers([...newPeer]);
+
+            console.log("newPeer after ", newPeer )
+            console.log("peersRef after ", newPeersRef )
         });
 
         socketClient.socket.on("receiving returned signal", payload => {
@@ -210,6 +219,8 @@ const LiveChannel = ({ history, channelId }) => {
 
 
     const handleToggle = (option) => () => {
+        console.log("perrs : ", peers)
+        console.log("peersRef : ", peersRef)
         if (tracks[option]) {
             tracks[option].enabled = !tracks[option].enabled
             setTracks({ ...tracks })

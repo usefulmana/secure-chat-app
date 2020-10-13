@@ -23,7 +23,7 @@ const Video = (props) => {
 
             ref.current.srcObject = stream;
         })
-        
+
         // props.peer.on("stream", stream => {
 
         //     ref.current.srcObject = stream;
@@ -179,7 +179,8 @@ const LiveChannel = ({ history, channelId }) => {
             // }
             // ));
 
-            setPeers([...newPeer]);
+            setDummy([...newPeer]);
+            // setDummy([])
 
             console.log("newPeer after ", newPeer)
             console.log("peersRef after ", newPeersRef)
@@ -301,9 +302,14 @@ const LiveChannel = ({ history, channelId }) => {
 
             </div>
             {console.log("peers in body : ", peers)}
-            {peers.map((peer, index) => {
+            {/* {peers.map((peer, index) => {
                 return index < 3 && (
                     <Video key={index} peer={peer} peerRef={peersRef.current[index]} />
+                );
+            })} */}
+            {peersRef.current.map((peerRef, index) => {
+                return index < 3 && (
+                    <Video key={index}  peerRef={peerRef} />
                 );
             })}
             {renderOptions()}

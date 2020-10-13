@@ -107,15 +107,22 @@ const LiveChannel = ({ history, channelId }) => {
             console.log("===the beginning of user joined ==== ")
             console.log("user joined event payload :", payload)
             const peer = addPeer(payload.signal, payload.callerID, stream);
-            peersRef.current.push({
-                peerID: payload.callerID,
-                peer,
-                username: payload.username
-            })
 
-            console.log("peersRef :", peersRef.current)
-            console.log("===the end of user joined ==== ")
-            setPeers(users => [...users, peer]);
+            var exist=peersRef.current.find(c => c.peerID===payload.callerID)
+
+            if(exist){
+
+            } else{
+                peersRef.current.push({
+                    peerID: payload.callerID,
+                    peer,
+                    username: payload.username
+                })
+    
+                console.log("peersRef :", peersRef.current)
+                console.log("===the end of user joined ==== ")
+                setPeers(users => [...users, peer]);
+            }
         });
 
         socketClient.socket.on("user left", payload => {

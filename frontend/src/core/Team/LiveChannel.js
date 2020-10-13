@@ -147,6 +147,7 @@ const LiveChannel = ({ history, channelId }) => {
             var newPeersRef = peersRef.current.filter((p) => {
 
                 if (p.peerID.socketId === payload.peerID) {
+                    console.log("p.peerID.socketId :  ", p.peerID.socketId, "|| payload.peerID : ", payload.peerID)
                     return false
                 } else {
                     return true

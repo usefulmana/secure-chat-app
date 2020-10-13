@@ -12,8 +12,6 @@ export const isUserHasAccessToThisChannel = (channel) => {
 
     var userId = getUserId()
 
-    console.log("channel : ", channel)
-    console.log("userId : ", userId)
     if (!channel) return false;
 
     if (channel.isPrivate === false) {

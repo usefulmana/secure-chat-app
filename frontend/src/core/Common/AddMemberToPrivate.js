@@ -73,7 +73,6 @@ const AddMemberToPrivate = ({ history, reference }) => {
 
   const handleSearch = () => {
     findUser({ method: 'email', keyword }).then((data) => {
-      console.log("data in find user : ", data)
       setSearchedMember(data)
     }).catch()
   }

@@ -150,7 +150,6 @@ const ChannelContent = ({ history, match }) => {
         if (!channelOnCall) socketClient.initCallOnChannel(currentChannelId)
         setLiveChatPopUp(true)
     }
-    console.log("access : ", access)
     return access ? (
         <div className="channel-content-cont">
             <div className={`live-chat-btn btn ${isChannelOnCall()}`} onClick={handleJoinCall}>

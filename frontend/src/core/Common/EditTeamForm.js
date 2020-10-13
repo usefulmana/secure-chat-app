@@ -9,7 +9,6 @@ const EditTeamForm = ({history, TeamsRef, teamId }) => {
   var jwt = JSON.parse(localStorage.getItem("jwt"));
   var token = jwt.token;
 
-  console.log("TeamsRef.current : ", TeamsRef.current)
   const { setOpened } = TeamsRef.current
 
   const [values, setValues] = useState({})
@@ -18,7 +17,6 @@ const EditTeamForm = ({history, TeamsRef, teamId }) => {
   useEffect(() => {
     // alert(teamId)
     getTeamInfo({ token, teamId }).then((data) => {
-      console.log("Data : ", data)
       setValues({ name: data.name, description: data.description })
     }).catch((err) => {
       console.log("Error in Teams : ", err)
@@ -32,7 +30,6 @@ const EditTeamForm = ({history, TeamsRef, teamId }) => {
 
   const handleSubmit = () => {
     editTeam({ teamId, name, description }).then(data => {
-      console.log("Data: ", data)
       if (data.error) {
 
       } else {

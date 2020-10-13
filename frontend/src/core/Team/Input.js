@@ -32,7 +32,6 @@ const Input = ({ history, match, currentChannelId, setLoading }) => {
     };
     useEffect(() => {
         window.addEventListener('click', (e) => {
-            // console.log(e.target)
 
             var inside = e.target.closest('.emojo-cont')
             if (!inside) {
@@ -71,10 +70,8 @@ const Input = ({ history, match, currentChannelId, setLoading }) => {
         })
 
         const file = await res.json()
-        console.log("file : ", file)
 
         const formattedMessage = file.secure_url + `?filename=${file.original_filename}`
-        console.log("formattedMessage : ", formattedMessage)
         setPendingFile(formattedMessage)
         setLoading(false)
 
@@ -84,7 +81,6 @@ const Input = ({ history, match, currentChannelId, setLoading }) => {
         e.preventDefault()
         var messaegeToSend = newMessage
         if (pendingFile !== "") messaegeToSend = pendingFile + `&message=${newMessage}`
-        console.log("messaegeToSend : ", messaegeToSend)
         socketClient.createNewMessge({ channelId: currentChannelId, userId, message: messaegeToSend })
         // getMessage(currentChannelId)
         setNewMessage("")

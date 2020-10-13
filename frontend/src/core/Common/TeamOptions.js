@@ -24,14 +24,12 @@ const TeamOptions = ({ history, team }) => {
 
     const [isAdmin, setIsAdmin] = useState(team.owner === userId)
 
-    console.log("Tea in teamOPTIONS : ", team)
 
     useEffect(() => {
     }, [])
 
     const parseTeamName = (name) => {
         var arr = name.split(" ")
-        console.log(arr.length - 1 > 0, arr)
 
         if (arr.length - 1 > 0) {
             return <span>{arr[0].charAt(0)} {arr[1].charAt(0)}</span>
@@ -45,7 +43,6 @@ const TeamOptions = ({ history, team }) => {
         var r = window.confirm("Delete the team?")
         if (r === true) {
             deleteTeam({ teamId }).then((data) => {
-                console.log("data in deleteTeam : ", data)
                 if (data.error) {
                     console.log("err in handleDelete : ", data.error)
                 } else {
@@ -67,10 +64,8 @@ const TeamOptions = ({ history, team }) => {
         var r = window.confirm("Leave the team?")
         if (r === true) {
             leaveTeam({ serverId: teamId }).then((data) => {
-                console.log("data in leaveTeam : ", data)
                 if (data.error) {
                     alert(data.error)
-                    console.log("err in handleLeaveTeam : ", data.error)
                 } else {
                     history.push('/teams');
                 }
@@ -82,7 +77,6 @@ const TeamOptions = ({ history, team }) => {
 
         /* Get the text field */
         var copyText = document.querySelector(".join-code");
-        console.log("copyText: ", copyText)
 
         /* Select the text field */
         copyText.select();

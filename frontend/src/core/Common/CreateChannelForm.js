@@ -25,10 +25,8 @@ const CreateTeamForm = ({ history, TeamsRef, teamId }) => {
   }
 
   const handleSubmit = () => {
-    console.log("isPrivate : ", isPrivate)
 
     createChannel({ teamId, channelName: name, isPrivate }).then(data => {
-      console.log("Data: ", data)
       if (data.error) {
 
       } else {

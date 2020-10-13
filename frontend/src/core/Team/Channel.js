@@ -43,7 +43,6 @@ const Channel = ({ history, match, teamInfo, channel, isAdmin }) => {
         var r = window.confirm("Leave the team?")
         if (r === true) {
             deleteChannel({ teamId, channelId }).then((data) => {
-                console.log("data in deletechannel : ", data)
                 if (data.error) {
 
                 } else {

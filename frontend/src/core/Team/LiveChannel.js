@@ -16,11 +16,9 @@ const Video = (props) => {
     var micEnabled = undefined
 
     const { username, videoTrack, audioTrack } = props.peerRef
-    console.log("props.peerRef in vdeio : ", props.peerRef)
+    // console.log("props.peerRef in vdeio : ", props.peerRef)
     useEffect(() => {
         props.peer.on("stream", stream => {
-            console.log("peer.getVideoTracks : ", stream.getVideoTracks())
-            console.log("peer.getAudioTracks : ", stream.getAudioTracks())
 
             ref.current.srcObject = stream;
         })
@@ -28,11 +26,11 @@ const Video = (props) => {
 
     return (
         <div className="video-cont peer-video">
-            {console.log("videoTrack : ", videoTrack)}
+            {/* {console.log("videoTrack : ", videoTrack)} */}
             {videoTrack === false || videoTrack === undefined ?
-               <div className="video-enabled row AIC JCC">
-               {username}
-           </div>
+                <div className="video-enabled row AIC JCC">
+                    {username}
+                </div>
                 :
                 <div className="video-enabled row AIC JCC">
                     {username}
@@ -106,7 +104,8 @@ const LiveChannel = ({ history, channelId }) => {
         })
 
         socketClient.socket.on("user joined", payload => {
-            console.log("user joined", payload)
+            console.log("===the beginning of user joined ==== ")
+            console.log("user joined event payload :", payload)
             const peer = addPeer(payload.signal, payload.callerID, stream);
             peersRef.current.push({
                 peerID: payload.callerID,
@@ -114,13 +113,16 @@ const LiveChannel = ({ history, channelId }) => {
                 username: payload.username
             })
 
+            console.log("peersRef :", peersRef.current)
+            console.log("===the end of user joined ==== ")
             setPeers(users => [...users, peer]);
         });
 
         socketClient.socket.on("user left", payload => {
-            console.log("user left event payload: ", payload )
-            console.log("peers before ", peers )
-            console.log("peersRef.current before ", peersRef.current )
+            console.log("===the beginning of user left ==== ")
+
+            console.log("user left event payload: ", payload)
+            console.log("peersRef.current before ", peersRef.current)
 
             // var newPeers = [...peers].filter(p => {
             //     if (p.peerID === payload.peerID) {
@@ -132,7 +134,7 @@ const LiveChannel = ({ history, channelId }) => {
             // )
 
             var newPeersRef = peersRef.current.filter((p) => {
-              
+
                 if (p.peerID === payload.peerID) {
                     return false
                 } else {
@@ -142,16 +144,18 @@ const LiveChannel = ({ history, channelId }) => {
             peersRef.current = newPeersRef
 
 
-            var newPeer = newPeersRef.map((c)=> c.peer)
+            var newPeer = newPeersRef.map((c) => c.peer)
             setPeers([...newPeer]);
 
-            console.log("newPeer after ", newPeer )
-            console.log("peersRef after ", newPeersRef )
+            console.log("newPeer after ", newPeer)
+            console.log("peersRef after ", newPeersRef)
+            console.log("===the end of user left ==== ")
+
         });
 
         socketClient.socket.on("receiving returned signal", payload => {
-            console.log("peersRef: ", peersRef.current)
-            console.log("payload: ", payload)
+            // console.log("peersRef: ", peersRef.current)
+            // console.log("payload: ", payload)
             const item = peersRef.current.find(p => p.peerID.socketId === payload.id);
 
             item.peer.signal(payload.signal);
@@ -231,7 +235,7 @@ const LiveChannel = ({ history, channelId }) => {
     const renderOptions = () => {
         return (
             <div className="option-cont row">
-                {console.log(tracks.audioTrack?.enabled)}
+                {/* {console.log(tracks.audioTrack?.enabled)} */}
                 {tracks.audioTrack?.enabled === true ?
                     <i class="fa fa-microphone" aria-hidden="true" onClick={handleToggle('audioTrack')}></i>
                     :
@@ -265,7 +269,6 @@ const LiveChannel = ({ history, channelId }) => {
             </div>
 
             {peers.map((peer, index) => {
-                console.log("peersRef.current[index] : ", peersRef.current[index])
                 return index < 3 && (
                     <Video key={index} peer={peer} peerRef={peersRef.current[index]} />
                 );

@@ -92,10 +92,11 @@ const LiveChannel = ({ history, channelId }) => {
         socketClient.socket.emit("join room", { roomID, username });
         socketClient.socket.on("all users", users => {
             const peers = [];
-            users.forEach(userID => {
-                const peer = createPeer(userID, socketClient.socket.id, stream);
+            users.forEach(user => {
+                console.log("user : ", user)
+                const peer = createPeer(user, socketClient.socket.id, stream);
                 peersRef.current.push({
-                    peerID: userID,
+                    peerID: user,
                     peer,
                 })
                 peers.push(peer);
@@ -114,7 +115,7 @@ const LiveChannel = ({ history, channelId }) => {
             console.log("peersRef.current after filter:", peersRef.current)
 
             peersRef.current.push({
-                peerID: payload.callerID,
+                peerID: { socketId: payload.callerID, username: payload.username },
                 peer,
                 username: payload.username
             })
@@ -124,7 +125,7 @@ const LiveChannel = ({ history, channelId }) => {
             console.log("===the end of user joined ==== ")
             // setPeers(users => [...users, peer]);
 
-            var newPeer =  peersRef.current.map((c) => c.peer)
+            var newPeer = peersRef.current.map((c) => c.peer)
             setPeers([...newPeer]);
         });
 
@@ -145,7 +146,7 @@ const LiveChannel = ({ history, channelId }) => {
 
             var newPeersRef = peersRef.current.filter((p) => {
 
-                if (p.peerID === payload.peerID) {
+                if (p.peerID.socketId === payload.peerID) {
                     return false
                 } else {
                     return true

@@ -1,13 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { BrowserRouter, Switch, Route, Link, withRouter } from "react-router-dom";
-import { getChannelInfo } from '../../API/channelAPI'
-import { getMessageFromChannel } from '../../API/chatAPI'
-import querySearch from "stringquery";
 import './LiveChannel.scss'
 import socketClient from "../../Socket/clinet"
-import { isUserHasAccessToThisChannel } from './handleAccess'
 import Peer from "simple-peer";
-
 
 const Video = (props) => {
 
@@ -26,7 +21,6 @@ const Video = (props) => {
 }
 
 const LiveChannel = ({ history, channelId }) => {
-
 
     const [peers, setPeers] = useState([]);
     const socketRef = useRef();
@@ -77,7 +71,6 @@ const LiveChannel = ({ history, channelId }) => {
                     }
                 }
                 )
-                console.log("peersRef.current bofre filtering : ", peersRef.current)
                 var newPeersRef = peersRef.current.filter((p) => {
                     if (p.peerId !== payload.peerId) {
                         return false
@@ -85,16 +78,13 @@ const LiveChannel = ({ history, channelId }) => {
                         return true
                     }
                 })
-                console.log("peersRef.current after filtering : ", newPeersRef)
                 peersRef.current = newPeersRef
-                console.log("peersRef.current after assing : ", peersRef.current)
 
                 setPeers([...newPeers]);
             });
 
             socketClient.socket.on("receiving returned signal", payload => {
                 const item = peersRef.current.find(p => p.peerID === payload.id);
-                console.log("what is item: ", item)
 
                 item.peer.signal(payload.signal);
             });

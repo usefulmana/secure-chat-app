@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Switch, Route, withRouter } from "react-router-dom";
 import { findUser } from '../../API/userAPI'
-import { addMemberToTeam } from '../../API/teamsAPI'
 import { createDmChannel } from '../../API/channelAPI'
 
 import './CreateChat.scss'
@@ -10,13 +9,11 @@ import '../Common/base.scss'
 const CreateChat = ({ history, reference, teamId }) => {
   var jwt = JSON.parse(localStorage.getItem("jwt"));
   var token = jwt.token;
-  console.log("teamId in addmember: ", teamId)
   const { setOpened } = reference.current
 
   const [addedMember, setAddedMember] = useState([])
   const [searchedMember, setSearchedMember] = useState([])
 
-  // const [keyword, setKeyword] = useState("")
   const [values, setValues] = useState({ keyword: "" })
   const { keyword } = values;
 
@@ -34,7 +31,6 @@ const CreateChat = ({ history, reference, teamId }) => {
       if (data.error || data.message) {
         alert(data.message)
       } else {
-        // console.log("data : ", data)
         window.location.reload()
       }
     }).catch()
@@ -42,7 +38,6 @@ const CreateChat = ({ history, reference, teamId }) => {
 
   const handleSearch = () => {
     findUser({ method: 'email', keyword }).then((data) => {
-      console.log("data in find user : ", data)
       setSearchedMember(data)
     }).catch()
   }
@@ -125,8 +120,6 @@ const CreateChat = ({ history, reference, teamId }) => {
       </div>
     )
   }
-
-
 
   return (
     <div className="add-member-cont base-cont">

@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
 import { login, authenticate, forgotPassword } from '../../API/userAPI'
 import { OAuthSignIn } from '../../API/OAuthAPI'
 import './base.scss'
-import queryString from 'query-string';
 
 const SignIn = ({ history, visible, flipVisibility }) => {
     var jwt = JSON.parse(localStorage.getItem("jwt"));
@@ -68,28 +66,6 @@ const SignIn = ({ history, visible, flipVisibility }) => {
         }
     }
 
-    // const showErrors = () => {
-    //     var firstIndex = errors[0]
-    //     var errorMessage = ""
-    //     console.log()
-    //     if (firstIndex.email) {
-    //         errorMessage = firstIndex.email
-    //         console.log("1")
-
-    //     } else if (firstIndex.password) {
-    //         errorMessage = firstIndex.password
-    //         console.log("2")
-
-    //     } else if (firstIndex.username) {
-    //         errorMessage = firstIndex.username
-    //         console.log("3")
-
-    //     }
-    //     console.log("what is errormeeage : ", errorMessage)
-    //     return errorMessage
-    // }
-
-
 
     const handleForgotPassword = () => {
         forgotPassword({ email }).then((data) => {
@@ -122,12 +98,7 @@ const SignIn = ({ history, visible, flipVisibility }) => {
                         <label className={isFilled("password")} data-error="wrong" for="Form-pass1">Your password</label>
                     </div>
                     <div type="button" class="btn signin-button oauth-base" onClick={handleSubmit}>Sign in</div>
-                    {/* <div type="button" class="btn signin-button-facebook oauth-base" >
-
-                        <a href={OAuthSignIn('facebook')}>
-                            <i class="fa fa-facebook-official" aria-hidden="true"></i>Sign in with Facebook
-                        </a>
-                    </div> */}
+               
                     <div type="button" class="btn signin-button-google oauth-base" >
                         <a href={OAuthSignIn('google')}>
                             <i class="fa fa-google" aria-hidden="true"></i>Sign in with Google

@@ -1,12 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { BrowserRouter, Switch, Route, Link, withRouter } from "react-router-dom";
-import { getChannelInfo } from '../../API/channelAPI'
-import { getMessageFromChannel } from '../../API/chatAPI'
-import querySearch from "stringquery";
-import Chat from "../Common/Chat"
 import './Input.scss'
 import socketClient from "../../Socket/clinet"
-import { isUserHasAccessToThisChannel } from './handleAccess'
 import Picker from 'emoji-picker-react';
 import { parseFileMessage, parseFileName } from "../Common/parse"
 
@@ -74,7 +69,6 @@ const Input = ({ history, match, currentChannelId, setLoading }) => {
         const formattedMessage = file.secure_url + `?filename=${file.original_filename}`
         setPendingFile(formattedMessage)
         setLoading(false)
-
     }
 
     const handleSubmit = (e) => {
@@ -82,14 +76,8 @@ const Input = ({ history, match, currentChannelId, setLoading }) => {
         var messaegeToSend = newMessage
         if (pendingFile !== "") messaegeToSend = pendingFile + `&message=${newMessage}`
         socketClient.createNewMessge({ channelId: currentChannelId, userId, message: messaegeToSend })
-        // getMessage(currentChannelId)
         setNewMessage("")
         setPendingFile("")
-    }
-
-    const handleOpenFile = (url) => (e) => {
-        var win = window.open(url, '_blank');
-        win.focus();
     }
 
     const filePreView = () => {

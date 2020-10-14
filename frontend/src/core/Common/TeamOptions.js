@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { BrowserRouter, Switch, Route, withRouter } from "react-router-dom";
 import './TeamOptions.scss'
-import { currentUser } from '../../API/userAPI'
 import { getTeamInfo, deleteTeam, leaveTeam } from '../../API/teamsAPI'
 
 import Modal from '../../Template/Modal'
@@ -9,8 +8,6 @@ import EditTeamForm from '../Common/EditTeamForm'
 import CreateChannelForm from '../Common/CreateChannelForm'
 import AddMember from '../Common/AddMember'
 import ManageTeamForm from '../Common/ManageTeamForm'
-
-import { TweenLite } from 'gsap'
 
 const TeamOptions = ({ history, team }) => {
     var jwt = JSON.parse(localStorage.getItem("jwt"));
@@ -52,14 +49,6 @@ const TeamOptions = ({ history, team }) => {
         }
     }
 
-    // const initEvent = () => {
-    //     document.querySelector(".delete-btn").addEventListener("click", (e) => {
-
-
-    //     });
-    // }
-
-
     const handleLeaveTeam = (teamId) => (e) => {
         var r = window.confirm("Leave the team?")
         if (r === true) {
@@ -74,7 +63,6 @@ const TeamOptions = ({ history, team }) => {
     }
 
     const handleCopyText = () => {
-
         /* Get the text field */
         var copyText = document.querySelector(".join-code");
 
@@ -84,7 +72,6 @@ const TeamOptions = ({ history, team }) => {
 
         /* Copy the text inside the text field */
         document.execCommand("copy");
-
     }
 
     const renderOptions = () => {

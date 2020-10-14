@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Switch, Route, withRouter } from "react-router-dom";
 import { createChannel, } from '../../API/channelAPI'
-import Select from 'react-select'
-import base from './base.scss'
-import createChannelForm from './CreateChannelForm.scss'
+import './base.scss'
+import './CreateChannelForm.scss'
 
 const CreateTeamForm = ({ history, TeamsRef, teamId }) => {
   var jwt = JSON.parse(localStorage.getItem("jwt"));
@@ -34,7 +33,6 @@ const CreateTeamForm = ({ history, TeamsRef, teamId }) => {
       }
     }).catch(err => {
       console.log("err in chatForm : ", err)
-
     })
   }
 
@@ -53,8 +51,6 @@ const CreateTeamForm = ({ history, TeamsRef, teamId }) => {
       <div className="form-cont">
         <div>Name </div>
         <input className="name-input input" value={name} onChange={handleChange('name')} />
-        {/* <Select options={options} value={options[selected]} onChange={handleSelect} /> */}
-        {/* <br /> */}
         <div>Is it private channel? </div>
         <select id="select-box" onChange={handleSelect} >
           <option className="option" value="false">No</option>

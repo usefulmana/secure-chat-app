@@ -5,7 +5,7 @@ import EditChannelForm from './EditChannelForm'
 import Modal from '../../Template/Modal'
 import { isUserHasAccessToThisChannel } from './handleAccess'
 import AddMemberToPrivate from "../Common/AddMemberToPrivate";
-import channel from "./Channel.scss"
+import "./Channel.scss"
 import socketClient from '../../Socket/clinet'
 
 const Channel = ({ history, match, teamInfo, channel, isAdmin }) => {
@@ -20,12 +20,7 @@ const Channel = ({ history, match, teamInfo, channel, isAdmin }) => {
 
 
     const [notificationOn, setNotificationOn] = useState(false)
-
     const [addMemberFormOpened, setAddMemberFormOpened] = useState(false)
-
-    const initSoket = () => {
-
-    }
 
     useEffect(() => {
         setCurrentChannelId(match.params.channelId)
@@ -52,10 +47,6 @@ const Channel = ({ history, match, teamInfo, channel, isAdmin }) => {
         }
     }
 
-    const handleEdit = () => {
-
-    }
-
     const isActive = () => {
         if (currentChannelId === channelId) {
             return 'active-channel each-channel'
@@ -64,10 +55,6 @@ const Channel = ({ history, match, teamInfo, channel, isAdmin }) => {
 
         }
     }
-
-    // const isPrivate = () => {
-    //     if (isPrivate === true) return 'private-channel-icon'
-    // }
 
     const handleClick = () => {
         history.push(`/team/${teamId}/${channelId}`)

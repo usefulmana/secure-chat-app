@@ -4,7 +4,6 @@ import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
 
 // Import core components
 import Main from './core/Main/Main';
-import Dashboard from "./core/Dashboard/Dashboard";
 import Profile from "./core/Profile/Profile";
 import PrivateRoute from "./auth/PrivateRoute";
 import TeamsList from './core/TeamsList/TeamsList';
@@ -16,8 +15,6 @@ function App() {
     <BrowserRouter>
       <Switch>
         <Route path="/" exact component={Main} />
-        {/* <PrivateRoute path="/dashboard/" exact component={Dashboard} /> */}
-        
         <PrivateRoute path="/teams" exact component={TeamsList} />
         <PrivateRoute path="/team/:teamId/:channelId" exact component={Team} />
         <PrivateRoute path="/dm/:channelId" exact component={DmPage} />

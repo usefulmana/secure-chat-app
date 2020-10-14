@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { BrowserRouter, Switch, Route, withRouter } from "react-router-dom";
 import { getTeamInfo,editTeam } from '../../API/teamsAPI'
 
-import editTeamForm from './EditTeamForm.scss'
-import base from './base.scss'
+import './EditTeamForm.scss'
+import './base.scss'
 
 const EditTeamForm = ({history, TeamsRef, teamId }) => {
   var jwt = JSON.parse(localStorage.getItem("jwt"));
@@ -15,7 +15,6 @@ const EditTeamForm = ({history, TeamsRef, teamId }) => {
   const { name, description } = values
 
   useEffect(() => {
-    // alert(teamId)
     getTeamInfo({ token, teamId }).then((data) => {
       setValues({ name: data.name, description: data.description })
     }).catch((err) => {
@@ -41,7 +40,6 @@ const EditTeamForm = ({history, TeamsRef, teamId }) => {
     })
   }
 
-
   const showForm = () => {
     return (
       <div className="form-cont">
@@ -65,8 +63,6 @@ const EditTeamForm = ({history, TeamsRef, teamId }) => {
       </div>
     )
   }
-
-
 
   return (
     <div className="edit-team-cont base-cont">

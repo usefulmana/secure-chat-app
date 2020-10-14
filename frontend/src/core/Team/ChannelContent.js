@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import { BrowserRouter, Switch, Route, Link, withRouter } from "react-router-dom";
 import { getChannelInfo } from '../../API/channelAPI'
 import { getMessageFromChannel } from '../../API/chatAPI'
-import querySearch from "stringquery";
 import Chat from "../Common/Chat"
 import './ChannelContent.scss'
 import socketClient from "../../Socket/clinet"
@@ -87,14 +86,6 @@ const ChannelContent = ({ history, match }) => {
         if (contentCont) contentCont.scrollTo(0, contentCont.scrollHeight)
     }
 
-    const handleSubmit = (e) => {
-        e.preventDefault()
-        socketClient.createNewMessge({ channelId: currentChannelId, userId, message: newMessage })
-        // getMessage(currentChannelId)
-        setNewMessage("")
-    }
-
-
     const renderMessages = () => {
         return messages?.docs?.map((m, index) => {
             var previousIndex = 0
@@ -157,7 +148,6 @@ const ChannelContent = ({ history, match }) => {
                 {channelOnCall && <span className="channel-on-call-msg">Channel is on call</span>}
             </div>
             <div className="content-cont">
-                {/* {currentChannelId} */}
                 {renderDraggable()}
                 {renderMessages()}
             </div>

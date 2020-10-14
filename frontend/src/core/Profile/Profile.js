@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
 import "./Profile.scss";
 import Layout from "../Layout"
 import {
@@ -9,7 +8,6 @@ import {
   changeAvatar,
 } from "../../API/userAPI";
 import Modal from "../../Template/Modal";
-import { set } from "animejs";
 
 const Profile = ({ history }) => {
   var jwt = JSON.parse(localStorage.getItem("jwt"));
@@ -48,7 +46,7 @@ const Profile = ({ history }) => {
         });
       })
       .catch((err) => {
-        console.log("err : ", err);
+        console.log("error in getting current user : ", err);
       });
   }, []);
 
@@ -59,7 +57,6 @@ const Profile = ({ history }) => {
       setUser({ ...user, password: e.target.value });
     } else if (option === "image") {
       formData.append(`avatar`, e.target.files[0]);
-      // setUser({ ...user, image: e.target.files[0] })
     }
   };
 
@@ -157,7 +154,6 @@ const Profile = ({ history }) => {
           {showOptions("username")}
         </div>
 
-        {/* <div>{user.email}</div> */}
         <div className="heading">Edit password</div>
         <div className="row AIC">
           <input

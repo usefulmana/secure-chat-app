@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
 import { createTeam, joinTeam } from '../../API/teamsAPI'
 import { currentUser, findUser } from '../../API/userAPI'
-import createTeamForm from './CreateTeamForm.scss'
+import './CreateTeamForm.scss'
 
 const CreateTeamForm = ({ TeamsRef }) => {
   var jwt = JSON.parse(localStorage.getItem("jwt"));
@@ -37,7 +36,7 @@ const CreateTeamForm = ({ TeamsRef }) => {
         }).catch()
       }
     }).catch(err => {
-      console.log("err in chatForm : ", err)
+      console.log("err in creating team : ", err)
 
     })
   }
@@ -53,7 +52,7 @@ const CreateTeamForm = ({ TeamsRef }) => {
         }).catch()
       }
     }).catch(err => {
-      console.log("err in chatForm : ", err)
+      console.log("err in joining team : ", err)
 
     })
   }

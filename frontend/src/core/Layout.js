@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
-// import { withRouter } from "react-router";
 import { BrowserRouter, Switch, Route, Link, withRouter } from "react-router-dom";
-import { signout } from "../API/userAPI";
-import layout from './Layout.scss'
+import './Layout.scss'
 
 const Layout = ({ loading, history, children }) => {
     var localItem = localStorage.getItem('jwt')
@@ -32,22 +30,16 @@ const Layout = ({ loading, history, children }) => {
 
     const renderSideNavBar = () => {
         return (
-            <>
-                <div className="side-navbar-cont">
-                    <div className={isActive('teams')} onClick={handleClick('teams')}>
-                        <i class="fa fa-users teams-icon icon"></i>
-                        <div className="text-center">Teams</div>
-                    </div>
-                    <div className={isActive('dm')} onClick={handleClick('dm/awe')}>
-                        <i class="fa fa-comments icon" aria-hidden="true"></i>
-                        <div className="text-center">Chats</div>
-                    </div>
-                    {/* <div className="btn option-btn" onClick={handleClick('contact')}>Contact</div> */}
-                    {/* <div className="btn option-btn" onClick={handleClick('chats')}>Chats</div> */}
+            <div className="side-navbar-cont">
+                <div className={isActive('teams')} onClick={handleClick('teams')}>
+                    <i class="fa fa-users teams-icon icon"></i>
+                    <div className="text-center">Teams</div>
                 </div>
-                {/* <Contact visible={visible} /> */}
-                {/* <Chats visible={visible} /> */}
-            </>
+                <div className={isActive('dm')} onClick={handleClick('dm/awe')}>
+                    <i class="fa fa-comments icon" aria-hidden="true"></i>
+                    <div className="text-center">Chats</div>
+                </div>
+            </div>
         )
     }
 

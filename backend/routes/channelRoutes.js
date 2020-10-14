@@ -5,6 +5,7 @@ const { Server } = require("../models/Server");
 const { Channel } = require("../models/Channel");
 const { User } = require("../models/User");
 
+// Create A Channel
 router.post(
   "/create",
   passport.authenticate("jwt", { session: false }),
@@ -43,7 +44,7 @@ router.post(
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     const { members } = req.body;
-    console.log("members : ", members)
+    
     const channelName = `${members[0]}:${members[1]}`
 
     const channel = await Channel.find({
@@ -64,7 +65,6 @@ router.post(
           error: err
         });
       }
-      console.log("result : ", result)
       res.json(result);
     });
   }
@@ -146,7 +146,6 @@ router.post(
 );
 
 // Remove members from private channels
-
 router.post(
   "/removeMember",
   passport.authenticate("jwt", { session: false }),

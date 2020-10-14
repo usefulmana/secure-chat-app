@@ -2,11 +2,8 @@ const nodemailer = require("nodemailer");
 const { setKeyValue } = require('./redis');
 const randomString = require('random-base64-string');
 
-// if (process.env.NODE_ENV !== 'production') {
-//     // Skip loading the .env file
-//     require("dotenv").config();
-// }
 
+// Configure Node Mailer
 let transporter = nodemailer.createTransport({
   service: process.env.EMAIL_SERVICE,  
   auth: {
@@ -15,11 +12,15 @@ let transporter = nodemailer.createTransport({
   },
 });
 
-const sendEMail =  async (user, type) =>{
 
+// Send Email
+const sendEMail =  async (user, type) =>{
+    // Generate a token
     const token = randomString(16);
     const payload = JSON.stringify({type: type, userId: user._id});
     setKeyValue(token, payload, 12*60*60);
+
+    // Try Sending the Email
     try {
       let info = await transporter.sendMail({
         from: process.env.EMAIL_USER,

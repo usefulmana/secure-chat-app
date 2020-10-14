@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
 
-
+// Connect to database
 const connect = () => {
     mongoose.connect(
         process.env.DATABASE_URL,
@@ -22,4 +22,5 @@ const connect = () => {
 
 connect();
 
+// export database connection
 module.exports = { mongoose, connect };

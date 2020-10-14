@@ -2,6 +2,7 @@ const aws = require("aws-sdk");
 const multer = require("multer");
 const multerS3 = require("multer-s3");
 
+// Setting Up AWS
 aws.config.update({
   secretAccessKey: process.env.AWS_SECRET_KEY,
   accessKeyId: process.env.AWS_ACCESS_ID,
@@ -9,15 +10,18 @@ aws.config.update({
 });
 
 
+// Filter File 
 const fileFilter = (req, file, cb) => {
     if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
       cb(null, true);
     } else {
       cb(null, false);
     }
-  };
+};
 
 s3 = new aws.S3();
+
+// Upload file
 const upload = multer({
   storage: multerS3({
     s3: s3,

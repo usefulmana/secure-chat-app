@@ -22,7 +22,7 @@
 
 ### Added
 
-* Mute/nmute during video call
+* Mute/unmute during video call
 * Turn camera on/off during video call
 * View name and avatar during video call
 * Kick members from a team

@@ -3,6 +3,7 @@
 # Group Name: TBD
 
 ## Members
+
 * Nguyen, Anh (s3616128)
 * Hernandez, Chloe ( s3664619)
 * Lee, SangYeon (s3742751)
@@ -17,21 +18,33 @@
 
 # Changelog
 
-## [1.0] - 2020-10-16
+## [1.0] - 2020-10-18
 
 ### Added
 
-* Emoji Support
-* Gif Support
-* Voice/Video Chat
-* Direct Messaging
+* Mute/nmute during video call
+* Turn camera on/off during video call
+* View name and avatar during video call
+* Kick members from a team
+* An indicator to notify users if a call is going on in a channel
 
 ### Changed
 
-* Restyling of the application
+* Fixed issue where if a user's token expired, the application will display a blank page
+* Fixed the hitbox issue on register/login forms
+* User can now type a message when sending a file
+* User can now use emoji in the middle of a chat message
+* Resolved 'undefined' issue when using emojis
+* The DM list is now restyled
+* Chat icon is Changed
+* Fixed issue where the '3 dots' menu is hard to click on
+* Fixed incorrect Oauth redirect
 
 ### Known Issues
-* Test
+
+* There no is currently no way to limit the users to upload as many files as possible
+* On certain browsers, when a user leaves a voice call, a black box will be left behind permanently
+* There is currently no way to choose IO devices
 
 ## [0.7] - 2020-09-30
 
@@ -44,7 +57,7 @@
 
 ### Changed
 
-* Restyling of the application
+* Slight Restyling of the application
 
 ## [0.5] - 2020-09-18
 

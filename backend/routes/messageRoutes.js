@@ -56,9 +56,6 @@ router.get("/last/:id", passport.authenticate("jwt", { session: false }), async 
         console.log("ehre")
         res.json({})
     }
-
-
-
 })
 
 module.exports = router;

@@ -12,17 +12,20 @@ const {
 } = require("../middleware/authenticate");
 
 
-// Get A Server
+// Get A Server Info From Id
 router.get(
   "/:id",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
+
+    // Database Query
     Server.findById(req.params.id).populate({
       path: 'channels',
       populate: {path: 'channels'}
     }).then((team) => {
       if (!team) res.status(400).send({ error: "Server does not exist!" });
-
+      
+      // Send Success Request
       res.status(200).json(team);
     });
   }
@@ -32,6 +35,7 @@ router.get(
 router.post("/add", passport.authenticate("jwt", { session: false }), async (req, res) => {
   const {userId, serverId} = req.body;
 
+  // Database Query
   const user = await User.findById(userId).then((u) => {
     Server.findById(serverId)
       .then(server => {
@@ -58,11 +62,45 @@ router.post("/add", passport.authenticate("jwt", { session: false }), async (req
 router.post("/leave", passport.authenticate("jwt", { session: false }), async (req, res) => {
   const {serverId} = req.body;
 
+  // Database Query
   const user = await User.findById(req.user.id).then((u) => {
     Server.findById(serverId)
       .then(server => {
           for (let i = 0; i < server.members.length; i++){
               if (String(server.members[i]) === String(req.user.id)){
+                  server.members.splice(i, 1);
+                  break;
+              }
+          }
+          for (let i = 0; i < u.servers.length; i++){
+            if (String(u.servers[i]) === String(serverId)){
+                u.servers.splice(i, 1);
+                break;
+            }
+          }
+          u.save();
+          server.save()
+          .then( s => {
+            res.status(200).send(s)
+          });
+      })
+      .catch((err) => {
+        res.status(400).send({ message: "Invalid server code" });
+      });
+  }).catch((err) => res.status(400).send({message: "No user with such Id"}));
+})
+
+
+// Kick user from the server
+router.post("/kick", passport.authenticate("jwt", { session: false }), async (req, res) => {
+  const {serverId, userId} = req.body;
+
+  // Database Query
+  const user = await User.findById(userId).then((u) => {
+    Server.findById(serverId)
+      .then(server => {
+          for (let i = 0; i < server.members.length; i++){
+              if (String(server.members[i]) === String(userId)){
                   server.members.splice(i, 1);
                   break;
               }
@@ -101,6 +139,7 @@ router.post(
       members: [req.user.id],
     });
 
+    // Database Query
     Server.create(newServer)
       .then((server) => {
         User.findById(req.user.id)
@@ -131,7 +170,7 @@ router.post(
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     const userId = req.user.id;
-
+    // Database Query
     const user = await User.findById(userId).then((u) => {
       const { serverCode } = req.body;
       Server.findOne({ code: serverCode })
@@ -161,7 +200,7 @@ router.get("/active/:id",  passport.authenticate("jwt", { session: false }), asy
   if (!serverId){
     return res.status(400).send({message: "No server Id"})
   }
-
+  // Database Query
   const server = await Server.findById(serverId)
   .populate({
     path: 'members',
@@ -192,7 +231,7 @@ router.delete("/:id",  passport.authenticate("jwt", { session: false }), async(r
   if (!serverId){
     return res.status(400).send({message: "No server Id"})
   }
-
+  // Database Query
   Server.findById(serverId).then(s => {
     for (let i = 0; i < s.channels.length; i++) {
       Channel.findByIdAndDelete(s.channels[i], function (err, result) {
@@ -218,6 +257,7 @@ router.put("/:id",  passport.authenticate("jwt", { session: false }), async(req,
   }
 
   const { name, description } = req.body;
+  // Database Query
   Server.findById(serverId).then((s) => {
     s.name = name;
     s.description = description;

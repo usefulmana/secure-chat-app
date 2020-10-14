@@ -6,6 +6,7 @@ const { User } = require('../models/User');
 const { GOOGLE_CONFIG, FACEBOOK_CONFIG } = require('../config/config');
 const slugify = require('slugify');
 
+// PassportJS Config
 let opts = {
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
     secretOrKey: process.env.JWT_SECRET

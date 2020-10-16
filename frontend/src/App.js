@@ -9,16 +9,19 @@ import PrivateRoute from "./auth/PrivateRoute";
 import TeamsList from './core/TeamsList/TeamsList';
 import Team from './core/Team/Team';
 import DmPage from './core/Dm/DmPage';
+import ForgotPassword from './core/Auth/ForgotPassword';
+import RetrievePassword from './core/Auth/RetrievePassword';
 
 function App() {
   return (
     <BrowserRouter>
       <Switch>
         <Route path="/" exact component={Main} />
+        <Route exact path = "/fpw" component={ForgotPassword}/>
+        <Route path="/forgot/:token" exact component={RetrievePassword} />
         <PrivateRoute path="/teams" exact component={TeamsList} />
         <PrivateRoute path="/team/:teamId/:channelId" exact component={Team} />
         <PrivateRoute path="/dm/:channelId" exact component={DmPage} />
-        
         <PrivateRoute path="/profile/" exact component={Profile} />
     
       </Switch>

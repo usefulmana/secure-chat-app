@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { login, authenticate, forgotPassword } from '../../API/userAPI'
 import { OAuthSignIn } from '../../API/OAuthAPI'
+import {Link} from 'react-router-dom';
 import './base.scss'
 
 const SignIn = ({ history, visible, flipVisibility }) => {
@@ -113,7 +114,7 @@ const SignIn = ({ history, visible, flipVisibility }) => {
                     <div className="text-center ">
                         <span className="sign-up-link btn" onClick={flipVisibility}>Sign up <span className="or-text">or</span></span>
                         
-                        <span className="forgot-password-link" onClick={handleForgotPassword}>Forgot passwrod?</span>
+                        <Link to="fpw" className="forgot-password-link" >Forgot Password?</Link>
                     </div>
 
                 </div>

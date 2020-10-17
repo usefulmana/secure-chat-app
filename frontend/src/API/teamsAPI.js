@@ -152,3 +152,24 @@ export const addMemberToTeam = async ({ userId, teamId }) => {
             console.log(err);
         });
 };
+
+export const kickMemberFromTeam = async ({ userId, teamId }) => {
+    var token = getToken()
+
+    return await fetch(`${API}/server/kick`, {
+        method: "POST",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `${token}`
+        },
+        body: JSON.stringify({ userId, serverId: teamId })
+
+    })
+        .then(response => {
+            return response.json();
+        })
+        .catch(err => {
+            console.log(err);
+        });
+};

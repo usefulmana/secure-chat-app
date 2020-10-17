@@ -17,6 +17,11 @@
 * Trello board : https://trello.com/b/dhiFdITj
 
 # Changelog
+## [1.0.1] - 2020-10-18
+
+### Changed
+
+* Resolved several visual bugs for various browsers
 
 ## [1.0] - 2020-10-18
 

@@ -1,6 +1,6 @@
 # RMIT PP1 2020B - Secure Chat App
 
-# Group Name: TBD
+# Group Name: A-FRI-CHAT-G01
 
 ## Members
 

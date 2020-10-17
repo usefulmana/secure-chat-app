@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Switch, Route, withRouter } from "react-router-dom";
 import { getUserById } from '../../API/userAPI'
+import { kickMemberFromTeam } from '../../API/teamsAPI'
+
 import './ManageTeamForm.scss'
 import './base.scss'
 
@@ -36,13 +38,30 @@ const ManageTeamForm = ({ history, TeamsRef, team }) => {
     })
   }, [])
 
+  const handleKickUser = (userId) => (e) => {
+    var r = window.confirm("Kick user?")
+    if (r === true) {
+      kickMemberFromTeam({ userId, teamId: team._id }).then(data => {
+        window.location.reload()
+      }).catch(err => {
+
+      })
+    }
+  }
+
   const renderMembers = () => {
     return members.map(m => {
+
+      if (m._id === team.owner) {
+        return <></>
+      }
+
       return (
         <div className="each-member row AIC" >
           <div className="img-cont"><img src={m.image} /></div>
           <div className="username">{m.username}</div>
           <div className="email">{m.email}</div>
+          <i class="fa fa-sign-out" aria-hidden="true" onClick={handleKickUser(m._id)}></i>
         </div>
       )
     })

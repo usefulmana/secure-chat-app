@@ -3,9 +3,6 @@ import { BrowserRouter, Switch, Route, withRouter } from "react-router-dom";
 import { findUser } from '../../API/userAPI'
 import { addMemberToTeam } from '../../API/teamsAPI'
 
-import addMember from './AddMember.scss'
-import base from './base.scss'
-
 const AddMember = ({ history, TeamsRef, teamId }) => {
   var jwt = JSON.parse(localStorage.getItem("jwt"));
   var token = jwt.token;

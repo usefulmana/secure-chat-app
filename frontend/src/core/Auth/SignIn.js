@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
 import { login, authenticate, forgotPassword } from '../../API/userAPI'
 import { OAuthSignIn } from '../../API/OAuthAPI'
+import {Link} from 'react-router-dom';
 import './base.scss'
-import queryString from 'query-string';
 
 const SignIn = ({ history, visible, flipVisibility }) => {
     var jwt = JSON.parse(localStorage.getItem("jwt"));
@@ -36,7 +35,6 @@ const SignIn = ({ history, visible, flipVisibility }) => {
                     setValues({ ...values, error: data.message })
                 }
                 else {
-                    console.log("what is data after login is succesfull : ", data.user.servers)
                     authenticate(data, () => {
                         history.push(`/teams`)
                     });
@@ -69,39 +67,13 @@ const SignIn = ({ history, visible, flipVisibility }) => {
         }
     }
 
-    // const showErrors = () => {
-    //     var firstIndex = errors[0]
-    //     var errorMessage = ""
-    //     console.log()
-    //     if (firstIndex.email) {
-    //         errorMessage = firstIndex.email
-    //         console.log("1")
-
-    //     } else if (firstIndex.password) {
-    //         errorMessage = firstIndex.password
-    //         console.log("2")
-
-    //     } else if (firstIndex.username) {
-    //         errorMessage = firstIndex.username
-    //         console.log("3")
-
-    //     }
-    //     console.log("what is errormeeage : ", errorMessage)
-    //     return errorMessage
-    // }
-
-    const handleOAuth = (option) => (e) => {
-        OAuthSignIn({ option }).then((data) => {
-
-        }).catch()
-    }
 
     const handleForgotPassword = () => {
         forgotPassword({ email }).then((data) => {
             if (data.error) {
                 setValues({ ...values, error: data.error })
-            }else{
-                
+            } else {
+
             }
         }).catch()
     }
@@ -127,14 +99,11 @@ const SignIn = ({ history, visible, flipVisibility }) => {
                         <label className={isFilled("password")} data-error="wrong" for="Form-pass1">Your password</label>
                     </div>
                     <div type="button" class="btn signin-button oauth-base" onClick={handleSubmit}>Sign in</div>
-                    <div type="button" class="btn signin-button-facebook oauth-base" onClick={handleOAuth('facebook')}>
-
-                        <i class="fa fa-facebook-official" aria-hidden="true"></i>Sign in with Facebook
-
-                    </div>
-                    <div type="button" class="btn signin-button-google oauth-base" onClick={handleOAuth('google')}>
-                        <i class="fa fa-google" aria-hidden="true"></i>Sign in with Google
-
+               
+                    <div type="button" class="btn signin-button-google oauth-base" >
+                        <a href={OAuthSignIn('google')}>
+                            <i class="fa fa-google" aria-hidden="true"></i>Sign in with Google
+                        </a>
                     </div>
 
                 </div>
@@ -143,7 +112,9 @@ const SignIn = ({ history, visible, flipVisibility }) => {
                         Have not had account yet?
                     </div>
                     <div className="text-center ">
-                        <span className="sign-up-link btn" onClick={flipVisibility}>Sign up or</span><span className="forgot-password-link" onClick={handleForgotPassword}>Forgot passwrod?</span>
+                        <span className="sign-up-link btn" onClick={flipVisibility}>Sign up <span className="or-text">or</span></span>
+                        
+                        <Link to="fpw" className="forgot-password-link" >Forgot Password?</Link>
                     </div>
 
                 </div>

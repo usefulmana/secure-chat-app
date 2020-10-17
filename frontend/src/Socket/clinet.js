@@ -4,10 +4,7 @@ import { BASE_URL } from "../config"
 
 class socketClientClass {
     constructor() {
-        // this.socket = undefined
-        // this.userId = undefined
         this.socket = socketIOClient(BASE_URL);
-        // this.userId = userId
         this.events = {
             channels: [],
             notification: []
@@ -16,8 +13,6 @@ class socketClientClass {
     }
 
     init(userId) {
-        // this.socket = socketIOClient(BASE_URL);
-        // this.userId = userId
     }
 
     createNewMessge({ userId, channelId, message }) {
@@ -30,19 +25,6 @@ class socketClientClass {
             message
         }
         this.socket.emit('chat-message', msg);
-    }
-
-    // listenToChannel(channelId, callback) {
-    //     alert("befor statign lsten : ", channelId)
-    //     console.log("befor statign lsten : ", channelId)
-    //     this.socket.emit('subscribe', (data) => {
-    //         alert("Data : ", data)
-    //         // callback()
-    //     });
-    // }
-
-    getCurrentChannel() {
-
     }
 
     isAlreadyListening(channelId) {
@@ -61,32 +43,11 @@ class socketClientClass {
             this.socket.emit('subscribe', channelId);
             this.events.notification.push(channelId)
             this.socket.on(`${channelId}-notification`, (payload) => {
-                // alert("got it")
                 callback(payload.channelId)
             })
             this.events.notification.push(channelId)
         }
-
-
     }
-
-    // joinNotification(channelId, callback) {
-    //     this.socket.emit('subscribe', channelId);
-    //     if (!isAlreadyListening(channelId)) {
-    //         this.events.notification.push(channelId)
-
-    //         this.events.channels.map(c => {
-    //             this.socket.off(c)
-    //         })
-
-    //         console.log("befor starting channel update : ", `${channelId}-update`)
-    //         this.socket.on(`${channelId}-update`, (payload) => {
-    //             console.log("channelId on udpae", channelId)
-    //             console.log("payload  on udpae", payload)
-    //             callback(channelId)
-    //         })
-    //     }
-    // }
 
     joinChannel(channelId, callback) {
         this.socket.emit('subscribe', channelId);

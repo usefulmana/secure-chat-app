@@ -1,3 +1,5 @@
+
+// Config file social login
 module.exports = {
     GOOGLE_CONFIG: {
         clientID: process.env.GOOGLE_CLIENT_ID,

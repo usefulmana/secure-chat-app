@@ -1,17 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import { BrowserRouter, Switch, Route, withRouter } from "react-router-dom";
 import { getTeamInfo } from '../../API/teamsAPI'
-import Modal from '../../Template/Modal'
 import Layout from '../Layout'
-import { TweenLite } from 'gsap'
 import TeamOptions from '../Common/TeamOptions'
+
 // CSS
 import './Team.scss'
 import Channel from "./Channel";
-import querySearch from "stringquery";
-import { currentUser } from "../../API/userAPI";
 import ChannelContent from "./ChannelContent";
-import socketClient from "../../Socket/clinet"
 import { isUserInThisTeam } from "./handleAccess";
 
 const Team = ({ history, match }) => {
@@ -22,10 +18,6 @@ const Team = ({ history, match }) => {
     const [teamId, setTeamId] = useState(match.params.teamId)
     const [teamInfo, setTeamInfo] = useState()
     const [channels, setChannels] = useState([])
-    // const [currentChannel, setCurrentChannel] = useState()
-
-    const [editFormOpened, setEditFormOpened] = useState(false)
-    const [teamToEdit, setTeamToEdit] = useState()
 
     const [isAdmin, setIsAdmin] = useState()
     const [error, setError] = useState(false)
@@ -62,7 +54,6 @@ const Team = ({ history, match }) => {
         )
     }
 
-
     const conditionalRender = () => {
         if (teamInfo) {
             return (
@@ -85,13 +76,9 @@ const Team = ({ history, match }) => {
         }
     }
 
-
-
-
     return (
         <>
             {conditionalRender()}
-
         </>
     )
 }

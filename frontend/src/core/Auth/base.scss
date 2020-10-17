@@ -109,6 +109,9 @@ $formWidth: 30vw;
                 margin-bottom: 0.6vw;
                 color: rgb(255, 255, 255);
                 font-size: 0.8rem;
+                a{
+                    color:white!important;
+                }
 
                 &:hover {
                     // box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4), 0 12px 40px 0 rgba(0, 0, 0, 0.4);
@@ -150,6 +153,10 @@ $formWidth: 30vw;
     font-weight: 600;
     color: rgb(214, 176, 176);
     font-size: 1.1vw;
+
+    .or-text{
+        color:black;
+    }
 }
 .signin-cont {
     .showError {

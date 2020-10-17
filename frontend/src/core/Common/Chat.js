@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { BrowserRouter, Switch, Route, Link, withRouter } from "react-router-dom";
-import chat from "./Chat.scss"
+import "./Chat.scss"
 import { parseFileMessage, parseFileName } from "./parse"
-const queryString = require('query-string');
 
 const Chat = ({ history, message, previousChatUser, index }) => {
 
@@ -75,7 +74,6 @@ const Chat = ({ history, message, previousChatUser, index }) => {
                     </div>
                 </div>
             )
-            // }
         }
     }
 

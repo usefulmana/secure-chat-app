@@ -5,6 +5,7 @@ const { Server } = require("../models/Server");
 const { Channel } = require("../models/Channel");
 const { User } = require("../models/User");
 
+// Create A Channel
 router.post(
   "/create",
   passport.authenticate("jwt", { session: false }),
@@ -43,12 +44,14 @@ router.post(
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     const { members } = req.body;
-
+    
     const channelName = `${members[0]}:${members[1]}`
+
     const channel = await Channel.find({
-      name: { "$regex": members[0], "$options": "i" },
-      name: { "$regex": members[1], "$options": "i" }
+      name: { "$regex": `${members[0]}:${members[1]}`, "$options": "i" },
+      name: { "$regex": `${members[1]}:${members[0]}`, "$options": "i" }
     })
+    
     console.log("channel : ", channel)
     if (channel.length > 0) {
       return res.status(400).send({ message: "Channel already exists" });
@@ -62,7 +65,6 @@ router.post(
           error: err
         });
       }
-      console.log("result : ", result)
       res.json(result);
     });
   }
@@ -144,7 +146,6 @@ router.post(
 );
 
 // Remove members from private channels
-
 router.post(
   "/removeMember",
   passport.authenticate("jwt", { session: false }),

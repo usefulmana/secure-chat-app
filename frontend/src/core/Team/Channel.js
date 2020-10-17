@@ -5,7 +5,7 @@ import EditChannelForm from './EditChannelForm'
 import Modal from '../../Template/Modal'
 import { isUserHasAccessToThisChannel } from './handleAccess'
 import AddMemberToPrivate from "../Common/AddMemberToPrivate";
-import channel from "./Channel.scss"
+import "./Channel.scss"
 import socketClient from '../../Socket/clinet'
 
 const Channel = ({ history, match, teamInfo, channel, isAdmin }) => {
@@ -20,12 +20,7 @@ const Channel = ({ history, match, teamInfo, channel, isAdmin }) => {
 
 
     const [notificationOn, setNotificationOn] = useState(false)
-
     const [addMemberFormOpened, setAddMemberFormOpened] = useState(false)
-
-    const initSoket = () => {
-
-    }
 
     useEffect(() => {
         setCurrentChannelId(match.params.channelId)
@@ -43,7 +38,6 @@ const Channel = ({ history, match, teamInfo, channel, isAdmin }) => {
         var r = window.confirm("Leave the team?")
         if (r === true) {
             deleteChannel({ teamId, channelId }).then((data) => {
-                console.log("data in deletechannel : ", data)
                 if (data.error) {
 
                 } else {
@@ -51,10 +45,6 @@ const Channel = ({ history, match, teamInfo, channel, isAdmin }) => {
                 }
             }).catch()
         }
-    }
-
-    const handleEdit = () => {
-
     }
 
     const isActive = () => {
@@ -65,10 +55,6 @@ const Channel = ({ history, match, teamInfo, channel, isAdmin }) => {
 
         }
     }
-
-    // const isPrivate = () => {
-    //     if (isPrivate === true) return 'private-channel-icon'
-    // }
 
     const handleClick = () => {
         history.push(`/team/${teamId}/${channelId}`)
@@ -94,9 +80,14 @@ const Channel = ({ history, match, teamInfo, channel, isAdmin }) => {
 
         return isAdmin ?
             <>
-                <div className="each-option edit-channel-btn" onClick={() => { setEditFormOpened(true) }}>Edit channel name</div>
-                <div className="each-option delete-channel-btn" onClick={handleDelete}>Delete channel</div>
-                {isPrivate && <div className="each-option delete-channel-btn" onClick={() => { setAddMemberFormOpened(true) }}>Add member</div>}
+                <div className="channel-option-btn" >
+                    ...
+                <div className="drop-down">
+                        <div className="each-option edit-channel-btn" onClick={() => { setEditFormOpened(true) }}>Edit channel name</div>
+                        <div className="each-option delete-channel-btn" onClick={handleDelete}>Delete channel</div>
+                        {isPrivate && <div className="each-option delete-channel-btn" onClick={() => { setAddMemberFormOpened(true) }}>Add member</div>}
+                    </div>
+                </div>
             </>
             :
             <></>
@@ -104,14 +95,7 @@ const Channel = ({ history, match, teamInfo, channel, isAdmin }) => {
 
     return accesToChannel ? (
         <div className={isActive()} >
-            <div className="channel-option-btn" >
-                ...
-                <div className="drop-down">
-                    {showOptions()}
-
-                </div>
-
-            </div>
+            {showOptions()}
             <div className="channel-name row AIC" onClick={handleClick}>
                 {notificationOn && <i class="fas fa-circle notification"></i>}
                 {channelName}

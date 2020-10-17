@@ -9,8 +9,6 @@ import CreateTeamForm from './CreateTeamForm'
 import EditTeamForm from '../Common/EditTeamForm'
 import AddMember from '../Common/AddMember'
 import Layout from '../Layout'
-import { TweenLite } from 'gsap'
-import socketClient from '../../Socket/clinet'
 
 const TeamsList = ({ history }) => {
   var jwt = JSON.parse(localStorage.getItem("jwt"));
@@ -32,7 +30,6 @@ const TeamsList = ({ history }) => {
   useEffect(() => {
 
     currentUser().then((data) => {
-      console.log("data in currentUser : ", data)
       var teams = data?.servers
       setTeams(teams)
       if (teams.length > 0) initEvent()
@@ -44,7 +41,6 @@ const TeamsList = ({ history }) => {
 
   const parseTeamName = (name) => {
     var arr = name.split(" ")
-    console.log(arr.length - 1 > 0, arr)
 
     if (arr.length - 1 > 0) {
       return <span>{arr[0].charAt(0)} {arr[1].charAt(0)}</span>
@@ -53,15 +49,11 @@ const TeamsList = ({ history }) => {
     }
   }
 
-  const handleAddMembers = () => {
-
-  }
-
   const handleDelete = (teamId) => {
     deleteTeam({ teamId }).then((data) => {
-      console.log("data in deleteTeam : ", data)
       if (data.error) {
-        console.log("err in handleDelete : ", data.error)
+        console.log("error in deleting team : ", data.error)
+        alert("Something went wrong")
       } else {
         window.location.reload(false);
       }
@@ -70,9 +62,9 @@ const TeamsList = ({ history }) => {
 
   const handleLeaveTeam = (teamId) => {
     leaveTeam({ serverId: teamId }).then((data) => {
-      console.log("data in leaveTeam : ", data)
       if (data.error) {
-        console.log("err in handleLeaveTeam : ", data.error)
+        console.log("error in leaving team : ", data.error)
+        alert("Something went wrong")
       } else {
         window.location.reload(false);
       }
@@ -80,10 +72,7 @@ const TeamsList = ({ history }) => {
   }
 
   const showDropDown = (e) => {
-
     console.log(e.target.parentNode.querySelector('.drop-down'))
-
-
   }
 
   const initEvent = () => {
@@ -95,7 +84,6 @@ const TeamsList = ({ history }) => {
         e.stopPropagation();
         var target = e.target.closest('.edit-btn')
         var teamId = target.id
-        // console.log(e.target.closest('.edit-btn').id)
         setTeamToEdit(teamId)
         setEditFormOpened(true);
       });
@@ -134,7 +122,6 @@ const TeamsList = ({ history }) => {
         e.stopPropagation();
         var target = e.target.closest('.add-member-btn')
         var teamId = target.id
-        // console.log(e.target.closest('.edit-btn').id)
         setTeamToEdit(teamId)
         setAddMemberFormOpened(true);
       });
@@ -157,7 +144,6 @@ const TeamsList = ({ history }) => {
   }
 
   const renderTeams = () => {
-    console.log("teasm : ", teams)
     return (
       <div className="teams-list-cont row-w ">
         {teams.map((c) =>
@@ -180,12 +166,6 @@ const TeamsList = ({ history }) => {
     )
   }
 
-  const CreateChatButton = () => {
-    return
-  }
-
-
-
   const renderHeader = () => {
     return (
       <div className="teams-header row JCB">
@@ -200,24 +180,17 @@ const TeamsList = ({ history }) => {
     )
   }
 
-
-
   const modalStyle = {
     width: '50vw',
     height: '40vw'
   }
 
-  
-
   return (
     <Layout>
-
       <div className="teams-list-cont" >
         {renderHeader()}
         {renderTeams()}
-
       </div>
-
       <Modal opened={createFormOpened} setOpened={setCreateFormOpened} options={modalStyle}>
         <CreateTeamForm TeamsRef={TeamsRef} />
       </Modal>

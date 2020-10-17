@@ -6,6 +6,7 @@ const { User } = require('../models/User');
 const { GOOGLE_CONFIG, FACEBOOK_CONFIG } = require('../config/config');
 const slugify = require('slugify');
 
+// PassportJS Config
 let opts = {
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
     secretOrKey: process.env.JWT_SECRET
@@ -50,10 +51,10 @@ module.exports = function(passport){
                 User.findOne({ username: slugify(profile.displayName.toLowerCase()) })
                     .then(user => {
                         if (user) {
-                            
+                            console.log(profile);
                             user.social.id = profile.id;
                             user.email = profile.emails[0].value;
-                            user.social.image = profile.photos[0].value.replace('?sz=50', '');
+                            user.image = profile.photos[0].value.replace('?sz=50', '');
 
                             user.save().then(user => {
                             
@@ -68,6 +69,7 @@ module.exports = function(passport){
                                     id: profile.id,
                                     image: profile.photos[0].value.replace('?sz=50', '')
                                 },
+                                image: profile.photos[0].value.replace('?sz=50', ''),
                                 isVerified: true,
                                 email: profile.emails[0].value,
                                 username: profile.displayName

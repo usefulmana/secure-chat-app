@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
 import { register, authenticate } from '../../API/userAPI'
-import Parallax from 'parallax-js' // Now published on NPM
 import './base.scss'
 import './SignUp.scss'
-import queryString from 'query-string';
 
 const SignUp = ({ history, visible, flipVisibility }) => {
     var jwt = JSON.parse(localStorage.getItem("jwt"));
@@ -79,27 +76,6 @@ const SignUp = ({ history, visible, flipVisibility }) => {
             return 'label'
         }
     }
-
-    // const showerror = () => {
-    //     var firstIndex = error[0]
-    //     var errorMessage = ""
-    //     console.log()
-    //     if (firstIndex.email) {
-    //         errorMessage = firstIndex.email
-    //         console.log("1")
-
-    //     } else if (firstIndex.password) {
-    //         errorMessage = firstIndex.password
-    //         console.log("2")
-
-    //     } else if (firstIndex.username) {
-    //         errorMessage = firstIndex.username
-    //         console.log("3")
-
-    //     }
-    //     console.log("what is errormeeage : ", errorMessage)
-    //     return errorMessage
-    // }
 
     const passwordCheck = () => {
         if (password === password2) {

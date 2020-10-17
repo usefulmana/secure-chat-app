@@ -124,11 +124,11 @@ export const changeAvatar = ({ formData, token }) => {
 
 
 export const authenticate = (data, next) => {
-
     if (typeof window !== "undefined") {
         localStorage.setItem("jwt", JSON.stringify(data));
-        next();
+        next()
     }
+    next();
 };
 
 export const signout = next => {
@@ -198,7 +198,6 @@ export const getUserById = ({ userId }) => {
 
 
 export const forgotPassword = ({ email }) => {
-
     return fetch(`${API}/user/forgot-pw`, {
         method: "POST",
         headers: {
@@ -216,17 +215,16 @@ export const forgotPassword = ({ email }) => {
 };
 
 
-export const retrievePassword = ({ formData, token }) => {
-    var token = getToken()
-
-    return fetch(`${API}/user/retrieve-pw`, {
+export const retrievePassword = (password, token) => {
+    console.log(JSON.stringify(password))
+    return fetch(`${API}/user/retrieve-pw/${token}`, {
         method: "POST",
         headers: {
             Accept: "application/json",
-            // "Content-Type": "form-data",
-            Authorization: `${token}`
+            "Content-Type": "application/json",
+      
         },
-        body: formData
+        body: JSON.stringify({password})
     })
         .then(response => {
             return response.json();

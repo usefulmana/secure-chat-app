@@ -2,12 +2,11 @@ import React, { useState, useEffect } from "react";
 import { BrowserRouter, Switch, Route, withRouter } from "react-router-dom";
 import { createChannel, editChannel, } from '../../API/channelAPI'
 
-import editChannelForm from './EditChannelForm.scss'
+import './EditChannelForm.scss'
 
 const CreateTeamForm = ({ history, reference }) => {
   var jwt = JSON.parse(localStorage.getItem("jwt"));
   var token = jwt.token;
-  console.log("REf : ", reference)
   const { setOpened, channel } = reference.current
   const channelId = channel._id
   const channelName = channel.name
@@ -25,20 +24,17 @@ const CreateTeamForm = ({ history, reference }) => {
   }
 
   const handleSubmit = () => {
-    console.log("channelId: ", channelId)
-    console.log("channelName: ", channelName)
 
     editChannel({ channelId, name: newChannelName }).then(data => {
 
       if (data.error || data.message) {
         alert(data.message)
-        // setError(data.error)
 
       } else {
         window.location.reload(false);
       }
     }).catch(err => {
-      console.log("err in edit channel form : ", err)
+      console.log("err in editing channel : ", err)
     })
   }
 

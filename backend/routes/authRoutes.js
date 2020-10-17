@@ -11,10 +11,6 @@ const { checkPassword } = require('../utils/passwordChecker');
 // ** Middleware **
 const {
     checkLoginFields,
-    checkRegistrationFields,
-    checkEditProfileFields,
-    createErrorObject,
-    customSocialAuthenticate
 } = require("../middleware/authenticate");
 const passport = require("passport");
 
@@ -144,7 +140,13 @@ router.get('/google', passport.authenticate('google'));
 router.get('/facebook', passport.authenticate('facebook', {scope: 'email'}));
 
 // ** Social Auth Callbacks **
-router.get('/google/redirect', passport.authenticate('google', {failureRedirect: '/login'}), socialAuthActions.google);
-router.get('/facebook/redirect', passport.authenticate('facebook'), socialAuthActions.facebook);
+router.get('/google/redirect', passport.authenticate('google', {failureRedirect: '/login'}), (req, res) => {
+    const token = jwt.sign(req.user.details.toObject(), process.env.JWT_SECRET, {
+        expiresIn: 18000
+    });
+
+    // Redirect to the client after successful login
+    res.redirect(`${process.env.CLIENT_URL}?token=${token}`)
+});
 
 module.exports = router;

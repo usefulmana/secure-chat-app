@@ -1,16 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { BrowserRouter, Switch, Route, Link, withRouter } from "react-router-dom";
-import { getChannelInfo } from '../../API/channelAPI'
-import { getMessageFromChannel } from '../../API/chatAPI'
-import querySearch from "stringquery";
-import Chat from "../Common/Chat"
 import './Input.scss'
 import socketClient from "../../Socket/clinet"
-import { isUserHasAccessToThisChannel } from './handleAccess'
 import Picker from 'emoji-picker-react';
 import { parseFileMessage, parseFileName } from "../Common/parse"
 
-const Input = ({ history, match, currentChannelId }) => {
+const Input = ({ history, match, currentChannelId, setLoading }) => {
     var jwt = JSON.parse(localStorage.getItem("jwt"));
     const userId = jwt.user._id
     const [newMessage, setNewMessage] = useState()
@@ -21,13 +16,17 @@ const Input = ({ history, match, currentChannelId }) => {
     const [pendingFile, setPendingFile] = useState("")
 
     const onEmojiClick = (event, emojiObject) => {
-        var firstString = newMessage.slice(0, caretPosition)
-        var secondString = newMessage.slice(caretPosition)
-        setNewMessage(firstString + emojiObject.emoji + secondString)
+        if (newMessage) {
+            var firstString = newMessage.slice(0, caretPosition)
+            var secondString = newMessage.slice(caretPosition)
+            setNewMessage(firstString + emojiObject.emoji + secondString)
+        } else {
+            setNewMessage(emojiObject.emoji)
+        }
+
     };
     useEffect(() => {
         window.addEventListener('click', (e) => {
-            // console.log(e.target)
 
             var inside = e.target.closest('.emojo-cont')
             if (!inside) {
@@ -54,11 +53,8 @@ const Input = ({ history, match, currentChannelId }) => {
 
 
     const handleFormData = async (e) => {
-        var arr = []
-        var length = e.target.files.length
-        // for (let i = 0; i < length; i++) {
-        //     formData.append(`file-${i}`, e.target.files[i])
-        // }
+        setLoading(true)
+
         formData.append('file', e.target.files[0])
         formData.append('upload_preset', 'chattr')
         formData.append('folder', `chattr/${currentChannelId}`)
@@ -69,48 +65,19 @@ const Input = ({ history, match, currentChannelId }) => {
         })
 
         const file = await res.json()
-        console.log("file : ", file)
 
         const formattedMessage = file.secure_url + `?filename=${file.original_filename}`
-
-
         setPendingFile(formattedMessage)
-
-        // socketClient.createNewMessge({ channelId: currentChannelId, userId, message: formattedMessage })
-        // // getMessage(currentChannelId)
-
-        // setNewMessage("")
+        setLoading(false)
     }
-
-    // const handleFileSubmit = async () => {
-    //     var res = await fetch('https://api.cloudinary.com/v1_1/ddd5rvj1e/image/upload', {
-    //         method: 'POST',
-    //         body: formData
-    //     })
-
-    //     const file = await res.json()
-    //     console.log("file : ", file)
-
-    //     const formattedMessage = file.secure_url + `?filename=${ file.original_filename }`
-    //     socketClient.createNewMessge({ channelId: currentChannelId, userId, message: formattedMessage })
-    //     // getMessage(currentChannelId)
-    //     setNewMessage("")
-    // }
 
     const handleSubmit = (e) => {
         e.preventDefault()
         var messaegeToSend = newMessage
         if (pendingFile !== "") messaegeToSend = pendingFile + `&message=${newMessage}`
-        console.log("messaegeToSend : " , messaegeToSend)
         socketClient.createNewMessge({ channelId: currentChannelId, userId, message: messaegeToSend })
-        // getMessage(currentChannelId)
         setNewMessage("")
         setPendingFile("")
-    }
-
-    const handleOpenFile = (url) => (e) => {
-        var win = window.open(url, '_blank');
-        win.focus();
     }
 
     const filePreView = () => {
@@ -130,12 +97,16 @@ const Input = ({ history, match, currentChannelId }) => {
         }
     }
 
+    const removeFile = () => {
+        setPendingFile("")
+    }
+
     const showNewMessageForm = () => {
         return (
             <form className="form-cont" onSubmit={handleSubmit} >
                 {pendingFile &&
                     <div className="file-preview-cont">
-                        <div className="delete-btn btn">x</div>
+                        <div className="delete-btn btn" onClick={removeFile}>x</div>
                         {filePreView()}
                     </div>
                 }

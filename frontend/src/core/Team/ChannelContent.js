@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import { BrowserRouter, Switch, Route, Link, withRouter } from "react-router-dom";
 import { getChannelInfo } from '../../API/channelAPI'
 import { getMessageFromChannel } from '../../API/chatAPI'
-import querySearch from "stringquery";
 import Chat from "../Common/Chat"
 import './ChannelContent.scss'
 import socketClient from "../../Socket/clinet"
@@ -11,6 +10,7 @@ import Input from "./Input";
 import Draggable from "react-draggable";
 import { TweenLite } from 'gsap'
 import LiveChannel from "./LiveChannel";
+import Loader from "../Common/Loader"
 
 const ChannelContent = ({ history, match }) => {
     var jwt = JSON.parse(localStorage.getItem("jwt"));
@@ -22,10 +22,12 @@ const ChannelContent = ({ history, match }) => {
     const [access, setAccess] = useState()
     const [liveChatPopUp, setLiveChatPopUp] = useState(false)
     const [maximized, setMaximized] = useState(true)
+    const [loading, setLoading] = useState(true)
 
     const [channelOnCall, setChannelOnCall] = useState(false)
 
     useEffect(() => {
+        setLoading(true)
         var channelId = initCurrentChannelId()
         setChannelOnCall(false)
         getChannelInfo({ channelId }).then((data) => {
@@ -34,7 +36,6 @@ const ChannelContent = ({ history, match }) => {
             setCurrentChannelId(channelId)
             getMessage(channelId)
             socketInit(channelId)
-
         }).catch()
 
 
@@ -55,7 +56,7 @@ const ChannelContent = ({ history, match }) => {
             setChannelOnCall(true)
         })
 
-        socketClient.listenCallFinish( () => {
+        socketClient.listenCallFinish(() => {
             setChannelOnCall(false)
         })
     }
@@ -72,6 +73,7 @@ const ChannelContent = ({ history, match }) => {
             } else {
                 setMessages(data)
                 scrollToBottom()
+                setLoading(false)
             }
         })
     }
@@ -83,14 +85,6 @@ const ChannelContent = ({ history, match }) => {
         var contentCont = document.querySelector(".content-cont")
         if (contentCont) contentCont.scrollTo(0, contentCont.scrollHeight)
     }
-
-    const handleSubmit = (e) => {
-        e.preventDefault()
-        socketClient.createNewMessge({ channelId: currentChannelId, userId, message: newMessage })
-        // getMessage(currentChannelId)
-        setNewMessage("")
-    }
-
 
     const renderMessages = () => {
         return messages?.docs?.map((m, index) => {
@@ -128,7 +122,7 @@ const ChannelContent = ({ history, match }) => {
                         </div>}
                         {!maximized && <div className="size-icon" onClick={() => { setMaximized(!maximized); moveDraggable() }}><i class="fa fa-window-maximize" aria-hidden="true"></i>
                         </div>}
-                        <div className="leave-icon" onClick={() => { setLiveChatPopUp(false); socketClient.socket.emit("disconnect-live-chat"); window.location.reload() }}><i class="fa fa-times" aria-hidden="true"></i>
+                        <div className="leave-icon" onClick={() => { setLiveChatPopUp(false); window.location.reload() }}><i class="fa fa-times" aria-hidden="true"></i>
                         </div>
                     </div>
                     <LiveChannel channelId={currentChannelId} />
@@ -143,29 +137,30 @@ const ChannelContent = ({ history, match }) => {
         }
     }
 
-    const handleJoinCall=()=>{
-        if(!channelOnCall) socketClient.initCallOnChannel(currentChannelId)
+    const handleJoinCall = () => {
+        if (!channelOnCall) socketClient.initCallOnChannel(currentChannelId)
         setLiveChatPopUp(true)
     }
-
     return access ? (
-        <>
-            <div className="channel-content-cont">
-                <div className={`live-chat-btn btn ${isChannelOnCall()}`} onClick={handleJoinCall}>
-                    <i class="fa fa-phone-square" aria-hidden=""></i>
-                    {channelOnCall && <span className="channel-on-call-msg">Channel is on call</span>}
-                </div>
-                <div className="content-cont">
-                    {/* {currentChannelId} */}
-                    {renderDraggable()}
-                    {renderMessages()}
-                </div>
-                <div className="new-message-cont ">
-                    <Input currentChannelId={currentChannelId} />
-                </div>
+        <div className="channel-content-cont">
+            <div className={`live-chat-btn btn ${isChannelOnCall()}`} onClick={handleJoinCall}>
+                <i class="fa fa-phone-square" aria-hidden=""></i>
+                {channelOnCall && <span className="channel-on-call-msg">Channel is on call</span>}
             </div>
-        </>
-    ) : <></>
+            <div className="content-cont">
+                {renderDraggable()}
+                {renderMessages()}
+            </div>
+            <div className="new-message-cont ">
+                <Input currentChannelId={currentChannelId} setLoading={setLoading} />
+            </div>
+            <Loader loading={loading} />
+        </div>
+    ) : (
+            <div className="no-access-cont row JCC AIC" >
+                {/* You have no access to this channel. */}
+            </div>
+        )
 }
 
 export default withRouter(ChannelContent)

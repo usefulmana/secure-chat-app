@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Switch, Route, withRouter } from "react-router-dom";
 import { getUserById } from '../../API/userAPI'
-
-import manageTeamForm from './ManageTeamForm.scss'
-import base from './base.scss'
+import './ManageTeamForm.scss'
+import './base.scss'
 
 const ManageTeamForm = ({ history, TeamsRef, team }) => {
   var jwt = JSON.parse(localStorage.getItem("jwt"));
@@ -11,13 +10,11 @@ const ManageTeamForm = ({ history, TeamsRef, team }) => {
   console.log("team in manage team: ", team)
   const { setOpened } = TeamsRef.current
 
-  // const [keyword, setKeyword] = useState("")
   const [values, setValues] = useState({ keyword: "" })
   const [members, setMembers] = useState([])
   const { keyword } = values;
 
   useEffect(() => {
-    console.log("team.members.lengt : ", team.members.length)
     var newArr = []
     var count = 0
     var length = team.members.length
@@ -40,7 +37,6 @@ const ManageTeamForm = ({ history, TeamsRef, team }) => {
   }, [])
 
   const renderMembers = () => {
-    console.log("length :", members.length)
     return members.map(m => {
       return (
         <div className="each-member row AIC" >
@@ -70,10 +66,6 @@ const ManageTeamForm = ({ history, TeamsRef, team }) => {
       <div className="content-cont">
         <div className="header">Manage team</div>
         {showForm()}
-        {/* <div className="row JCE button-cont">
-          <div className="cancel-btn btn" onClick={() => setOpened(false)}>Cancel</div>
-          <div className="submit-btn btn" onClick={() => { }}>Submit</div>
-        </div> */}
       </div>
     )
   }

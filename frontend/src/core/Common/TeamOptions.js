@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { BrowserRouter, Switch, Route, withRouter } from "react-router-dom";
 import './TeamOptions.scss'
-import { currentUser } from '../../API/userAPI'
 import { getTeamInfo, deleteTeam, leaveTeam } from '../../API/teamsAPI'
 
 import Modal from '../../Template/Modal'
@@ -9,8 +8,6 @@ import EditTeamForm from '../Common/EditTeamForm'
 import CreateChannelForm from '../Common/CreateChannelForm'
 import AddMember from '../Common/AddMember'
 import ManageTeamForm from '../Common/ManageTeamForm'
-
-import { TweenLite } from 'gsap'
 
 const TeamOptions = ({ history, team }) => {
     var jwt = JSON.parse(localStorage.getItem("jwt"));
@@ -24,14 +21,12 @@ const TeamOptions = ({ history, team }) => {
 
     const [isAdmin, setIsAdmin] = useState(team.owner === userId)
 
-    console.log("Tea in teamOPTIONS : ", team)
 
     useEffect(() => {
     }, [])
 
     const parseTeamName = (name) => {
         var arr = name.split(" ")
-        console.log(arr.length - 1 > 0, arr)
 
         if (arr.length - 1 > 0) {
             return <span>{arr[0].charAt(0)} {arr[1].charAt(0)}</span>
@@ -45,7 +40,6 @@ const TeamOptions = ({ history, team }) => {
         var r = window.confirm("Delete the team?")
         if (r === true) {
             deleteTeam({ teamId }).then((data) => {
-                console.log("data in deleteTeam : ", data)
                 if (data.error) {
                     console.log("err in handleDelete : ", data.error)
                 } else {
@@ -55,22 +49,12 @@ const TeamOptions = ({ history, team }) => {
         }
     }
 
-    // const initEvent = () => {
-    //     document.querySelector(".delete-btn").addEventListener("click", (e) => {
-
-
-    //     });
-    // }
-
-
     const handleLeaveTeam = (teamId) => (e) => {
         var r = window.confirm("Leave the team?")
         if (r === true) {
             leaveTeam({ serverId: teamId }).then((data) => {
-                console.log("data in leaveTeam : ", data)
                 if (data.error) {
                     alert(data.error)
-                    console.log("err in handleLeaveTeam : ", data.error)
                 } else {
                     history.push('/teams');
                 }
@@ -79,10 +63,8 @@ const TeamOptions = ({ history, team }) => {
     }
 
     const handleCopyText = () => {
-
         /* Get the text field */
         var copyText = document.querySelector(".join-code");
-        console.log("copyText: ", copyText)
 
         /* Select the text field */
         copyText.select();
@@ -90,7 +72,6 @@ const TeamOptions = ({ history, team }) => {
 
         /* Copy the text inside the text field */
         document.execCommand("copy");
-
     }
 
     const renderOptions = () => {
@@ -100,12 +81,12 @@ const TeamOptions = ({ history, team }) => {
                 <div className="each-option edit-btn" onClick={() => { setEditFormOpened(true) }} ><i class="far fa-edit"></i>Edit team</div>
                 <div className="each-option delete-btn" onClick={handleDelete(team._id)}><i class="far fa-trash-alt"></i>Delete team</div>
                 <div className="each-option create-btn" onClick={() => { setCreateFormOpened(true) }}><i class="far fa-plus-square"></i>Create channel</div>
-                <div className="each-option manage-team-btn" onClick={() => { setManageTeamFormOpened(true) }}><i class="fas fa-users-cog"></i>Manage team</div>
+                <div className="each-option manage-team-btn" onClick={() => { setManageTeamFormOpened(true) }}><i class="fas fa-users-cog"></i>List of members</div>
                 <div className="each-option " onClick={handleCopyText}><i class="fa fa-clone" aria-hidden="true"></i><input className="join-code" value={team.code} /> Copy join code</div>
             </>
             :
             <>
-                <div className="each-option manage-team-btn" onClick={() => { setManageTeamFormOpened(true) }}><i class="fas fa-users-cog"></i>Manage team</div>
+                <div className="each-option manage-team-btn" onClick={() => { setManageTeamFormOpened(true) }}><i class="fas fa-users-cog"></i>List of members</div>
                 <div className="each-option leave-team-btn" onClick={handleLeaveTeam(team._id)}><i class="fas fa-sign-out-alt"></i>Leave team</div>
             </>
 

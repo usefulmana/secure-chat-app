@@ -9,7 +9,6 @@ import base from './base.scss'
 const AddMember = ({ history, TeamsRef, teamId }) => {
   var jwt = JSON.parse(localStorage.getItem("jwt"));
   var token = jwt.token;
-  console.log("teamId in addmember: ", teamId)
   const { setOpened } = TeamsRef.current
 
   const [addedMember, setAddedMember] = useState([])
@@ -55,7 +54,6 @@ const AddMember = ({ history, TeamsRef, teamId }) => {
 
   const handleSearch = () => {
     findUser({ method: 'email', keyword }).then((data) => {
-      console.log("data in find user : ", data)
       setSearchedMember(data)
     }).catch()
   }

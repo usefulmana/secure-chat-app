@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { BrowserRouter, Switch, Route, withRouter } from "react-router-dom";
 import { getUserById } from '../../API/userAPI'
 import { kickMemberFromTeam } from '../../API/teamsAPI'
+import Swal from "sweetalert2"
 
 import './ManageTeamForm.scss'
 import './base.scss'
@@ -9,7 +10,6 @@ import './base.scss'
 const ManageTeamForm = ({ history, TeamsRef, team }) => {
   var jwt = JSON.parse(localStorage.getItem("jwt"));
   var token = jwt.token;
-  console.log("team in manage team: ", team)
   const { setOpened } = TeamsRef.current
 
   const [values, setValues] = useState({ keyword: "" })
@@ -39,14 +39,26 @@ const ManageTeamForm = ({ history, TeamsRef, team }) => {
   }, [])
 
   const handleKickUser = (userId) => (e) => {
-    var r = window.confirm("Kick user?")
-    if (r === true) {
-      kickMemberFromTeam({ userId, teamId: team._id }).then(data => {
-        window.location.reload()
-      }).catch(err => {
-
-      })
-    }
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You will not be able to undo this action!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes",
+      cancelButtonText: "No"
+    }).then(result => {
+      if (result.value){
+        kickMemberFromTeam({ userId, teamId: team._id }).then(data => {
+          Swal.fire({
+            title: "User removed",
+            icon: "success",
+            timer: 2000
+          }).then(v => window.location.reload())
+        }).catch(err => {
+  
+        })
+      }
+    })
   }
 
   const renderMembers = () => {

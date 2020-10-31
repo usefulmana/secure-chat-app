@@ -13,6 +13,7 @@ const Layout = ({ loading, history, children }) => {
   var item = JSON.parse(localItem);
 
   const [userImage, setUserImage] = useState(item.user.image);
+  const [username, setUserName] = useState(item.user.username);
 
   const handleClick = (option) => () => {
     history.push(`/${option}`);
@@ -56,7 +57,9 @@ const Layout = ({ loading, history, children }) => {
             <img className="img" src={require("./Main/img/test.png")} /> Chattr
           </div>
         </div>
-        <div className="second"></div>
+        <div className="second">
+          <p style={{color: "white"}}>Hello, {username}</p>
+        </div>
         <div className="third">
           <div
             className="icon-image-cont"

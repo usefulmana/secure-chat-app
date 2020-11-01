@@ -3,6 +3,8 @@ import { login, authenticate, forgotPassword } from '../../API/userAPI'
 import { OAuthSignIn } from '../../API/OAuthAPI'
 import {Link} from 'react-router-dom';
 import './base.scss'
+import PasswordRule from "./PasswordRule";
+
 
 const SignIn = ({ history, visible, flipVisibility }) => {
     var jwt = JSON.parse(localStorage.getItem("jwt"));
@@ -93,11 +95,12 @@ const SignIn = ({ history, visible, flipVisibility }) => {
                         <input type="email" class="my-form-input" onChange={handleChange('email')} />
                         <label data-error="wrong" className={isFilled("email")} for="Form-email1">Your email</label>
                     </div>
-
+                    
                     <div class="my-form ">
                         <input type="password" class="my-form-input " onChange={handleChange('password')} />
                         <label className={isFilled("password")} data-error="wrong" for="Form-pass1">Your password</label>
                     </div>
+                    
                     <div type="button" class="btn signin-button oauth-base" onClick={handleSubmit}>Sign in</div>
                
                     <div type="button" class="btn signin-button-google oauth-base" >
@@ -108,6 +111,7 @@ const SignIn = ({ history, visible, flipVisibility }) => {
 
                 </div>
                 <div className="signin-footer">
+                    <PasswordRule/>
                     <div className="text-center no-have-account">
                         Have not had account yet?
                     </div>

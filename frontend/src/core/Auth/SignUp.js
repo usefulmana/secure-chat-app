@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { register, authenticate } from '../../API/userAPI'
 import './base.scss'
+import PasswordRule from "./PasswordRule";
 import './SignUp.scss'
+
 
 const SignUp = ({ history, visible, flipVisibility }) => {
     var jwt = JSON.parse(localStorage.getItem("jwt"));
@@ -113,10 +115,12 @@ const SignUp = ({ history, visible, flipVisibility }) => {
                         <input type="password" class="my-form-input " onChange={handleChange('password2')} />
                         <label className={isFilled("password2")} data-error="wrong" for="Form-pass1">Confirm your password</label>
                     </div>
+                    
                     <div type="button" class="btn signin-button oauth-base" onClick={handleSubmit}>Sign Up</div>
 
                 </div>
                 <div className="signin-footer">
+                    <PasswordRule/>
                     <div className="text-center no-have-account">
                         Already have account?
                     </div>

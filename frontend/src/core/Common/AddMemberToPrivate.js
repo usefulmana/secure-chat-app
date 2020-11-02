@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { BrowserRouter, Switch, Route, withRouter } from "react-router-dom";
 import { findUser, getUserById } from '../../API/userAPI'
 import { addToPrivateChannel } from '../../API/channelAPI'
-
+import Swal from "sweetalert2"
 import addMemberToPrivate from './AddMemberToPrivate.scss'
 import base from './base.scss'
 
@@ -53,11 +53,18 @@ const AddMemberToPrivate = ({ history, reference }) => {
     addedMember.map((m) => {
       addToPrivateChannel({ channelId: channel._id, userId: m._id }).then(data => {
         if (data.error) {
-          alert(data.error)
+          Swal.fire({
+            title: "Error",
+            icon: "error",
+            timer: 2000
+          })
         } else {
           if (length - 1 === count) {
-            alert("Succesfully added")
-            window.location.reload()
+            Swal.fire({
+              title: "Successfully Added!",
+              icon: "success",
+              timer: 2000
+            }).then(v => window.location.reload())
           } else {
             count += 1
           }

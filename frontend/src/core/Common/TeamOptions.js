@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { BrowserRouter, Switch, Route, withRouter } from "react-router-dom";
 import './TeamOptions.scss'
 import { getTeamInfo, deleteTeam, leaveTeam } from '../../API/teamsAPI'
-
+import Swal from "sweetalert2";
 import Modal from '../../Template/Modal'
 import EditTeamForm from '../Common/EditTeamForm'
 import CreateChannelForm from '../Common/CreateChannelForm'
@@ -36,30 +36,55 @@ const TeamOptions = ({ history, team }) => {
     }
 
     const handleDelete = (teamId) => () => {
-
-        var r = window.confirm("Delete the team?")
-        if (r === true) {
-            deleteTeam({ teamId }).then((data) => {
-                if (data.error) {
-                    console.log("err in handleDelete : ", data.error)
-                } else {
-                    history.push('/teams');
-                }
-            }).catch()
-        }
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You will not be able to undo this action!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes",
+            cancelButtonText: "No",
+          }).then((result) => {
+            if (result.value) {
+                deleteTeam({ teamId }).then((data) => {
+                    if (data.error) {
+                        console.log("err in handleDelete : ", data.error)
+                    } else {
+                        Swal.fire({
+                            title: "Team Deleted",
+                            icon: "success",
+                            timer: 2000,
+                          }).then((v) => history.push('/teams'));
+                        
+                    }
+                }).catch()
+            }
+          });
     }
 
     const handleLeaveTeam = (teamId) => (e) => {
-        var r = window.confirm("Leave the team?")
-        if (r === true) {
-            leaveTeam({ serverId: teamId }).then((data) => {
-                if (data.error) {
-                    alert(data.error)
-                } else {
-                    history.push('/teams');
-                }
-            }).catch()
-        }
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You will not be able to undo this action!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes",
+            cancelButtonText: "No",
+          }).then((result) => {
+            if (result.value) {
+                leaveTeam({ serverId: teamId }).then((data) => {
+                    if (data.error) {
+                        console.log("err in handleDelete : ", data.error)
+                    } else {
+                        Swal.fire({
+                            title: "Left Team",
+                            icon: "success",
+                            timer: 2000,
+                          }).then((v) => history.push('/teams'));
+                        
+                    }
+                }).catch()
+            }
+          });
     }
 
     const handleCopyText = () => {

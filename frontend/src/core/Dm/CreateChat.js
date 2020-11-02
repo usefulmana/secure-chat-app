@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { BrowserRouter, Switch, Route, withRouter } from "react-router-dom";
 import { findUser } from '../../API/userAPI'
 import { createDmChannel } from '../../API/channelAPI'
-
+import Swal from "sweetalert2"
 import './CreateChat.scss'
 import '../Common/base.scss'
 
@@ -29,7 +29,11 @@ const CreateChat = ({ history, reference, teamId }) => {
   const handleSubmit = () => {
     createDmChannel({ addedMember: addedMember[0]._id }).then((data) => {
       if (data.error || data.message) {
-        alert(data.message)
+        Swal.fire({
+          title: "Success!",
+          icon: "success",
+          timer: 2000
+        })
       } else {
         window.location.reload()
       }

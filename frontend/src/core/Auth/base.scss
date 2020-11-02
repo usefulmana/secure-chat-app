@@ -6,6 +6,19 @@ $linkSize: 1.2vw;
 $formHeight: 35vw;
 $formWidth: 30vw;
 
+.background{
+    background: url("../Main/img/background10.jpg");
+    // background: linear-gradient(rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)), url("./img/background10.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100%;
+}
+
 #root .base-container {
     // position: absolute;
     margin-bottom: 2vw;

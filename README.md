@@ -18,6 +18,12 @@
 
 # Changelog
 
+## [1.1.1] - 2020-11-02
+
+### Changed
+
+* User search bar in DM tab will now display results as a user types
+
 ## [1.1] - 2020-11-02
 
 ### Changed

@@ -24,6 +24,7 @@ const CreateChat = ({ history, reference, teamId }) => {
 
   const handleChange = (field) => (e) => {
     setValues({ ...values, [field]: e.target.value })
+    handleSearch()
   }
 
   const handleSubmit = () => {

@@ -18,14 +18,20 @@
 
 # Changelog
 
+## [1.1.1] - 2020-11-02
+
+### Changed
+
+* User search bar in DM tab will now display results as a user types
+
 ## [1.1] - 2020-11-02
 
 ### Changed
 
-* Touched up forgot password and retrieve password pages
+* Touched up forgot password/retrieve password pages
 * Fixed image thumbnail issue
 * Added proper alert modals in place of the default JS alert
-* Added Hello + Username to the navigation bar
+* Added Hello {Username} to the navigation bar
 * User search bar will now display results as a user types
 * Password Rules are now displayed on the Login/Registration pages
 

@@ -28,7 +28,7 @@
 
 ### Changed
 
-* Touched up forgot password and retrieve password pages
+* Touched up forgot password/retrieve password pages
 * Fixed image thumbnail issue
 * Added proper alert modals in place of the default JS alert
 * Added Hello + Username to the navigation bar

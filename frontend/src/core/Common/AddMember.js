@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { BrowserRouter, Switch, Route, withRouter } from "react-router-dom";
 import { findUser } from '../../API/userAPI'
 import { addMemberToTeam } from '../../API/teamsAPI'
+import Swal from "sweetalert2"
 
 const AddMember = ({ history, TeamsRef, teamId }) => {
   var jwt = JSON.parse(localStorage.getItem("jwt"));
@@ -22,6 +23,7 @@ const AddMember = ({ history, TeamsRef, teamId }) => {
 
   const handleChange = (field) => (e) => {
     setValues({ ...values, [field]: e.target.value })
+    handleSearch()
   }
 
   const handleSubmit = () => {
@@ -34,8 +36,12 @@ const AddMember = ({ history, TeamsRef, teamId }) => {
 
         } else {
           if (length - 1 === count) {
-            alert("Succesfully added")
-            window.location.reload()
+            Swal.fire({
+              title: "Successfully Added!",
+              icon: "success",
+              timer: 2000
+            }).then(v => window.location.reload())
+            
           } else {
             count += 1
           }

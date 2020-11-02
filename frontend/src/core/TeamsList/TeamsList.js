@@ -61,7 +61,11 @@ const TeamsList = ({ history }) => {
       .then((data) => {
         if (data.error) {
           console.log("error in deleting team : ", data.error);
-          alert("Something went wrong");
+          Swal.fire({
+            title: "Error!",
+            icon: "error",
+            timer: 2000
+          })
         } else {
           window.location.reload(false);
         }
@@ -74,7 +78,11 @@ const TeamsList = ({ history }) => {
       .then((data) => {
         if (data.error) {
           console.log("error in leaving team : ", data.error);
-          alert("Something went wrong");
+          Swal.fire({
+            title: "Error!",
+            icon: "error",
+            timer: 2000
+          })
         } else {
           window.location.reload(false);
         }

@@ -31,7 +31,7 @@
 * Touched up forgot password/retrieve password pages
 * Fixed image thumbnail issue
 * Added proper alert modals in place of the default JS alert
-* Added Hello + Username to the navigation bar
+* Added Hello {Username} to the navigation bar
 * User search bar will now display results as a user types
 * Password Rules are now displayed on the Login/Registration pages
 
